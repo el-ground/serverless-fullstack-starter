@@ -1,33 +1,44 @@
-# new-node-service-starter
+# serverless-fullstack-starter
+
+### Goal
+
+- Lets you develop a fullstack service mvp at the speed of light!
+- Single serverless deployment
+- Shared lint + type system between frontend and backend
+- Prerender with bot detection
 
 ### Features
 
-* typescript
-* eslint
-* prettier
-* testing
-* express
-* requestId log
-* error handler
-* cors, compression
+* typescript + eslint + stylelint (scss) + prettier
+* nextjs + express + apollo(graphql)
 
-### Whats new
+### Structure
 
-- Upgraded to node 20
-- Migrated to node test runner
-- Removed node-fetch from base dependency. Lets try node's default fetch.
-- Changes to express middlewares structure
-- Moved deployment specific files to deployment/* Use whatever meets your environment!
-- Became more minimal!
-- Removed globals
+- frontend resources located at src/* public/*, compiled to .next/
+- backend resources located at server/*, compiled to dist/
+- frontend & backend share root directory + tsconfig, eslintrc.json, etc.
+- frontend is served from the backend using nextjs' custom server.
 
+### Why do I need to use this?
+
+- Full typescript setup + graphql => super less work to get your client satisfied
+- All architecture stays inside the repo! Any developer can jump in to collaborate to your project!
+
+### Additional features TODO
+
+- Media serve
+- HTTP Cache headers
+- Media upload
+- Authentication (uid hook & token management)
+- Error Boundary, onPopState (back button)
+- Capacitor setup for hybrid app deployment
+- Safe area
 
 ### Recommended setup
 
 - vscode
 - nvm
 - yarn (corepack enable)
-
 
 ### How to use HTTPS
 
@@ -67,7 +78,7 @@
 
 
    ```
-2. set process.env.CERT, process.env.CERT_KEY, process.env.HTTPS_PORT when running the node process.
+2. set process.env.CERT, process.env.CERT_KEY when running the node process.
 3. Use this method only for development environment! in production, you'd better have a proxy that handles ssl.
 
 ### How to log

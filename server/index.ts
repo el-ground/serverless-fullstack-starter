@@ -2,24 +2,21 @@ import http from 'http'
 import https from 'https'
 import fs from 'fs'
 import { EventEmitter } from 'events'
-import { app } from './app'
+import { app as expressApp } from './app'
+import { bindApolloServer } from './apollo-server'
 import next from 'next'
 
 EventEmitter.defaultMaxListeners = 100
 
 // https://nextjs.org/docs/pages/building-your-application/configuring/custom-server
 
-// on production only http port is used!
-const port = process.env.PORT ? Number(process.env.PORT) : undefined
-if (!port) {
-  throw new Error(`PORT not provided!`)
-}
-
+const port = process.env.PORT ? Number(process.env.PORT) : 3000
 const dev = process.env.NODE_ENV !== 'production'
 /* provide HOST_NAME in dev environments! */
 const hostname = process.env.HOST_NAME || 'localhost'
 const nextApp = next({ dev, hostname, port })
 
+// prepare next
 await nextApp.prepare()
 
 const handler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
@@ -27,7 +24,7 @@ const handler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
     const url = new URL(req.url, `https://${hostname}`)
     if (url.pathname.indexOf(`/api`) === 0) {
       // route express
-      app(req, res)
+      expressApp(req, res)
     } else {
       // route next
       await nextApp.render(
@@ -59,7 +56,11 @@ if (isHTTPS) {
     cert: fs.readFileSync(certPath),
   }
 
-  https.createServer(options, handler).listen(port)
+  const httpServer = https.createServer(options, handler)
+  await bindApolloServer(expressApp, httpServer)
+  httpServer.listen(port)
 } else {
-  http.createServer(handler).listen(port)
+  const httpServer = http.createServer(handler)
+  await bindApolloServer(expressApp, httpServer)
+  httpServer.listen(port)
 }

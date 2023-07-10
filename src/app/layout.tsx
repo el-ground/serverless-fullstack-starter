@@ -1,5 +1,7 @@
+import React from 'react'
 import '#src/styles/global/_global-styles.scss'
 import type { Metadata } from 'next'
+import { ApolloProvider } from '#src/framework/apollo/provider'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -12,8 +14,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="kr">
-      <body>{children}</body>
-    </html>
+    <ApolloProvider>
+      <html lang="kr">
+        <body>{children}</body>
+      </html>
+    </ApolloProvider>
   )
 }
