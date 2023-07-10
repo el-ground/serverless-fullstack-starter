@@ -1,0 +1,40 @@
+@import './disable-scroll-buttons-on-number-input';
+@import './font';
+@import './hover-highlight';
+@import './input';
+@import './remove-browser-default-styles';
+@import './text';
+
+html {
+  min-height: 100vh;
+}
+
+body {
+  right: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 62.5%;
+  font-family: $font-family;
+}
+
+.no-overscroll-refresh {
+  overscroll-behavior-y: contain;
+}
+
+.no-callout {
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* apple font accessibility */
+@supports (font: -apple-system-body) {
+  html {
+    /* stylelint-disable */
+    font: -apple-system-body; /*  !important; */
+  }
+}
+
+/* sugars */
+.data-empty-hidden {
+  visibility: hidden;
+}

@@ -1,0 +1,101 @@
+@import '../breakpoints';
+
+.t09,
+.t10,
+.t11,
+.t12,
+.t13,
+.t14,
+.t15,
+.t16,
+.t20,
+.t22 {
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5em;
+  letter-spacing: -0.3px;
+}
+
+/* set font sizes */
+
+.t22 {
+  font-size: 2.2em;
+}
+
+.t20 {
+  font-size: 2em;
+}
+
+.t16 {
+  font-size: 1.6em;
+}
+
+.t15 {
+  font-size: 1.5em;
+}
+
+.t14 {
+  font-size: 1.4em;
+}
+
+.t13 {
+  font-size: 1.3em;
+}
+
+.t12 {
+  font-size: 1.2em;
+}
+
+.t11 {
+  font-size: 1.1em;
+}
+
+.t10 {
+  font-size: 1em;
+}
+
+.t09 {
+  font-size: 0.9em;
+}
+
+@media (min-width: $bp-desktop) {
+  .t22 {
+    font-size: 2.2em;
+  }
+
+  .t20 {
+    font-size: 2em;
+  }
+
+  .t16 {
+    font-size: 1.6em;
+  }
+
+  .t15 {
+    font-size: 1.6em;
+  }
+
+  .t14 {
+    font-size: 1.6em;
+  }
+
+  .t13 {
+    font-size: 1.5em;
+  }
+
+  .t12 {
+    font-size: 1.4em;
+  }
+
+  .t11 {
+    font-size: 1.4em;
+  }
+
+  .t10 {
+    font-size: 1.3em;
+  }
+
+  .t09 {
+    font-size: 1.2em;
+  }
+}

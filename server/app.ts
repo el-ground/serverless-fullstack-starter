@@ -10,30 +10,20 @@ initializeRequestId()
 intiializeLogger()
 
 const app = express()
-
 // on production only http port is used!
-const httpPort = process.env.PORT ? Number(process.env.PORT) : undefined
-const httpsPort = process.env.HTTPS_PORT
-  ? Number(process.env.HTTPS_PORT)
-  : undefined
+const port = process.env.PORT ? Number(process.env.PORT) : undefined
 
 // enable cors while development!
 const corsAllowOrigins = []
 if (process.env.NODE_ENV === `development`) {
   const address = ip.address()
-  if (httpPort) {
-    corsAllowOrigins.push(
-      `http://localhost:${httpPort}`,
-      `http://${address}:${httpPort}`,
-    )
-  }
 
-  if (httpsPort) {
-    corsAllowOrigins.push(
-      `https://localhost:${httpsPort}`,
-      `https://${address}:${httpsPort}`,
-    )
-  }
+  corsAllowOrigins.push(
+    `http://localhost:${port}`,
+    `http://${address}:${port}`,
+    `https://localhost:${port}`,
+    `https://${address}:${port}`,
+  )
 }
 
 // bind routers

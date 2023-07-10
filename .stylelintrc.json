@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-css-modules",
+    "stylelint-config-prettier"
+  ],
+  "ignoreFiles": [
+    "**/*.svg",
+    "node_modules/**",
+    "public/**",
+    "dist/**",
+    ".next/**",
+    "**/*.mjs",
+    "**/*.js",
+    "**/*.ts",
+    "**/*.jsx",
+    "**/*.tsx"
+  ],
+  "configBasedir": "./",
+  "overrides": [
+    {
+      "files": ["*.scss", "**/*.scss"],
+      "rules": {
+        "selector-class-pattern": null,
+        "import-notation": null,
+        "selector-pseudo-class-no-unknown": null,
+        "no-descending-specificity": null,
+        "media-query-no-invalid": null
+      }
+    }
+  ]
+}

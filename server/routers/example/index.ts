@@ -1,4 +1,4 @@
-import { asyncHandler } from '#src/framework/express'
+import { asyncHandler } from '#server/framework/express'
 import { Router } from 'express'
 
 const exampleRouter = Router()

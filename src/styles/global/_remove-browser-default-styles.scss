@@ -1,0 +1,88 @@
+/* remove default margins and paddings */
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol {
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  padding: 0;
+  padding-block-start: 0;
+  padding-block-end: 0;
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+}
+
+/* removing default styles */
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+a {
+  color: inherit;
+
+  /* default highlight stuff */
+  text-decoration: none;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+address {
+  margin: 0;
+  font-style: normal;
+}
+
+button,
+input[type='submit'],
+input[type='reset'] {
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  color: inherit;
+  vertical-align: baseline;
+
+  /* default highlight stuff */
+  text-decoration: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.selectable {
+  outline: none;
+}

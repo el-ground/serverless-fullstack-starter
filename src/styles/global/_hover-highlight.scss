@@ -1,0 +1,200 @@
+$hover-highlight-background-color: rgb(128 128 128 / 13%);
+
+/* TODO : need to setup all accessibility effects! especially hover and etc. */
+
+/*
+
+    text classes : 
+    .t09,
+    .t10,
+    .t11,
+    .t12,
+    .t13,
+    .t14,
+    .t15,
+    .t16,
+    .t20,
+    .t22
+
+    &.t09,
+    &.t10,
+    &.t11,
+    &.t12,
+    &.t13,
+    &.t14,
+    &.t15,
+    &.t16,
+    &.t20,
+    &.t22
+*/
+
+/*
+    anchor or button & text : underline
+    anchor or button & not text : background-color
+    not text > anchor or button : background-color
+    .selectable > background-color
+*/
+
+@media (hover: hover) and (pointer: fine) {
+  a:hover,
+  button:hover {
+    /* &$text-classes v */
+    &.t09,
+    &.t10,
+    &.t11,
+    &.t12,
+    &.t13,
+    &.t14,
+    &.t15,
+    &.t16,
+    &.t20,
+    &.t22
+    /* &$text-classes ^ */ {
+      text-decoration: underline;
+    }
+
+    &:not(
+        /* $text-classes v */
+        .t09,
+        .t10,
+        .t11,
+        .t12,
+        .t13,
+        .t14,
+        .t15,
+        .t16,
+        .t20,
+        .t22,
+        /* $text-classes ^ */
+        .disable-selectable
+      ) {
+      background-color: $hover-highlight-background-color;
+    }
+  }
+
+  :not(
+    /* $text-classes v */
+    .t09,
+    .t10,
+    .t11,
+    .t12,
+    .t13,
+    .t14,
+    .t15,
+    .t16,
+    .t20,
+    .t22
+    /* $text-classes  */) {
+    & > {
+      a:hover {
+        &:not(
+            /* $text-classes v */
+            .t09,
+            .t10,
+            .t11,
+            .t12,
+            .t13,
+            .t14,
+            .t15,
+            .t16,
+            .t20,
+            .t22,
+            /* $text-classes  */
+            .disable-selectable
+          ) {
+          background-color: $hover-highlight-background-color;
+        }
+      }
+    }
+  }
+
+  .selectable:hover {
+    text-decoration: none;
+
+    &::after {
+      background-color: $hover-highlight-background-color;
+    }
+  }
+}
+
+a:focus,
+a:active,
+button:focus,
+button:active {
+  /* &$text-classes v */
+  &.t09,
+    &.t10,
+    &.t11,
+    &.t12,
+    &.t13,
+    &.t14,
+    &.t15,
+    &.t16,
+    &.t20,
+    &.t22
+    /* &$text-classes ^ */ {
+    text-decoration: underline;
+  }
+
+  &:not(
+    /* $text-classes v */
+    .t09,
+    .t10,
+    .t11,
+    .t12,
+    .t13,
+    .t14,
+    .t15,
+    .t16,
+    .t20,
+    .t22,
+    /* $text-classes ^ */
+    .disable-selectable) {
+    background-color: $hover-highlight-background-color;
+  }
+}
+
+:not(
+    /* $text-classes v */
+    .t09,
+    .t10,
+    .t11,
+    .t12,
+    .t13,
+    .t14,
+    .t15,
+    .t16,
+    .t20,
+    .t22
+    /* $text-classes ^ */) {
+  & > {
+    a:focus,
+    a:active {
+      &:not(
+        /* $text-classes v */
+        .t09,
+        .t10,
+        .t11,
+        .t12,
+        .t13,
+        .t14,
+        .t15,
+        .t16,
+        .t20,
+        .t22,
+        /* $text-classes ^ */
+        .disable-selectable) {
+        background-color: $hover-highlight-background-color;
+      }
+    }
+  }
+}
+
+.selectable:focus,
+.selectable:active {
+  text-decoration: none;
+
+  &::after {
+    background-color: $hover-highlight-background-color;
+  }
+}

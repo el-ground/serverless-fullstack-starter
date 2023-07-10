@@ -1,0 +1,12 @@
+@import './font';
+
+textarea,
+.content-editable,
+input,
+.button-style,
+.input-style {
+  line-height: 1.5em;
+  letter-spacing: -0.3px;
+  font-size: max(16px, 1.6em); /* disable zoom */
+  font-family: $font-family;
+}

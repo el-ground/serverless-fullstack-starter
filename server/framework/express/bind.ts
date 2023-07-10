@@ -1,4 +1,4 @@
-import type { Application, Router } from 'express'
+import type { Router } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import compression from 'compression'
@@ -10,7 +10,7 @@ import { errorHandler } from './middlewares/error-handler'
     Binds routers and handlers to given express app.
 */
 export const bind = (
-  app: Application,
+  app: Router,
   routers: Router[],
   {
     corsAllowOrigins,

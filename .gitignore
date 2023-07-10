@@ -54,6 +54,9 @@ typings/
 # dotenv environment variable files
 .env*
 
+# keys
+*.pem
+
 # gatsby files
 .cache/
 public
@@ -89,3 +92,15 @@ temp/
 
 # build results
 dist
+
+# next
+/.next/
+/out/
+/build
+
+# next-vercel
+.vercel
+
+# next-typescript
+*.tsbuildinfo
+next-env.d.ts

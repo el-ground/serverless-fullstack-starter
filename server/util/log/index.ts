@@ -4,6 +4,6 @@ import {
   logInfo,
   logDebug,
   logError,
-} from '#src/framework/express/middlewares/logger'
+} from '#server/framework/express/middlewares/logger'
 
 export { logInfo, logDebug, logError }
