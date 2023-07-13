@@ -6,3 +6,5 @@ dist
 public
 # don't lint nyc coverage output
 coverage
+# don't lint generated graphql types
+schema/__generated__/

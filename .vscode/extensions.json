@@ -3,6 +3,7 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "stylelint.vscode-stylelint",
+        "GraphQL.vscode-graphql-syntax",
         "yzhang.markdown-all-in-one",
         "eamodio.gitlens",
     ]

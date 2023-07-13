@@ -33,11 +33,19 @@
     "baseUrl": ".",
     "paths": {
       // exmaple of directory aliases
+      /*
       "#server/*": [
         "server/*"
       ],
       "#src/*": [
         "src/*"
+      ],
+      "#schema/*": [
+        "schema/*"
+      ],
+      */
+      "@/*": [
+        "./*"
       ]
     },
     "plugins": [
@@ -56,7 +64,8 @@
   "include": [
     "server/**/*",
     "src/**/*",
-    ".next/types/**/*.ts",
+    "schema/**/*",
+    ".next/types/**/*.ts", // client
     "next-env.d.ts"
   ],
   "exclude": [

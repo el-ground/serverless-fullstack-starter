@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { app } from '#server/app'
+import { app } from '@/server/app'
 import request from 'supertest'
 
 // https://nodejs.dev/en/api/v18/test/

@@ -1,5 +1,5 @@
 /* customize for your own needs! */
-import express from 'express'
+import express, { Router } from 'express'
 import ip from 'ip'
 import { bind } from './framework/express'
 import { exampleRouter } from './routers/example'
@@ -10,6 +10,7 @@ initializeRequestId()
 intiializeLogger()
 
 const app = express()
+const mainRouter = Router()
 // on production only http port is used!
 const port = process.env.PORT ? Number(process.env.PORT) : undefined
 
@@ -27,8 +28,10 @@ if (process.env.NODE_ENV === `development`) {
 }
 
 // bind routers
-bind(app, [exampleRouter], {
+bind(mainRouter, [exampleRouter], {
   corsAllowOrigins,
 })
+
+app.use(`/api/`, mainRouter)
 
 export { app }

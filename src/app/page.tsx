@@ -1,9 +1,9 @@
-import { Dummy } from '#src/components/dummy'
+import { SSRHydrationClientComponentExample } from '@/src/components/ssr-hydration-client-component-example'
 
 const RootContainer = () => {
   return (
     <div className="t14">
-      <Dummy />
+      <SSRHydrationClientComponentExample />
       Hello world!!!
     </div>
   )

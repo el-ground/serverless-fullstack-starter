@@ -4,52 +4,19 @@ import type { Application } from 'express'
 import { json } from 'express'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
+import type { Context } from './context'
+import { schema } from './schema'
 
-const typeDefs = `#graphql
-  # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-  # This "Book" type defines the queryable fields for every book in our data source.
-  type Book {
-    title: String
-    author: String
-  }
-
-  # The "Query" type is special: it lists all of the available queries that
-  # clients can execute, along with the return type for each. In this
-  # case, the "books" query returns an array of zero or more Books (defined above).
-  type Query {
-    books: [Book]
-  }
-`
-const books = [
-  {
-    title: 'The Awakening',
-    author: 'Kate Chopin',
-  },
-  {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-]
-
-const resolvers = {
-  Query: {
-    books: () => books,
-  },
-}
-
-interface MyContext {
-  token?: string
-}
-
+// https://github.com/apollographql/apollo-server/issues/1933
 export const bindApolloServer = async (
   app: Application,
   httpServer: Server,
 ) => {
-  const server = new ApolloServer<MyContext>({
-    typeDefs,
-    resolvers,
+  const server = new ApolloServer<Context>({
+    schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    // Development only
+    introspection: process.env.NODE_ENV === `development`,
   })
   // prepare apollo
   await server.start()

@@ -40,8 +40,10 @@ const handler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
 // used for dev
 const certPath = process.env.CERT || undefined
 const certKeyPath = process.env.CERT_KEY || undefined
-const isHTTPS = !!certPath
-console.log(`hostname : ${hostname} port : ${port} isHTTPS: ${isHTTPS} `)
+const isHTTPS = process.env.SECURE === `true`
+console.log(
+  `NODE_ENV: ${process.env.NODE_ENV} hostname : ${hostname} port : ${port} isHTTPS: ${isHTTPS} `,
+)
 if (isHTTPS) {
   if (!certPath) {
     throw new Error(`cert path : process.env.CERT not provided!`)

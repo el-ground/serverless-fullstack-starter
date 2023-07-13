@@ -1,7 +1,9 @@
 import React from 'react'
-import '#src/styles/global/_global-styles.scss'
+import '@/src/styles/global/_global-styles.scss'
 import type { Metadata } from 'next'
-import { ApolloProvider } from '#src/framework/apollo/provider'
+import { ApolloProvider } from '@/src/framework/apollo/client'
+
+console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 
 export const metadata: Metadata = {
   title: 'Create Next App',
