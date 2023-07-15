@@ -4,7 +4,7 @@ import { gql } from '@/schema/__generated__/client'
 import { ApolloLink, InMemoryCache } from '@apollo/client'
 import { NextSSRApolloClient } from '@apollo/experimental-nextjs-app-support/ssr'
 import { SchemaLink } from '@apollo/client/link/schema'
-import { schema } from '@/server/schema'
+import { schema } from '@/server/framework/apollo/schema'
 import { headers } from 'next/headers'
 
 // https://www.apollographql.com/docs/react/api/link/apollo-link-schema/

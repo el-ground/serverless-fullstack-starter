@@ -5,13 +5,13 @@ import compression from 'compression'
 import { requestId } from './middlewares/request-id'
 import { logInfo } from './middlewares/logger'
 import { errorHandler } from './middlewares/error-handler'
+import { rootRouter } from '@/server/routers'
 
 /* 
     Binds routers and handlers to given express app.
 */
 export const bind = (
-  app: Router,
-  routers: Router[],
+  mainRouter: Router,
   {
     corsAllowOrigins,
   }: {
@@ -21,9 +21,9 @@ export const bind = (
   /*
         1. request id log
     */
-  app.use(requestId())
+  mainRouter.use(requestId())
 
-  app.use(
+  mainRouter.use(
     morgan('[:date[iso]] Started :method :url for :remote-addr', {
       immediate: true,
       stream: {
@@ -32,7 +32,7 @@ export const bind = (
     }),
   )
 
-  app.use(
+  mainRouter.use(
     morgan(
       '[:date[iso]] Completed :status :res[content-length] in :response-time ms',
       {
@@ -51,21 +51,19 @@ export const bind = (
       origin: corsAllowOrigins,
     }
 
-    app.use(cors(corsOptions))
+    mainRouter.use(cors(corsOptions))
   }
 
   /*
         compression
     */
-  app.use(compression())
+  mainRouter.use(compression())
 
-  app.get([`/`, `/healthy`, `/ping`], (req, res) => {
+  mainRouter.get([`/`, `/healthy`, `/ping`], (req, res) => {
     res.status(200)
     res.send(`healthy!`)
   })
 
-  // bind routers!
-  routers.forEach((router) => app.use(router))
-
-  app.use(errorHandler())
+  mainRouter.use(rootRouter)
+  mainRouter.use(errorHandler())
 }

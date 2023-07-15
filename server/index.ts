@@ -3,7 +3,7 @@ import https from 'https'
 import fs from 'fs'
 import { EventEmitter } from 'events'
 import { app as expressApp } from './app'
-import { bindApolloServer } from './apollo-server'
+import { bind as bindApolloServer } from './framework/apollo/bind'
 import next from 'next'
 
 EventEmitter.defaultMaxListeners = 100

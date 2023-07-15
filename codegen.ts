@@ -9,7 +9,7 @@ const config: CodegenConfig = {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
         useIndexSignature: true,
-        contextType: '../../../server/context#Context',
+        contextType: '../../../server/framework/apollo/context#Context',
       },
     },
     'schema/__generated__/server/introspection.json': {

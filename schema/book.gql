@@ -1,14 +1,15 @@
 # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
-# This "Book" type defines the queryable fields for every book in our data source.
+# both server and client and database should agree to this
+# be aware that either types or database can change. there's no strict guarantee that on the type.
 type Book {
   title: String
   author: String
 }
 
-# The "Query" type is special: it lists all of the available queries that
-# clients can execute, along with the return type for each. In this
-# case, the "books" query returns an array of zero or more Books (defined above).
+# client queries using this
+# server defines resolvers using this
 type Query {
   books: [Book]
+  book(id: String!): Book
 }

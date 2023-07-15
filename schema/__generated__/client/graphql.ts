@@ -24,7 +24,13 @@ export type Book = {
 
 export type Query = {
   __typename?: 'Query';
+  book?: Maybe<Book>;
   books?: Maybe<Array<Maybe<Book>>>;
+};
+
+
+export type QueryBookArgs = {
+  id: Scalars['String']['input'];
 };
 
 export type GetBooks2QueryVariables = Exact<{ [key: string]: never; }>;

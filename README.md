@@ -24,6 +24,10 @@
 - Full typescript setup + graphql => super less work to get your client satisfied
 - All architecture stays inside the repo! Any developer can jump in to collaborate to your project!
 
+### TODO
+
+- react component testing
+
 ### Additional features TODO
 
 - Media serve
@@ -84,7 +88,7 @@
 ### How to log
 
 ```typescript
-import { logInfo, logDebug, logError } from '#src/util/log'
+import { logInfo, logDebug, logError } from '@/src/util/log'
 
 /*
 	This prints request id inside the entire promise stack of the request.

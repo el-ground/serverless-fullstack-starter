@@ -1,7 +1,7 @@
 import { globSync } from 'glob'
 import { readFileSync } from 'node:fs'
-import { makeExecutableSchema } from 'graphql-tools'
-import { resolvers } from './resolvers'
+import { makeExecutableSchema } from '@graphql-tools/schema'
+import { resolvers } from '@/server/resolvers'
 
 const typeDefPaths = globSync('./dist/schema/**/*.gql')
 const typeDefs: string[] = []
