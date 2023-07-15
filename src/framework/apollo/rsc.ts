@@ -1,35 +1,47 @@
+'use server'
+/*
+  This module is called inside next server code, neither in our express handler or browser.
+*/
 import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
 import { gql } from '@/schema/__generated__/client'
-
-import { ApolloLink, InMemoryCache } from '@apollo/client'
+import { InMemoryCache, ApolloLink } from '@apollo/client'
 import { NextSSRApolloClient } from '@apollo/experimental-nextjs-app-support/ssr'
+import { setContext } from '@apollo/client/link/context'
 import { SchemaLink } from '@apollo/client/link/schema'
 import { schema } from '@/server/framework/apollo/schema'
-import { headers } from 'next/headers'
+import { cookies } from 'next/headers'
+import { createLoader } from '@/server/framework/database/loader'
+import { validateParseAndRefresh } from '@/server/framework/auth/validate-parse-and-refresh'
 
 // https://www.apollographql.com/docs/react/api/link/apollo-link-schema/
 const { getClient } = registerApolloClient(() => {
-  // called every render.
-  // https://www.apollographql.com/docs/react/networking/advanced-http-networking/
-
-  const authMiddleware = new ApolloLink((operation, forward) => {
-    // add the authorization to the headers
-
-    const authorizationHeaderValue = headers().get('authorization')
-
-    operation.setContext(({ headers = {} }) => ({
-      headers: {
-        ...headers,
-        authorization: authorizationHeaderValue,
-      },
-    }))
-
-    return forward(operation)
-  })
-
   const client = new NextSSRApolloClient({
     cache: new InMemoryCache(),
-    link: ApolloLink.from([authMiddleware, new SchemaLink({ schema })]),
+    ssrMode: true,
+    // https://github.com/apollographql/apollo-link/blob/master/packages/apollo-link-schema/src/index.ts
+    link: ApolloLink.from([
+      setContext(async () => {
+        const authorizationPayloadCookie =
+          cookies().get(`authorization-payload`)?.value || ``
+        const authorizationRestCookie =
+          cookies().get(`authorization-rest`)?.value || ``
+        const authToken = authorizationPayloadCookie + authorizationRestCookie
+
+        const { authPayload } = await validateParseAndRefresh(authToken, false)
+
+        const loader = createLoader()
+        return {
+          loader,
+          ...authPayload,
+        }
+      }),
+      new SchemaLink({
+        schema,
+        context: (operation) => {
+          return operation.getContext()
+        },
+      }),
+    ]),
   })
 
   return client

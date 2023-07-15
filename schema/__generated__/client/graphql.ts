@@ -19,7 +19,19 @@ export type Scalars = {
 export type Book = {
   __typename?: 'Book';
   author?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addBook?: Maybe<Book>;
+};
+
+
+export type MutationAddBookArgs = {
+  author: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type Query = {

@@ -6,5 +6,13 @@ export const getOrigin = () => {
     return 'https://localhost:8000' // change to production domain!!
   }
 
-  return 'https://localhost:8000'
+  return 'http://localhost:3000'
+}
+
+export const getCORSAllosOrigins = (): readonly string[] => {
+  /*
+    "http://localhost:3000",
+    "https://your-domain.com"
+  */
+  return []
 }

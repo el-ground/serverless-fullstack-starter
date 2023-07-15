@@ -1,4 +1,4 @@
-import type { Router } from 'express'
+import { Router } from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
 import compression from 'compression'
@@ -10,20 +10,18 @@ import { rootRouter } from '@/server/routers'
 /* 
     Binds routers and handlers to given express app.
 */
-export const bind = (
-  mainRouter: Router,
-  {
-    corsAllowOrigins,
-  }: {
-    corsAllowOrigins?: string[]
-  },
-) => {
+export const createRouter = ({
+  corsAllowOrigins,
+}: {
+  corsAllowOrigins?: string[]
+}) => {
+  const router = Router()
   /*
         1. request id log
     */
-  mainRouter.use(requestId())
+  router.use(requestId())
 
-  mainRouter.use(
+  router.use(
     morgan('[:date[iso]] Started :method :url for :remote-addr', {
       immediate: true,
       stream: {
@@ -32,7 +30,7 @@ export const bind = (
     }),
   )
 
-  mainRouter.use(
+  router.use(
     morgan(
       '[:date[iso]] Completed :status :res[content-length] in :response-time ms',
       {
@@ -51,19 +49,21 @@ export const bind = (
       origin: corsAllowOrigins,
     }
 
-    mainRouter.use(cors(corsOptions))
+    router.use(cors(corsOptions))
   }
 
   /*
         compression
     */
-  mainRouter.use(compression())
+  router.use(compression())
 
-  mainRouter.get([`/`, `/healthy`, `/ping`], (req, res) => {
+  router.get([`/`, `/healthy`, `/ping`], (req, res) => {
     res.status(200)
     res.send(`healthy!`)
   })
 
-  mainRouter.use(rootRouter)
-  mainRouter.use(errorHandler())
+  router.use(rootRouter)
+  router.use(errorHandler())
+
+  return router
 }

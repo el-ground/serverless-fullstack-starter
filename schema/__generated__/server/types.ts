@@ -20,7 +20,19 @@ export type Scalars = {
 export type Book = {
   __typename?: 'Book';
   author?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addBook?: Maybe<Book>;
+};
+
+
+export type MutationAddBookArgs = {
+  author: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type Query = {
@@ -108,6 +120,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Book: ResolverTypeWrapper<Book>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 }>;
@@ -116,14 +129,20 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Book: Book;
   Boolean: Scalars['Boolean']['output'];
+  Mutation: {};
   Query: {};
   String: Scalars['String']['output'];
 }>;
 
 export type BookResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = ResolversObject<{
   author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationAddBookArgs, 'author' | 'title'>>;
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -133,6 +152,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
   Book?: BookResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 }>;
 

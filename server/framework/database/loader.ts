@@ -1,19 +1,8 @@
 import DataLoader from 'dataloader'
 import lruMapModule from 'lru_map'
+import { database } from './example'
 
 const { LRUMap } = lruMapModule
-
-// mock
-const books: Record<string, any> = {
-  a: {
-    title: 'The Awakeningg',
-    author: 'Kate Chopin',
-  },
-  b: {
-    title: 'City of Glass',
-    author: 'Paul Auster',
-  },
-}
 
 const batchLoad = async (keys: readonly string[]) => {
   /*
@@ -22,7 +11,7 @@ const batchLoad = async (keys: readonly string[]) => {
         return null if not exists!
     */
   // dummy
-  const result = keys.map((key) => (books[key] as any) || null)
+  const result = keys.map((key) => (database[key] as any) || null)
   return result
 }
 

@@ -1,15 +1,18 @@
 import { ApolloServer } from '@apollo/server'
 import type { Server } from 'http'
-import type { Application } from 'express'
-import { json } from 'express'
+import { Router, json } from 'express'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { createLoader } from '@/server/framework/database/loader'
+import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
+import cookieParser from 'cookie-parser'
 import type { Context } from './context'
 import { schema } from './schema'
 
 // https://github.com/apollographql/apollo-server/issues/1933
-export const bind = async (app: Application, httpServer: Server) => {
+export const createRouter = async (httpServer: Server) => {
+  const router = Router()
+
   const server = new ApolloServer<Context>({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
@@ -19,27 +22,22 @@ export const bind = async (app: Application, httpServer: Server) => {
   // prepare apollo
   await server.start()
   // add apollo to express app
-  app.use(
-    '/api/graphql',
-    json(),
+  router.use(json())
+  router.use(cookieParser()) // required to parse auth
+  // apollo can refresh token!
+  router.use(validateParseAndRefreshAuthCookiesMiddleware({ refresh: true }))
+  router.use(
     expressMiddleware(server, {
       context: async ({ req }) => {
-        /*
-          TODO : auth object populate
-        */
-        const userId = (req as any).auth?.userId
-        const isAdmin = (req as any).auth?.isAdmin
-        const isAuthorized = !!userId
-
         const loader = createLoader()
 
         return {
           loader,
-          userId,
-          isAdmin,
-          isAuthorized,
+          ...req.auth,
         }
       },
     }),
   )
+
+  return router
 }

@@ -1,4 +1,5 @@
-import type { Request, Response, NextFunction, RequestHandler } from 'express'
+import type { RequestHandler } from 'express'
+import type { Request, Response, NextFunction } from 'express-serve-static-core'
 import expressRequestId from 'express-request-id'
 import { Namespace, createNamespace } from 'cls-hooked'
 

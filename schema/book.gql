@@ -3,6 +3,7 @@
 # both server and client and database should agree to this
 # be aware that either types or database can change. there's no strict guarantee that on the type.
 type Book {
+  id: String
   title: String
   author: String
 }
@@ -12,4 +13,8 @@ type Book {
 type Query {
   books: [Book]
   book(id: String!): Book
+}
+
+type Mutation {
+  addBook(title: String!, author: String!): Book
 }

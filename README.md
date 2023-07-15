@@ -38,6 +38,16 @@
 - Capacitor setup for hybrid app deployment
 - Safe area
 
+### Caching
+
+Only caching that's recommended is query-stack caching inside a single query. We don't recomment caching neither on http, graphql, dataloader. Caching should be done behind the dataloader. The reason is that requests from a single client can be load balanced through multiple server instances. If each instance has their local cache, The client might view multiple cached versions of the same data.
+
+### Auth / ACL
+
+The auth middleware validates / refreshes token and attaches acl-fields to request data. Filtering of the data should be performed at the resolver. No graphql level filtering is recommended.
+
+The client should implement updating local auth token from the server response to prevent extra round trip.
+
 ### Recommended setup
 
 - vscode

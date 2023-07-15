@@ -1,19 +1,15 @@
-import express, { Router } from 'express'
-import { bind } from './framework/express'
+import express from 'express'
+import { createRouter } from './framework/express'
 import { initialize as initializeRequestId } from './framework/express/middlewares/request-id'
 import { initialize as intiializeLogger } from './framework/express/middlewares/logger'
+import { getCORSAllosOrigins } from '@/config'
 
 initializeRequestId()
 intiializeLogger()
 
 const app = express()
-const mainRouter = Router()
-
-// enable cors while development!
-
-// bind routers
-bind(mainRouter, {
-  corsAllowOrigins: [],
+const mainRouter = createRouter({
+  corsAllowOrigins: [...getCORSAllosOrigins()],
 })
 
 app.use(`/api/`, mainRouter)

@@ -1,4 +1,4 @@
 import { asyncHandler } from './async-handler'
-import { bind } from './bind'
+import { createRouter } from './create-router'
 
-export { asyncHandler, bind }
+export { asyncHandler, createRouter }
