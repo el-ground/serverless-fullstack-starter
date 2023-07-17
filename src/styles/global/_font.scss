@@ -1,2 +1,29 @@
+@font-face {
+  font-weight: 400;
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-display: swap;
+  src: local('Nanum Gothic'),
+    url('/fonts/nanum-gothic/nanum-gothic-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 700;
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-display: swap;
+  src: local('Nanum Gothic'),
+    url('/fonts/nanum-gothic/nanum-gothic-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-weight: 800;
+  font-family: 'Nanum Gothic';
+  font-style: normal;
+  font-display: swap;
+  src: local('Nanum Gothic'),
+    url('/fonts/nanum-gothic/nanum-gothic-800.woff2') format('woff2');
+}
+
 /* @font-family: 'Insert-your-font-name-here', sans-serif; */
-$font-family: sans-serif;
+$font-family: 'Nanum Gothic', sans-serif;

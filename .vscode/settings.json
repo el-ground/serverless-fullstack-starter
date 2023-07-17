@@ -45,4 +45,5 @@
         "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     },
     "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true
 }

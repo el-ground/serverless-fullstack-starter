@@ -24,22 +24,6 @@ export const makeClient = () => {
 
   const httpLink = new HttpLink({ uri: `${getOrigin()}/api/graphql` })
 
-  let authorizationHeaderValue: string | null = null
-  if (typeof window !== `undefined`) {
-    authorizationHeaderValue = localStorage.getItem(`token`)
-  }
-
-  const authMiddleware = new ApolloLink((operation, forward) => {
-    operation.setContext(({ headers = {} }) => ({
-      headers: {
-        ...headers,
-        authorization: authorizationHeaderValue,
-      },
-    }))
-
-    return forward(operation)
-  })
-
   const links: ApolloLink[] = []
   if (typeof window === `undefined`) {
     links.push(
@@ -48,7 +32,7 @@ export const makeClient = () => {
       }),
     )
   }
-  links.push(authMiddleware, httpLink)
+  links.push(httpLink)
 
   const client = new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),

@@ -1,4 +1,4 @@
-@import '../breakpoints';
+@use '../breakpoints' as breakpoints;
 
 .t09,
 .t10,
@@ -58,7 +58,7 @@
   font-size: 0.9em;
 }
 
-@media (min-width: $bp-desktop) {
+@media (min-width: breakpoints.$desktop) {
   .t22 {
     font-size: 2.2em;
   }

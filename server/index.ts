@@ -22,7 +22,10 @@ const nextApp = await createNextApp()
 
 const handler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
   if (req.url) {
-    const url = new URL(req.url, `https://${hostname}`)
+    const url = new URL(
+      req.url,
+      `https://${req.headers.host || `${hostname}:${port}`}`,
+    )
     if (url.pathname.indexOf(`/api`) === 0) {
       expressApp(req, res)
     } else {

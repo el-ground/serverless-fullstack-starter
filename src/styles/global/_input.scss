@@ -1,4 +1,4 @@
-@import './font';
+@use './font' as font;
 
 textarea,
 .content-editable,
@@ -8,5 +8,5 @@ input,
   line-height: 1.5em;
   letter-spacing: -0.3px;
   font-size: max(16px, 1.6em); /* disable zoom */
-  font-family: $font-family;
+  font-family: font.$font-family;
 }

@@ -1,0 +1,42 @@
+@use '@/src/styles/_palette' as palette;
+@use '@/src/styles/_safe-area' as safe-area;
+
+.rootContainer {
+  padding: safe-area.$top 12px safe-area.$bottom;
+
+  h1 {
+    margin: 1em 0;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 1em 0;
+    font-size: 14px;
+    line-height: 1.4em;
+  }
+
+  a {
+    color: palette.$link;
+  }
+}
+
+.errorAction {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.errorList {
+  margin: 20px 0;
+  padding: 0;
+  color: gray;
+}
+
+.errorListBlock {
+  font-size: 12px;
+}
+
+.errorPath {
+  color: gray;
+}

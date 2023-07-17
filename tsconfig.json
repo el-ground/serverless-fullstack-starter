@@ -32,28 +32,16 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      // exmaple of directory aliases
-      /*
-      "#server/*": [
-        "server/*"
-      ],
-      "#src/*": [
-        "src/*"
-      ],
-      "#schema/*": [
-        "schema/*"
-      ],
-      */
       "@/*": [
         "./*"
       ]
     },
     "plugins": [
       {
-        "name": "typescript-plugin-css-modules"
+        "name": "next"
       },
       {
-        "name": "next"
+        "name": "typescript-plugin-css-modules"
       }
     ],
     "jsx": "preserve",

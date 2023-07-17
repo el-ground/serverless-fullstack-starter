@@ -2,7 +2,7 @@
 
 const nextConfig = {
   experimental: {
-    serverActions: true, // set cookies in rsc
+    serverActions: true,
   },
 }
 

@@ -8,3 +8,4 @@ public
 coverage
 # don't lint generated graphql types
 schema/__generated__/
+assets

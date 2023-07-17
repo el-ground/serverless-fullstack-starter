@@ -1,0 +1,8 @@
+$top: max(
+  /* custom definition */ var(--safe-area-inset-top, 0px),
+  /* native */ env(safe-area-inset-top, 0px)
+);
+$bottom: max(
+  /* custom definition */ var(--safe-area-inset-bottom, 0px),
+  /* native */ env(safe-area-inset-bottom, 0px)
+);

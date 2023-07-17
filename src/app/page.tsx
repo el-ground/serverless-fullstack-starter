@@ -1,11 +1,13 @@
 import { SSRHydrationClientComponentExample } from '@/src/components/ssr-hydration-client-component-example'
+import { RSCExample } from '@/src/components/rsc-example'
 
 const RootContainer = () => {
   return (
-    <div className="t14">
+    <>
+      <RSCExample />
       <SSRHydrationClientComponentExample />
-      Hello world!!!
-    </div>
+      <div className="t14">Hello world!!!</div>
+    </>
   )
 }
 

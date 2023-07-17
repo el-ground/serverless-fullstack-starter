@@ -1,7 +1,10 @@
 import React from 'react'
+import Head from 'next/head'
 import '@/src/styles/global/_global-styles.scss'
 import type { Metadata } from 'next'
+import { ErrorBoundary } from '@/src/components/error-boundary'
 import { ApolloProvider } from '@/src/framework/apollo/client'
+import { ForceRSC } from '@/src/components/force-rsc'
 
 console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 
@@ -16,10 +19,37 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ApolloProvider>
+    <>
+      <Head>
+        <link
+          rel="preload"
+          href="/fonts/nanum-gothic/nanum-gothic-400.woff2"
+          as="font"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/nanum-gothic/nanum-gothic-700.woff2"
+          as="font"
+          type="font/woff2"
+        />
+        <link
+          rel="preload"
+          href="/fonts/nanum-gothic/nanum-gothic-800.woff2"
+          as="font"
+          type="font/woff2"
+        />
+      </Head>
       <html lang="kr">
-        <body>{children}</body>
+        <body>
+          <ErrorBoundary>
+            <ApolloProvider>
+              {children}
+              <ForceRSC />
+            </ApolloProvider>
+          </ErrorBoundary>
+        </body>
       </html>
-    </ApolloProvider>
+    </>
   )
 }

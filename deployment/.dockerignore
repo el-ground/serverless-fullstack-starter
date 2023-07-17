@@ -6,6 +6,8 @@
 !yarn.lock
 
 !dist/**
+!.next/**
+!public/**
 
 # ignore files within allowed files and directories
 *.test.js

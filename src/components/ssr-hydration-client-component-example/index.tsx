@@ -4,7 +4,9 @@ import React from 'react'
 import { useSuspenseQuery } from '@/src/framework/apollo/client'
 
 import { gql } from '@/schema/__generated__/client/gql'
+import Like from '@/assets/sample.svg'
 
+import Image from 'next/image'
 import styles from './style.module.scss'
 
 const query = gql(`
@@ -27,6 +29,7 @@ export const SSRHydrationClientComponentExample = () => {
   if (error) return <p>Error : {error.message}</p>
   return (
     <React.Suspense fallback="loading...">
+      <Image priority src={Like} alt="heart" width={24} height={24} />
       <div className={styles.rootContainer}>
         {data?.books?.map((e) => JSON.stringify(e))}
       </div>
