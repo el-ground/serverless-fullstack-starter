@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 import Like from '@/assets/sample.svg'
 import { getClient, gql } from '@/src/framework/apollo/rsc'
 
@@ -15,7 +14,7 @@ export const RSCExample = async () => {
   const { data } = await client.query({ query })
   return (
     <div>
-      <Image priority src={Like} alt="heart" width={24} height={24} />
+      <Like width={24} height={24} />
       {data?.books?.map((e) => JSON.stringify(e))}
     </div>
   )

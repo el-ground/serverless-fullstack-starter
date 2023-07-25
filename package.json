@@ -32,6 +32,7 @@
     "@graphql-codegen/introspection": "^4.0.0",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
+    "@svgr/webpack": "^8.0.1",
     "@types/cls-hooked": "^4.3.4",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
