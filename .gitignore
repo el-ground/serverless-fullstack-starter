@@ -87,6 +87,9 @@ yarn-error.log
 # Vim generated
 *.swp 
 
+# VsCode Counter
+.VSCodeCounter
+
 # temp directory for shared codes in the monorepo
 temp/
 

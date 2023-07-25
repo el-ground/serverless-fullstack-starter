@@ -34,7 +34,14 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@util/*": [
+        "./src/util/*"
+      ],
+      // maybe use @ for src/ and # for server/
     },
     "plugins": [
       {
