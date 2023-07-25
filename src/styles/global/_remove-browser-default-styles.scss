@@ -35,54 +35,36 @@ ol {
   list-style-type: none;
 }
 
+/* default highlight stuff */
+
 a {
   color: inherit;
-
-  /* default highlight stuff */
   text-decoration: none;
-  outline: none;
+
+  /* outline: none; */
   cursor: pointer;
   appearance: none;
-  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+/* input[type='submit']*/
+[type='submit'],
+/* input[type='reset']*/
+[type='reset'] {
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  cursor: pointer;
+  appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
 
 address {
   margin: 0;
   font-style: normal;
-}
-
-button,
-input[type='submit'],
-input[type='reset'] {
-  padding: 0;
-  color: inherit;
-  font: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  color: inherit;
-  vertical-align: baseline;
-
-  /* default highlight stuff */
-  text-decoration: none;
-  border: 0;
-  outline: none;
-  cursor: pointer;
-  appearance: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.selectable {
-  outline: none;
 }

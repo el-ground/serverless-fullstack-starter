@@ -1,5 +1,6 @@
 @use '../breakpoints' as breakpoints;
 
+.t,
 .t09,
 .t10,
 .t11,
@@ -12,8 +13,14 @@
 .t22 {
   font-style: normal;
   font-weight: 400;
-  line-height: 1.5em;
   letter-spacing: -0.3px;
+  line-height: 1.5em;
+  white-space: pre-wrap; /* render all white space, break, newline  */
+  word-break: break-all;
+
+  &.fit {
+    line-height: 1em;
+  }
 }
 
 /* set font sizes */

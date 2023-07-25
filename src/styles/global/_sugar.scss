@@ -1,0 +1,14 @@
+@use '../palette' as palette;
+
+/* sugars to fasten your development */
+.primary {
+  color: palette.$primary;
+}
+
+.link {
+  color: palette.$link;
+}
+
+.error {
+  color: palette.$error;
+}

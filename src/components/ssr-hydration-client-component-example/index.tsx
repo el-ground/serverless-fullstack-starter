@@ -31,6 +31,15 @@ export const SSRHydrationClientComponentExample = () => {
       <div className={styles.rootContainer}>
         {data?.books?.map((e) => JSON.stringify(e))}
       </div>
+      <input type="text" value="foo" />
+      <button type="button" className="t14">
+        버튼 버튼입니당
+      </button>
+      <a type="button" href="#" className="t14 link">
+        앵커 버튼입니당
+      </a>
+      <input type="submit" value="Input submit button" className="t14" />
+      <p className="t14 fit">하이하이</p>
     </React.Suspense>
   )
 }
