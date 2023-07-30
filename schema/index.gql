@@ -1,0 +1,10 @@
+type Query {
+  auth: AuthQueries!
+  user: UserQueries!
+  book: BookQueries!
+}
+
+type Mutation {
+  auth: AuthMutations!
+  book: BookMutations!
+}

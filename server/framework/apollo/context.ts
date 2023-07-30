@@ -5,4 +5,5 @@ import type { AuthPayload } from '@/server/framework/auth/auth-payload'
 */
 export interface Context extends AuthPayload {
   loader: Loader
+  setAuthToken: (token: string | null) => void
 }

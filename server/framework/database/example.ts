@@ -1,14 +1,20 @@
-import { Book } from '@/schema/__generated__/server/types'
-// mock
-export const database: Record<string, Book> = {
-  a: {
-    id: `a`,
-    title: 'The Awakeningg',
-    author: 'Kate Chopin',
+import { AccountType, User, Book } from '@/schema/__generated__/server/types'
+
+export const database: Record<string, User | Book> = {
+  'user:a': {
+    id: `user:a`,
+    public: {
+      accountType: AccountType.User,
+    },
   },
-  b: {
-    id: `b`,
-    title: 'City of Glass',
-    author: 'Paul Auster',
+  'book:a': {
+    id: `book:a`,
+    title: `helloworld`,
+    author: `jwjang`,
+  },
+  'book:b': {
+    id: `book:b`,
+    title: `titletitle`,
+    author: `authorauthor`,
   },
 }

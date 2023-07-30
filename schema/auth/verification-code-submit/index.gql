@@ -1,0 +1,8 @@
+input VerificationCodeSubmitInput {
+  verificationCodeRequestToken: String!
+  verificationCode: String!
+}
+
+type VerificationCodeSubmitOutput {
+  verificationCodeSubmitToken: String!
+}

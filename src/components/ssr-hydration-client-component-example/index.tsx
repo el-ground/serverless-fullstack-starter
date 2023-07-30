@@ -9,9 +9,11 @@ import styles from './style.module.scss'
 
 const query = gql(`
   query GetBooks {
-    books {
-      author
-      title
+    book {
+      books {
+        author
+        title
+      }
     }
   }
 `)
@@ -29,7 +31,7 @@ export const SSRHydrationClientComponentExample = () => {
     <React.Suspense fallback="loading...">
       <Like width={24} height={24} />
       <div className={styles.rootContainer}>
-        {data?.books?.map((e) => JSON.stringify(e))}
+        {data?.book.books?.map((e) => JSON.stringify(e))}
       </div>
       <input type="text" value="foo" />
       <button type="button" className="t14">

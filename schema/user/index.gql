@@ -1,0 +1,22 @@
+enum AccountType {
+  SELLER
+  USER
+}
+
+type UserPublicFields {
+  accountType: AccountType!
+}
+
+type User {
+  id: String!
+  public: UserPublicFields!
+}
+
+type NicknameExistsOutput {
+  exists: Boolean!
+  sanitizedNickname: String!
+}
+
+type UserQueries {
+  nicknameExists(nickname: String!): NicknameExistsOutput!
+}

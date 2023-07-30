@@ -1,0 +1,9 @@
+input VerificationCodeRequestInput {
+  method: AuthMethod!
+  verificationService: VerificationService!
+  authId: String! # request verification for the following authId
+}
+
+type VerificationCodeRequestOutput {
+  verificationCodeRequestToken: String!
+}

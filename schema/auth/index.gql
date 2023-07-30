@@ -1,0 +1,36 @@
+enum AuthMethod {
+  SIGN_IN
+  SIGN_UP
+  PASSWORD_RESET
+  # PASSWORD_CHANGE
+  # SIGN_OUT
+  # DELETE_ACCOUNT
+  # ADD_SIGN_IN_METHOD
+}
+
+# list verification service types you use!
+enum VerificationService {
+  BIZMSG_SMS
+  BIZMSG_ALIMTALK
+  # EMAIL
+}
+
+type AuthQueries {
+  authIdExists(authId: String!): AuthIdExistsOutput!
+}
+
+type AuthMutations {
+  verificationCodeRequest(
+    input: VerificationCodeRequestInput!
+  ): VerificationCodeRequestOutput!
+
+  verificationCodeSubmit(
+    input: VerificationCodeSubmitInput!
+  ): VerificationCodeSubmitOutput!
+
+  signIn(input: SignInInput!): SignInOutput!
+
+  signUp(input: SignUpInput!): SignUpOutput!
+
+  passwordReset(input: PasswordResetInput!): PasswordResetOutput!
+}

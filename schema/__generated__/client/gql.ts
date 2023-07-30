@@ -13,8 +13,8 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\nquery getBooks2 {\n    books {\n        author\n    }\n}": types.GetBooks2Document,
-    "\n  query GetBooks {\n    books {\n      author\n      title\n    }\n  }\n": types.GetBooksDocument,
+    "\nquery getBooks2 {\n    book {\n      books {\n          author\n      }\n    }\n}": types.GetBooks2Document,
+    "\n  query GetBooks {\n    book {\n      books {\n        author\n        title\n      }\n    }\n  }\n": types.GetBooksDocument,
 };
 
 /**
@@ -34,11 +34,11 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\nquery getBooks2 {\n    books {\n        author\n    }\n}"): (typeof documents)["\nquery getBooks2 {\n    books {\n        author\n    }\n}"];
+export function gql(source: "\nquery getBooks2 {\n    book {\n      books {\n          author\n      }\n    }\n}"): (typeof documents)["\nquery getBooks2 {\n    book {\n      books {\n          author\n      }\n    }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetBooks {\n    books {\n      author\n      title\n    }\n  }\n"): (typeof documents)["\n  query GetBooks {\n    books {\n      author\n      title\n    }\n  }\n"];
+export function gql(source: "\n  query GetBooks {\n    book {\n      books {\n        author\n        title\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetBooks {\n    book {\n      books {\n        author\n        title\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

@@ -4,8 +4,10 @@ import { getClient, gql } from '@/src/framework/apollo/rsc'
 
 const query = gql(`
 query getBooks2 {
-    books {
-        author
+    book {
+      books {
+          author
+      }
     }
 }`)
 
@@ -15,7 +17,7 @@ export const RSCExample = async () => {
   return (
     <div>
       <Like width={24} height={24} />
-      {data?.books?.map((e) => JSON.stringify(e))}
+      {data?.book.books?.map((e) => JSON.stringify(e))}
     </div>
   )
 }

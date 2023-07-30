@@ -28,11 +28,13 @@ export const createRouter = async (httpServer: Server) => {
   router.use(validateParseAndRefreshAuthCookiesMiddleware({ refresh: true }))
   router.use(
     expressMiddleware(server, {
-      context: async ({ req }) => {
+      context: async ({ req, res }) => {
         const loader = createLoader()
+        const setAuthToken = res.setAuthToken
 
         return {
           loader,
+          setAuthToken,
           ...req.auth,
         }
       },

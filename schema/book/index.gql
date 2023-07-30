@@ -8,13 +8,11 @@ type Book {
   author: String
 }
 
-# client queries using this
-# server defines resolvers using this
-type Query {
+type BookQueries {
   books: [Book]
   book(id: String!): Book
 }
 
-type Mutation {
+type BookMutations {
   addBook(title: String!, author: String!): Book
 }

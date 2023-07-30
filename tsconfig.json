@@ -32,6 +32,12 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "@/types": [
+        "./schema/__generated__/client/types"
+      ],
+      "#/types": [
+        "./schema/__generated__/server/types"
+      ],
       "@/*": [
         "./*"
       ],

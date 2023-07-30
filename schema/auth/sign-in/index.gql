@@ -1,0 +1,8 @@
+input SignInInput {
+  authId: String! # can be phoneNumber, email, or userId, etc.
+  password: String!
+}
+
+type SignInOutput {
+  user: User!
+}

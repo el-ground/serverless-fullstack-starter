@@ -1,7 +1,7 @@
 import { Resolvers } from '@/schema/__generated__/server/types'
-import { book } from './example/book'
-import { books } from './example/books'
-import { addBook } from './example/add-book'
+import { AuthQueries, AuthMutations } from './auth'
+import { UserQueries } from './user'
+import { BookQueries, BookMutations } from './book'
 
 /*
     ACL performed inside resolvers.
@@ -12,16 +12,12 @@ import { addBook } from './example/add-book'
 
     Reason : Requests from a single client can be load balanced through multiple server instances.
       If each instance has their local cache, The client might view multiple cached versions of the same data.
-      
-
 */
 
 export const resolvers: Resolvers = {
-  Query: {
-    books,
-    book,
-  },
-  Mutation: {
-    addBook,
-  },
+  BookQueries,
+  BookMutations,
+  AuthQueries,
+  AuthMutations,
+  UserQueries,
 }

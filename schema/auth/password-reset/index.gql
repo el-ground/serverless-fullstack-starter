@@ -1,0 +1,8 @@
+input PasswordResetInput {
+  newPassword: String!
+  verificationCodeSubmitToken: String!
+}
+
+type PasswordResetOutput {
+  user: User!
+}

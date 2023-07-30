@@ -1,0 +1,4 @@
+type NicknameExistsOutput {
+  exists: Boolean!
+  sanitizedNickname: String!
+}

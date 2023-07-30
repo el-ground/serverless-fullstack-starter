@@ -1,0 +1,11 @@
+input SignUpInput {
+  authId: String! # can be phoneNumber, email, or userId, etc.
+  password: String!
+  nickname: String!
+  accountType: AccountType!
+  verificationCodeSubmitToken: String!
+}
+
+type SignUpOutput {
+  user: User!
+}
