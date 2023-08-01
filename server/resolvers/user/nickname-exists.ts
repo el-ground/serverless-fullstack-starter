@@ -1,13 +1,36 @@
-/*
-    Exmaple
-*/
-import type { UserQueriesResolvers } from '@/schema/__generated__/server/types'
+import { GraphQLError } from 'graphql'
+import type { UserQueriesResolvers } from '#types'
+import type { NicknameOwnership } from '#model/nickname-ownership'
+import { readDirectly } from '#framework/database/read'
+import { sanitize, validate } from '@/schema/user/nickname-exists'
 
 export const nicknameExists: UserQueriesResolvers['nicknameExists'] = async (
   _,
-  { nickname },
-  context,
+  { input: _input },
 ) => {
+  const errors = validate(_input)
+  if (errors) {
+    throw new GraphQLError(`validation error!`, {
+      extensions: { code: 'VALIDATION_FAIL', errors },
+    })
+  }
+
+  const { nickname } = sanitize(_input)
+
+  const encodedNickname = encodeURIComponent(nickname)
+  const nicknameOwnership = await readDirectly<NicknameOwnership>(
+    `/nickname-ownerships/${encodedNickname}`,
+  )
+  if (nicknameOwnership) {
+    const { revoked } = nicknameOwnership
+    if (!revoked) {
+      return {
+        exists: true,
+        sanitizedNickname: nickname,
+      }
+    }
+  }
+
   return {
     exists: false,
     sanitizedNickname: nickname,

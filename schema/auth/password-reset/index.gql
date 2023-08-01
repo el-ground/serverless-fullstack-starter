@@ -6,3 +6,10 @@ input PasswordResetInput {
 type PasswordResetOutput {
   user: User!
 }
+
+enum PasswordResetError {
+  VERIFICATION_TIME_EXPIRED
+  INVALID_METHOD
+  INVALID_STATE
+  RATE_LIMITED
+}

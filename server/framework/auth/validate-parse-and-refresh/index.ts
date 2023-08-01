@@ -1,4 +1,9 @@
 import type { AuthPayload } from '../auth-payload'
+import {
+  DecodeResult,
+  decodeAuthTokenNoRefresh,
+  decodeAuthTokenTryRefresh,
+} from '../auth-token/decode'
 /*
     1. on header get,
         check jwt and validate, populate data and return.
@@ -32,17 +37,36 @@ export const validateParseAndRefresh = async (
     return {
       authPayload: {
         isAuthenticated: false,
-        isAdmin: false,
       },
     }
   }
 
-  // jwt stuff
+  // jwt stuff. get rolesAndPermissions.
 
-  return {
-    authPayload: {
-      isAuthenticated: false,
-      isAdmin: false,
-    },
+  try {
+    let decodeResult: DecodeResult
+    if (refresh) {
+      decodeResult = await decodeAuthTokenTryRefresh(authToken)
+    } else {
+      decodeResult = await decodeAuthTokenNoRefresh(authToken)
+    }
+
+    const { token, payload, refreshed } = decodeResult
+
+    return {
+      refreshedToken: refreshed ? token : undefined,
+      authPayload: {
+        userId: payload.userId,
+        isAuthenticated: true,
+        rolesAndPermissions: payload.rolesAndPermissions,
+      },
+    }
+  } catch (e) {
+    // auth expire!
+    return {
+      authPayload: {
+        isAuthenticated: false,
+      },
+    }
   }
 }

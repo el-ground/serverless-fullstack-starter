@@ -15,8 +15,9 @@ enum VerificationService {
   # EMAIL
 }
 
-type AuthQueries {
-  authIdExists(authId: String!): AuthIdExistsOutput!
+enum VerificationCodeState {
+  VERIFICATION_CODE_REQUEST
+  VERIFICATION_CODE_SUBMIT
 }
 
 type AuthMutations {

@@ -1,4 +1,4 @@
-import { SignUpInput } from '#/types'
+import { SignUpInput } from '#types'
 import { InputSanitizer, InputValidator } from '@/schema/types'
 
 export const validate: InputValidator<SignUpInput> = (input) => {

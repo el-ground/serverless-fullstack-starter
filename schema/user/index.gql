@@ -4,19 +4,20 @@ enum AccountType {
 }
 
 type UserPublicFields {
+  nickname: String!
   accountType: AccountType!
 }
 
-type User {
-  id: String!
-  public: UserPublicFields!
+type UserPrivateFields {
+  isAdmin: Boolean!
 }
 
-type NicknameExistsOutput {
-  exists: Boolean!
-  sanitizedNickname: String!
+type User {
+  userId: String!
+  public: UserPublicFields!
+  private: UserPrivateFields!
 }
 
 type UserQueries {
-  nicknameExists(nickname: String!): NicknameExistsOutput!
+  nicknameExists(input: NicknameExistsInput!): NicknameExistsOutput!
 }

@@ -22,12 +22,6 @@ export enum AccountType {
   User = 'USER'
 }
 
-export type AuthIdExistsOutput = {
-  __typename?: 'AuthIdExistsOutput';
-  exists: Scalars['Boolean']['output'];
-  sanitizedAuthId: Scalars['String']['output'];
-};
-
 export enum AuthMethod {
   PasswordReset = 'PASSWORD_RESET',
   SignIn = 'SIGN_IN',
@@ -68,16 +62,6 @@ export type AuthMutationsVerificationCodeSubmitArgs = {
   input: VerificationCodeSubmitInput;
 };
 
-export type AuthQueries = {
-  __typename?: 'AuthQueries';
-  authIdExists: AuthIdExistsOutput;
-};
-
-
-export type AuthQueriesAuthIdExistsArgs = {
-  authId: Scalars['String']['input'];
-};
-
 export type Book = {
   __typename?: 'Book';
   author?: Maybe<Scalars['String']['output']>;
@@ -113,11 +97,22 @@ export type Mutation = {
   book: BookMutations;
 };
 
+export type NicknameExistsInput = {
+  nickname: Scalars['String']['input'];
+};
+
 export type NicknameExistsOutput = {
   __typename?: 'NicknameExistsOutput';
   exists: Scalars['Boolean']['output'];
   sanitizedNickname: Scalars['String']['output'];
 };
+
+export enum PasswordResetError {
+  InvalidMethod = 'INVALID_METHOD',
+  InvalidState = 'INVALID_STATE',
+  RateLimited = 'RATE_LIMITED',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
 
 export type PasswordResetInput = {
   newPassword: Scalars['String']['input'];
@@ -131,10 +126,14 @@ export type PasswordResetOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  auth: AuthQueries;
   book: BookQueries;
   user: UserQueries;
 };
+
+export enum SignInError {
+  InvalidPasswordOrUserDoesntExist = 'INVALID_PASSWORD_OR_USER_DOESNT_EXIST',
+  RateLimited = 'RATE_LIMITED'
+}
 
 export type SignInInput = {
   authId: Scalars['String']['input'];
@@ -146,9 +145,17 @@ export type SignInOutput = {
   user: User;
 };
 
+export enum SignUpError {
+  AccountAlreadyExists = 'ACCOUNT_ALREADY_EXISTS',
+  InvalidMethod = 'INVALID_METHOD',
+  InvalidState = 'INVALID_STATE',
+  NicknameAlreadyExists = 'NICKNAME_ALREADY_EXISTS',
+  RateLimited = 'RATE_LIMITED',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
+
 export type SignUpInput = {
   accountType: AccountType;
-  authId: Scalars['String']['input'];
   nickname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   verificationCodeSubmitToken: Scalars['String']['input'];
@@ -161,13 +168,20 @@ export type SignUpOutput = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['String']['output'];
+  private: UserPrivateFields;
   public: UserPublicFields;
+  userId: Scalars['String']['output'];
+};
+
+export type UserPrivateFields = {
+  __typename?: 'UserPrivateFields';
+  isAdmin: Scalars['Boolean']['output'];
 };
 
 export type UserPublicFields = {
   __typename?: 'UserPublicFields';
   accountType: AccountType;
+  nickname: Scalars['String']['output'];
 };
 
 export type UserQueries = {
@@ -177,8 +191,12 @@ export type UserQueries = {
 
 
 export type UserQueriesNicknameExistsArgs = {
-  nickname: Scalars['String']['input'];
+  input: NicknameExistsInput;
 };
+
+export enum VerificationCodeRequestError {
+  RateLimited = 'RATE_LIMITED'
+}
 
 export type VerificationCodeRequestInput = {
   authId: Scalars['String']['input'];
@@ -190,6 +208,18 @@ export type VerificationCodeRequestOutput = {
   __typename?: 'VerificationCodeRequestOutput';
   verificationCodeRequestToken: Scalars['String']['output'];
 };
+
+export enum VerificationCodeState {
+  VerificationCodeRequest = 'VERIFICATION_CODE_REQUEST',
+  VerificationCodeSubmit = 'VERIFICATION_CODE_SUBMIT'
+}
+
+export enum VerificationCodeSubmitError {
+  InvalidVerificationState = 'INVALID_VERIFICATION_STATE',
+  RateLimited = 'RATE_LIMITED',
+  VerificationCodeMismatch = 'VERIFICATION_CODE_MISMATCH',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
 
 export type VerificationCodeSubmitInput = {
   verificationCode: Scalars['String']['input'];
@@ -279,29 +309,35 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   AccountType: AccountType;
-  AuthIdExistsOutput: ResolverTypeWrapper<AuthIdExistsOutput>;
   AuthMethod: AuthMethod;
   AuthMutations: ResolverTypeWrapper<AuthMutations>;
-  AuthQueries: ResolverTypeWrapper<AuthQueries>;
   Book: ResolverTypeWrapper<Book>;
   BookMutations: ResolverTypeWrapper<BookMutations>;
   BookQueries: ResolverTypeWrapper<BookQueries>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  NicknameExistsInput: NicknameExistsInput;
   NicknameExistsOutput: ResolverTypeWrapper<NicknameExistsOutput>;
+  PasswordResetError: PasswordResetError;
   PasswordResetInput: PasswordResetInput;
   PasswordResetOutput: ResolverTypeWrapper<PasswordResetOutput>;
   Query: ResolverTypeWrapper<{}>;
+  SignInError: SignInError;
   SignInInput: SignInInput;
   SignInOutput: ResolverTypeWrapper<SignInOutput>;
+  SignUpError: SignUpError;
   SignUpInput: SignUpInput;
   SignUpOutput: ResolverTypeWrapper<SignUpOutput>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   User: ResolverTypeWrapper<User>;
+  UserPrivateFields: ResolverTypeWrapper<UserPrivateFields>;
   UserPublicFields: ResolverTypeWrapper<UserPublicFields>;
   UserQueries: ResolverTypeWrapper<UserQueries>;
+  VerificationCodeRequestError: VerificationCodeRequestError;
   VerificationCodeRequestInput: VerificationCodeRequestInput;
   VerificationCodeRequestOutput: ResolverTypeWrapper<VerificationCodeRequestOutput>;
+  VerificationCodeState: VerificationCodeState;
+  VerificationCodeSubmitError: VerificationCodeSubmitError;
   VerificationCodeSubmitInput: VerificationCodeSubmitInput;
   VerificationCodeSubmitOutput: ResolverTypeWrapper<VerificationCodeSubmitOutput>;
   VerificationService: VerificationService;
@@ -309,14 +345,13 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  AuthIdExistsOutput: AuthIdExistsOutput;
   AuthMutations: AuthMutations;
-  AuthQueries: AuthQueries;
   Book: Book;
   BookMutations: BookMutations;
   BookQueries: BookQueries;
   Boolean: Scalars['Boolean']['output'];
   Mutation: {};
+  NicknameExistsInput: NicknameExistsInput;
   NicknameExistsOutput: NicknameExistsOutput;
   PasswordResetInput: PasswordResetInput;
   PasswordResetOutput: PasswordResetOutput;
@@ -327,6 +362,7 @@ export type ResolversParentTypes = ResolversObject<{
   SignUpOutput: SignUpOutput;
   String: Scalars['String']['output'];
   User: User;
+  UserPrivateFields: UserPrivateFields;
   UserPublicFields: UserPublicFields;
   UserQueries: UserQueries;
   VerificationCodeRequestInput: VerificationCodeRequestInput;
@@ -335,23 +371,12 @@ export type ResolversParentTypes = ResolversObject<{
   VerificationCodeSubmitOutput: VerificationCodeSubmitOutput;
 }>;
 
-export type AuthIdExistsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthIdExistsOutput'] = ResolversParentTypes['AuthIdExistsOutput']> = ResolversObject<{
-  exists?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  sanitizedAuthId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type AuthMutationsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthMutations'] = ResolversParentTypes['AuthMutations']> = ResolversObject<{
   passwordReset?: Resolver<ResolversTypes['PasswordResetOutput'], ParentType, ContextType, RequireFields<AuthMutationsPasswordResetArgs, 'input'>>;
   signIn?: Resolver<ResolversTypes['SignInOutput'], ParentType, ContextType, RequireFields<AuthMutationsSignInArgs, 'input'>>;
   signUp?: Resolver<ResolversTypes['SignUpOutput'], ParentType, ContextType, RequireFields<AuthMutationsSignUpArgs, 'input'>>;
   verificationCodeRequest?: Resolver<ResolversTypes['VerificationCodeRequestOutput'], ParentType, ContextType, RequireFields<AuthMutationsVerificationCodeRequestArgs, 'input'>>;
   verificationCodeSubmit?: Resolver<ResolversTypes['VerificationCodeSubmitOutput'], ParentType, ContextType, RequireFields<AuthMutationsVerificationCodeSubmitArgs, 'input'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AuthQueriesResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthQueries'] = ResolversParentTypes['AuthQueries']> = ResolversObject<{
-  authIdExists?: Resolver<ResolversTypes['AuthIdExistsOutput'], ParentType, ContextType, RequireFields<AuthQueriesAuthIdExistsArgs, 'authId'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -390,7 +415,6 @@ export type PasswordResetOutputResolvers<ContextType = Context, ParentType exten
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  auth?: Resolver<ResolversTypes['AuthQueries'], ParentType, ContextType>;
   book?: Resolver<ResolversTypes['BookQueries'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['UserQueries'], ParentType, ContextType>;
 }>;
@@ -406,18 +430,25 @@ export type SignUpOutputResolvers<ContextType = Context, ParentType extends Reso
 }>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  private?: Resolver<ResolversTypes['UserPrivateFields'], ParentType, ContextType>;
   public?: Resolver<ResolversTypes['UserPublicFields'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserPrivateFieldsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserPrivateFields'] = ResolversParentTypes['UserPrivateFields']> = ResolversObject<{
+  isAdmin?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserPublicFieldsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserPublicFields'] = ResolversParentTypes['UserPublicFields']> = ResolversObject<{
   accountType?: Resolver<ResolversTypes['AccountType'], ParentType, ContextType>;
+  nickname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserQueriesResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserQueries'] = ResolversParentTypes['UserQueries']> = ResolversObject<{
-  nicknameExists?: Resolver<ResolversTypes['NicknameExistsOutput'], ParentType, ContextType, RequireFields<UserQueriesNicknameExistsArgs, 'nickname'>>;
+  nicknameExists?: Resolver<ResolversTypes['NicknameExistsOutput'], ParentType, ContextType, RequireFields<UserQueriesNicknameExistsArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -432,9 +463,7 @@ export type VerificationCodeSubmitOutputResolvers<ContextType = Context, ParentT
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
-  AuthIdExistsOutput?: AuthIdExistsOutputResolvers<ContextType>;
   AuthMutations?: AuthMutationsResolvers<ContextType>;
-  AuthQueries?: AuthQueriesResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   BookMutations?: BookMutationsResolvers<ContextType>;
   BookQueries?: BookQueriesResolvers<ContextType>;
@@ -445,6 +474,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   SignInOutput?: SignInOutputResolvers<ContextType>;
   SignUpOutput?: SignUpOutputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserPrivateFields?: UserPrivateFieldsResolvers<ContextType>;
   UserPublicFields?: UserPublicFieldsResolvers<ContextType>;
   UserQueries?: UserQueriesResolvers<ContextType>;
   VerificationCodeRequestOutput?: VerificationCodeRequestOutputResolvers<ContextType>;

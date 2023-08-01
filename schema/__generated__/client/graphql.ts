@@ -21,12 +21,6 @@ export enum AccountType {
   User = 'USER'
 }
 
-export type AuthIdExistsOutput = {
-  __typename?: 'AuthIdExistsOutput';
-  exists: Scalars['Boolean']['output'];
-  sanitizedAuthId: Scalars['String']['output'];
-};
-
 export enum AuthMethod {
   PasswordReset = 'PASSWORD_RESET',
   SignIn = 'SIGN_IN',
@@ -67,16 +61,6 @@ export type AuthMutationsVerificationCodeSubmitArgs = {
   input: VerificationCodeSubmitInput;
 };
 
-export type AuthQueries = {
-  __typename?: 'AuthQueries';
-  authIdExists: AuthIdExistsOutput;
-};
-
-
-export type AuthQueriesAuthIdExistsArgs = {
-  authId: Scalars['String']['input'];
-};
-
 export type Book = {
   __typename?: 'Book';
   author?: Maybe<Scalars['String']['output']>;
@@ -112,11 +96,22 @@ export type Mutation = {
   book: BookMutations;
 };
 
+export type NicknameExistsInput = {
+  nickname: Scalars['String']['input'];
+};
+
 export type NicknameExistsOutput = {
   __typename?: 'NicknameExistsOutput';
   exists: Scalars['Boolean']['output'];
   sanitizedNickname: Scalars['String']['output'];
 };
+
+export enum PasswordResetError {
+  InvalidMethod = 'INVALID_METHOD',
+  InvalidState = 'INVALID_STATE',
+  RateLimited = 'RATE_LIMITED',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
 
 export type PasswordResetInput = {
   newPassword: Scalars['String']['input'];
@@ -130,10 +125,14 @@ export type PasswordResetOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  auth: AuthQueries;
   book: BookQueries;
   user: UserQueries;
 };
+
+export enum SignInError {
+  InvalidPasswordOrUserDoesntExist = 'INVALID_PASSWORD_OR_USER_DOESNT_EXIST',
+  RateLimited = 'RATE_LIMITED'
+}
 
 export type SignInInput = {
   authId: Scalars['String']['input'];
@@ -145,9 +144,17 @@ export type SignInOutput = {
   user: User;
 };
 
+export enum SignUpError {
+  AccountAlreadyExists = 'ACCOUNT_ALREADY_EXISTS',
+  InvalidMethod = 'INVALID_METHOD',
+  InvalidState = 'INVALID_STATE',
+  NicknameAlreadyExists = 'NICKNAME_ALREADY_EXISTS',
+  RateLimited = 'RATE_LIMITED',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
+
 export type SignUpInput = {
   accountType: AccountType;
-  authId: Scalars['String']['input'];
   nickname: Scalars['String']['input'];
   password: Scalars['String']['input'];
   verificationCodeSubmitToken: Scalars['String']['input'];
@@ -160,13 +167,20 @@ export type SignUpOutput = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['String']['output'];
+  private: UserPrivateFields;
   public: UserPublicFields;
+  userId: Scalars['String']['output'];
+};
+
+export type UserPrivateFields = {
+  __typename?: 'UserPrivateFields';
+  isAdmin: Scalars['Boolean']['output'];
 };
 
 export type UserPublicFields = {
   __typename?: 'UserPublicFields';
   accountType: AccountType;
+  nickname: Scalars['String']['output'];
 };
 
 export type UserQueries = {
@@ -176,8 +190,12 @@ export type UserQueries = {
 
 
 export type UserQueriesNicknameExistsArgs = {
-  nickname: Scalars['String']['input'];
+  input: NicknameExistsInput;
 };
+
+export enum VerificationCodeRequestError {
+  RateLimited = 'RATE_LIMITED'
+}
 
 export type VerificationCodeRequestInput = {
   authId: Scalars['String']['input'];
@@ -189,6 +207,18 @@ export type VerificationCodeRequestOutput = {
   __typename?: 'VerificationCodeRequestOutput';
   verificationCodeRequestToken: Scalars['String']['output'];
 };
+
+export enum VerificationCodeState {
+  VerificationCodeRequest = 'VERIFICATION_CODE_REQUEST',
+  VerificationCodeSubmit = 'VERIFICATION_CODE_SUBMIT'
+}
+
+export enum VerificationCodeSubmitError {
+  InvalidVerificationState = 'INVALID_VERIFICATION_STATE',
+  RateLimited = 'RATE_LIMITED',
+  VerificationCodeMismatch = 'VERIFICATION_CODE_MISMATCH',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
 
 export type VerificationCodeSubmitInput = {
   verificationCode: Scalars['String']['input'];

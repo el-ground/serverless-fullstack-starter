@@ -1,4 +1,0 @@
-type AuthIdExistsOutput {
-  exists: Boolean!
-  sanitizedAuthId: String!
-}

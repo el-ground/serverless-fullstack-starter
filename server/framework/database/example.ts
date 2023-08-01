@@ -1,6 +1,7 @@
-import { AccountType, User, Book } from '@/schema/__generated__/server/types'
+import { AccountType } from '@/schema/__generated__/server/types'
 
-export const database: Record<string, User | Book> = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const database: Record<string, any> = {
   'user:a': {
     id: `user:a`,
     public: {

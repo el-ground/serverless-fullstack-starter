@@ -1,4 +1,4 @@
-import { PasswordResetInput } from '#/types'
+import { PasswordResetInput } from '#types'
 import { InputSanitizer, InputValidator } from '@/schema/types'
 
 /*

@@ -1,3 +1,7 @@
+input NicknameExistsInput {
+  nickname: String!
+}
+
 type NicknameExistsOutput {
   exists: Boolean!
   sanitizedNickname: String!

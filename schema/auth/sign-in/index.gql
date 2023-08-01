@@ -6,3 +6,8 @@ input SignInInput {
 type SignInOutput {
   user: User!
 }
+
+enum SignInError {
+  INVALID_PASSWORD_OR_USER_DOESNT_EXIST
+  RATE_LIMITED
+}

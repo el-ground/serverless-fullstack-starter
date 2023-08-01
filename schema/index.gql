@@ -1,5 +1,4 @@
 type Query {
-  auth: AuthQueries!
   user: UserQueries!
   book: BookQueries!
 }

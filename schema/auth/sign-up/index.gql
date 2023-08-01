@@ -1,5 +1,5 @@
 input SignUpInput {
-  authId: String! # can be phoneNumber, email, or userId, etc.
+  # authId provided via verificationCodeSubmitToken
   password: String!
   nickname: String!
   accountType: AccountType!
@@ -8,4 +8,13 @@ input SignUpInput {
 
 type SignUpOutput {
   user: User!
+}
+
+enum SignUpError {
+  VERIFICATION_TIME_EXPIRED
+  INVALID_METHOD
+  INVALID_STATE
+  ACCOUNT_ALREADY_EXISTS
+  NICKNAME_ALREADY_EXISTS
+  RATE_LIMITED
 }

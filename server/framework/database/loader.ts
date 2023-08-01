@@ -1,18 +1,12 @@
 import DataLoader from 'dataloader'
 import lruMapModule from 'lru_map'
-import { database } from './example'
+import { readAllDirectly } from './read'
 
 const { LRUMap } = lruMapModule
 
 const batchLoad = async (keys: readonly string[]) => {
-  /*
-        your nosql batch read by key!
-        ex) firestore getAll
-        return null if not exists!
-    */
-  // dummy
-  const result = keys.map((key) => (database[key] as any) || null)
-  return result
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return readAllDirectly<any>(keys)
 }
 
 /*

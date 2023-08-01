@@ -32,10 +32,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@/types": [
+      "@types": [
         "./schema/__generated__/client/types"
       ],
-      "#/types": [
+      "#types": [
         "./schema/__generated__/server/types"
       ],
       "@/*": [
@@ -46,6 +46,18 @@
       ],
       "@util/*": [
         "./src/util/*"
+      ],
+      "#util/*": [
+        "./server/util/*"
+      ],
+      "#services/*": [
+        "./server/services/*"
+      ],
+      "#framework/*": [
+        "./server/framework/*"
+      ],
+      "#model/*": [
+        "./server/model/*"
       ],
       // maybe use @ for src/ and # for server/
     },

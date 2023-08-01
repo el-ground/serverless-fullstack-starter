@@ -6,3 +6,10 @@ input VerificationCodeSubmitInput {
 type VerificationCodeSubmitOutput {
   verificationCodeSubmitToken: String!
 }
+
+enum VerificationCodeSubmitError {
+  VERIFICATION_TIME_EXPIRED
+  INVALID_VERIFICATION_STATE
+  VERIFICATION_CODE_MISMATCH
+  RATE_LIMITED
+}
