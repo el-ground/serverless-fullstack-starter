@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql'
-import type { AuthMutationsResolvers } from '#types'
+import type { MutationResolvers } from '#types'
 import { VerificationCodeRequestError, VerificationCodeState } from '#types'
 import { validate, sanitize } from '@/schema/auth/verification-code-request'
 import crypto from 'node:crypto'
@@ -7,12 +7,15 @@ import { CompactEncrypt } from 'jose'
 import { create as createUUID } from '#util/uuid'
 import jwt from 'jsonwebtoken'
 import { sendVerificationCode } from '#services/message-sender/templates/verification'
-import { getAuthKey, getAuthKeyObject } from '#framework/auth/key'
+import {
+  getAuthKeyStringRSA4096Private,
+  getAuthKeyObjectSymmetric256,
+} from '#framework/auth/key'
 import { testRateLimiter } from '@/server/services/rate-limiter'
 import { getTestVerificationCode } from '../util'
 import type { VerificationCodeRequestTokenPayload } from './types'
 
-export const verificationCodeRequest: AuthMutationsResolvers['verificationCodeRequest'] =
+export const Auth_verificationCodeRequest: MutationResolvers['Auth_verificationCodeRequest'] =
   async (_, { input: _input }) => {
     const errors = validate(_input)
     if (errors) {
@@ -87,16 +90,22 @@ export const verificationCodeRequest: AuthMutationsResolvers['verificationCodeRe
         version: `1.0.0`,
       },
     }
-    const phoneVerificationRequestToken = jwt.sign(payload, getAuthKey(), {
-      // 4 minutes to enter the token. Users will prompted for 3 min
-      expiresIn: '4m',
-    })
+
+    const phoneVerificationRequestToken = jwt.sign(
+      payload,
+      getAuthKeyStringRSA4096Private(),
+      {
+        // 4 minutes to enter the token. Users will prompted for 3 min
+        expiresIn: '4m',
+        algorithm: 'RS256',
+      },
+    )
 
     const encryptedPhoneVerificationRequestToken = await new CompactEncrypt(
       new TextEncoder().encode(phoneVerificationRequestToken),
     )
-      .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
-      .encrypt(getAuthKeyObject())
+      .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+      .encrypt(getAuthKeyObjectSymmetric256())
 
     return {
       verificationCodeRequestToken: encryptedPhoneVerificationRequestToken,

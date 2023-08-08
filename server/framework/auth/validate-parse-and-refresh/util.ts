@@ -7,7 +7,7 @@ export const splitJWT = (token: string) => {
     https://stackoverflow.com/questions/38552003/how-to-decode-jwt-token-in-javascript-without-using-a-library
   */
 
-  const sliceAtIndex = token.indexOf(`.`)
+  const sliceAtIndex = token.indexOf(`.`, token.indexOf(`.`) + 1)
   const payload = token.slice(0, sliceAtIndex) // contains the payload
   const rest = token.slice(sliceAtIndex) // contains checksum & etc
 

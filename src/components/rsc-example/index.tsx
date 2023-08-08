@@ -3,11 +3,9 @@ import Like from '@/assets/sample.svg'
 import { getClient, gql } from '@/src/framework/apollo/rsc'
 
 const query = gql(`
-query getBooks2 {
-    book {
-      books {
-          author
-      }
+  query GetBooks2 {
+    Book_books {
+        author
     }
 }`)
 
@@ -17,7 +15,7 @@ export const RSCExample = async () => {
   return (
     <div>
       <Like width={24} height={24} />
-      {data?.book.books?.map((e) => JSON.stringify(e))}
+      {data?.Book_books?.map((e) => JSON.stringify(e))}
     </div>
   )
 }

@@ -13,8 +13,13 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\nquery getBooks2 {\n    book {\n      books {\n          author\n      }\n    }\n}": types.GetBooks2Document,
-    "\n  query GetBooks {\n    book {\n      books {\n        author\n        title\n      }\n    }\n  }\n": types.GetBooksDocument,
+    "\n  query GetBooks2 {\n    Book_books {\n        author\n    }\n}": types.GetBooks2Document,
+    "\n  query GetBooks {\n      Book_books {\n        author\n        title\n    }\n  }\n": types.GetBooksDocument,
+    "\n  mutation submitPasswordReset($input: PasswordResetInput!) {\n    Auth_passwordReset(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n": types.SubmitPasswordResetDocument,
+    "\n  mutation submitSignI($input: SignInInput!) {\n    Auth_signIn(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n": types.SubmitSignIDocument,
+    "\n  mutation submitSignUp($input: SignUpInput!) {\n    Auth_signUp(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n": types.SubmitSignUpDocument,
+    "\n  mutation submitVerificationCodeRequest($input: VerificationCodeRequestInput!) {\n    Auth_verificationCodeRequest(input: $input) {\n      verificationCodeRequestToken\n    }\n  }\n": types.SubmitVerificationCodeRequestDocument,
+    "\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n": types.SubmitVerificationCodeSubmitDocument,
 };
 
 /**
@@ -34,11 +39,31 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\nquery getBooks2 {\n    book {\n      books {\n          author\n      }\n    }\n}"): (typeof documents)["\nquery getBooks2 {\n    book {\n      books {\n          author\n      }\n    }\n}"];
+export function gql(source: "\n  query GetBooks2 {\n    Book_books {\n        author\n    }\n}"): (typeof documents)["\n  query GetBooks2 {\n    Book_books {\n        author\n    }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetBooks {\n    book {\n      books {\n        author\n        title\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetBooks {\n    book {\n      books {\n        author\n        title\n      }\n    }\n  }\n"];
+export function gql(source: "\n  query GetBooks {\n      Book_books {\n        author\n        title\n    }\n  }\n"): (typeof documents)["\n  query GetBooks {\n      Book_books {\n        author\n        title\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation submitPasswordReset($input: PasswordResetInput!) {\n    Auth_passwordReset(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation submitPasswordReset($input: PasswordResetInput!) {\n    Auth_passwordReset(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation submitSignI($input: SignInInput!) {\n    Auth_signIn(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation submitSignI($input: SignInInput!) {\n    Auth_signIn(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation submitSignUp($input: SignUpInput!) {\n    Auth_signUp(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation submitSignUp($input: SignUpInput!) {\n    Auth_signUp(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation submitVerificationCodeRequest($input: VerificationCodeRequestInput!) {\n    Auth_verificationCodeRequest(input: $input) {\n      verificationCodeRequestToken\n    }\n  }\n"): (typeof documents)["\n  mutation submitVerificationCodeRequest($input: VerificationCodeRequestInput!) {\n    Auth_verificationCodeRequest(input: $input) {\n      verificationCodeRequestToken\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n"): (typeof documents)["\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

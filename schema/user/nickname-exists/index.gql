@@ -6,3 +6,7 @@ type NicknameExistsOutput {
   exists: Boolean!
   sanitizedNickname: String!
 }
+
+extend type Query {
+  User_nicknameExists(input: NicknameExistsInput!): NicknameExistsOutput!
+}

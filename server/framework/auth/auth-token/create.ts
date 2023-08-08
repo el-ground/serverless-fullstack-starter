@@ -1,8 +1,7 @@
 import { create as createUUID } from '#util/uuid'
-import { getAuthKey } from '#framework/auth/key'
+import { getAuthKeyStringRSA4096Private } from '#framework/auth/key'
 import type { AuthTokenPayload, RefreshToken } from './types'
 import type { RolesAndPermissions } from '../roles-and-permissions'
-import { getRolesAndPermissionsFromUser } from '../roles-and-permissions'
 import jwt from 'jsonwebtoken'
 import { runTransaction } from '../../database/transaction'
 import { updateInTransaction } from '#framework/database/write/update'
@@ -70,7 +69,7 @@ export const createAuthToken = async ({
     version: `1.0.0`,
   }
 
-  const token = jwt.sign(payload, getAuthKey(), {
+  const token = jwt.sign(payload, getAuthKeyStringRSA4096Private(), {
     expiresIn: '1h',
     jwtid,
     algorithm: 'RS256',

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { User } from '#types'
-import { getAuthPublicKey } from '#framework/auth/key'
+import { getAuthKeyStringRSA4096Public } from '#framework/auth/key'
 import type { AuthTokenPayload, RefreshToken } from './types'
 import { ResError } from '#util/error'
 import { getRolesAndPermissionsFromUser } from '../roles-and-permissions'
@@ -16,7 +16,7 @@ export interface DecodeResult {
 export const decodeAuthTokenNoRefresh = async (
   token: string,
 ): Promise<DecodeResult> => {
-  const publicKey = await getAuthPublicKey()
+  const publicKey = await getAuthKeyStringRSA4096Public()
   // verify will throw
   const payload = jwt.verify(token, publicKey) as AuthTokenPayload
   return {
@@ -33,7 +33,7 @@ export const decodeAuthTokenNoRefresh = async (
 export const decodeAuthTokenTryRefresh = async (
   token: string,
 ): Promise<DecodeResult> => {
-  const publicKey = await getAuthPublicKey()
+  const publicKey = await getAuthKeyStringRSA4096Public()
 
   try {
     const payload = jwt.verify(token, publicKey) as AuthTokenPayload

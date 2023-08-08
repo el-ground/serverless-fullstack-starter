@@ -1,9 +1,2 @@
-type Query {
-  user: UserQueries!
-  book: BookQueries!
-}
-
-type Mutation {
-  auth: AuthMutations!
-  book: BookMutations!
-}
+type Query
+type Mutation

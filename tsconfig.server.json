@@ -8,4 +8,7 @@
     ".next/types/**/*.ts",
     "next-env.d.ts"
   ],
+  "compilerOptions": {
+    "noEmit": false
+  },
 }

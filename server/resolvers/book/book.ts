@@ -1,9 +1,9 @@
 /*
     Exmaple
 */
-import type { BookQueriesResolvers } from '@/schema/__generated__/server/types'
+import type { QueryResolvers } from '@/schema/__generated__/server/types'
 
-export const book: BookQueriesResolvers['book'] = async (
+export const Book_book: QueryResolvers['Book_book'] = async (
   _,
   { id },
   context,

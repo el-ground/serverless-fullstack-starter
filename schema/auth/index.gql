@@ -19,19 +19,3 @@ enum VerificationCodeState {
   VERIFICATION_CODE_REQUEST
   VERIFICATION_CODE_SUBMIT
 }
-
-type AuthMutations {
-  verificationCodeRequest(
-    input: VerificationCodeRequestInput!
-  ): VerificationCodeRequestOutput!
-
-  verificationCodeSubmit(
-    input: VerificationCodeSubmitInput!
-  ): VerificationCodeSubmitOutput!
-
-  signIn(input: SignInInput!): SignInOutput!
-
-  signUp(input: SignUpInput!): SignUpOutput!
-
-  passwordReset(input: PasswordResetInput!): PasswordResetOutput!
-}

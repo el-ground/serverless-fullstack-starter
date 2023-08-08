@@ -8,11 +8,11 @@ type Book {
   author: String
 }
 
-type BookQueries {
-  books: [Book]
-  book(id: String!): Book
+extend type Query {
+  Book_books: [Book]
+  Book_book(id: String!): Book
 }
 
-type BookMutations {
-  addBook(title: String!, author: String!): Book
+extend type Mutation {
+  Book_addBook(title: String!, author: String!): Book
 }

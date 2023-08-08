@@ -9,7 +9,3 @@ export const validate: InputValidator<SignUpInput> = (input) => {
 export const sanitize: InputSanitizer<SignUpInput> = (input) => {
   return input
 }
-
-/*
-    validation : at client : FormValidator
-*/

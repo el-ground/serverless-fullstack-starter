@@ -1,10 +1,10 @@
 import type {
-  BookMutationsResolvers,
+  MutationResolvers,
   Book,
 } from '@/schema/__generated__/server/types'
 import { database } from '@/server/framework/database/example'
 
-export const addBook: BookMutationsResolvers['addBook'] = async (
+export const Book_addBook: MutationResolvers['Book_addBook'] = async (
   _,
   { title, author },
 ) => {

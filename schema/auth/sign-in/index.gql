@@ -11,3 +11,7 @@ enum SignInError {
   INVALID_PASSWORD_OR_USER_DOESNT_EXIST
   RATE_LIMITED
 }
+
+extend type Mutation {
+  Auth_signIn(input: SignInInput!): SignInOutput!
+}

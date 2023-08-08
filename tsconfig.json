@@ -33,7 +33,7 @@
     "baseUrl": ".",
     "paths": {
       "@types": [
-        "./schema/__generated__/client/types"
+        "./schema/__generated__/client/graphql"
       ],
       "#types": [
         "./schema/__generated__/server/types"
@@ -41,11 +41,20 @@
       "@/*": [
         "./*"
       ],
+      "@containers/*": [
+        "./src/containers/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
       "@hooks/*": [
         "./src/hooks/*"
       ],
       "@util/*": [
         "./src/util/*"
+      ],
+      "@framework/*": [
+        "./src/framework/*"
       ],
       "#util/*": [
         "./server/util/*"
@@ -72,7 +81,7 @@
     "jsx": "preserve",
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
-    "noEmit": false
+    "noEmit": true
   },
   "include": [
     "server/**/*",

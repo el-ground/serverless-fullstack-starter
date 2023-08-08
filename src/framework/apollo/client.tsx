@@ -10,6 +10,7 @@ import {
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 import { gql } from '@/schema/__generated__/client'
+import { useMutation, ErrorMessages } from './use-mutation'
 import { getOrigin } from '@/config'
 
 /*
@@ -57,7 +58,8 @@ export const ApolloProvider = ({ children }: React.PropsWithChildren) => {
   )
 }
 
-export { useSuspenseQuery, useQuery, gql }
+export { useSuspenseQuery, useQuery, useMutation, gql }
+export type { ErrorMessages }
 
 /*
   https://www.apollographql.com/blog/apollo-client/next-js/how-to-use-apollo-client-with-next-js-13/

@@ -18,3 +18,7 @@ enum SignUpError {
   NICKNAME_ALREADY_EXISTS
   RATE_LIMITED
 }
+
+extend type Mutation {
+  Auth_signUp(input: SignUpInput!): SignUpOutput!
+}

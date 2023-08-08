@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql'
-import type { AuthMutationsResolvers, User } from '#types'
+import type { MutationResolvers, User } from '#types'
 import { SignInError } from '#types'
 import bcrypt from 'bcrypt'
 import { validate, sanitize } from '@/schema/auth/sign-in'
@@ -9,7 +9,7 @@ import { testRateLimiter } from '@/server/services/rate-limiter'
 import { readDirectly } from '@/server/framework/database/read'
 import { AuthAccount } from '@/server/framework/auth/auth-account'
 
-export const signIn: AuthMutationsResolvers['signIn'] = async (
+export const Auth_signIn: MutationResolvers['Auth_signIn'] = async (
   _,
   { input: _input },
   { setAuthToken },
@@ -39,7 +39,7 @@ export const signIn: AuthMutationsResolvers['signIn'] = async (
   const authAccount = await readDirectly<AuthAccount>(
     `/auth-accounts/${authId}`,
   )
-  if (!authAccount) {
+  if (!authAccount || authAccount.revoked) {
     throw new GraphQLError(`Invalid password or user doesn't exist`, {
       extensions: { code: SignInError.InvalidPasswordOrUserDoesntExist },
     })

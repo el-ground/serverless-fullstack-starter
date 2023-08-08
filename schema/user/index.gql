@@ -17,7 +17,3 @@ type User {
   public: UserPublicFields!
   private: UserPrivateFields!
 }
-
-type UserQueries {
-  nicknameExists(input: NicknameExistsInput!): NicknameExistsOutput!
-}

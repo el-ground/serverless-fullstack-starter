@@ -1,13 +1,18 @@
-import { passwordReset } from './password-reset'
-import { signIn } from './sign-in'
-import { signUp } from './sign-up'
-import { verificationCodeRequest } from './verification-code-request'
-import { verificationCodeSubmit } from './verification-code-submit'
+import { Auth_authAccountExists } from './auth-account-exists'
+import { Auth_passwordReset } from './password-reset'
+import { Auth_signIn } from './sign-in'
+import { Auth_signUp } from './sign-up'
+import { Auth_verificationCodeRequest } from './verification-code-request'
+import { Auth_verificationCodeSubmit } from './verification-code-submit'
+
+export const AuthQueries = {
+  Auth_authAccountExists,
+}
 
 export const AuthMutations = {
-  passwordReset,
-  signIn,
-  signUp,
-  verificationCodeRequest,
-  verificationCodeSubmit,
+  Auth_passwordReset,
+  Auth_signIn,
+  Auth_signUp,
+  Auth_verificationCodeRequest,
+  Auth_verificationCodeSubmit,
 }

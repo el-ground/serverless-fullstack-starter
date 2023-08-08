@@ -22,45 +22,26 @@ export enum AccountType {
   User = 'USER'
 }
 
+export enum AuthAccountExistsError {
+  InvalidState = 'INVALID_STATE',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
+
+export type AuthAccountExistsInput = {
+  verificationCodeSubmitToken: Scalars['String']['input'];
+};
+
+export type AuthAccountExistsOutput = {
+  __typename?: 'AuthAccountExistsOutput';
+  exists: Scalars['Boolean']['output'];
+  sanitizedAuthId: Scalars['String']['output'];
+};
+
 export enum AuthMethod {
   PasswordReset = 'PASSWORD_RESET',
   SignIn = 'SIGN_IN',
   SignUp = 'SIGN_UP'
 }
-
-export type AuthMutations = {
-  __typename?: 'AuthMutations';
-  passwordReset: PasswordResetOutput;
-  signIn: SignInOutput;
-  signUp: SignUpOutput;
-  verificationCodeRequest: VerificationCodeRequestOutput;
-  verificationCodeSubmit: VerificationCodeSubmitOutput;
-};
-
-
-export type AuthMutationsPasswordResetArgs = {
-  input: PasswordResetInput;
-};
-
-
-export type AuthMutationsSignInArgs = {
-  input: SignInInput;
-};
-
-
-export type AuthMutationsSignUpArgs = {
-  input: SignUpInput;
-};
-
-
-export type AuthMutationsVerificationCodeRequestArgs = {
-  input: VerificationCodeRequestInput;
-};
-
-
-export type AuthMutationsVerificationCodeSubmitArgs = {
-  input: VerificationCodeSubmitInput;
-};
 
 export type Book = {
   __typename?: 'Book';
@@ -69,32 +50,45 @@ export type Book = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
-export type BookMutations = {
-  __typename?: 'BookMutations';
-  addBook?: Maybe<Book>;
-};
-
-
-export type BookMutationsAddBookArgs = {
-  author: Scalars['String']['input'];
-  title: Scalars['String']['input'];
-};
-
-export type BookQueries = {
-  __typename?: 'BookQueries';
-  book?: Maybe<Book>;
-  books?: Maybe<Array<Maybe<Book>>>;
-};
-
-
-export type BookQueriesBookArgs = {
-  id: Scalars['String']['input'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  auth: AuthMutations;
-  book: BookMutations;
+  Auth_passwordReset: PasswordResetOutput;
+  Auth_signIn: SignInOutput;
+  Auth_signUp: SignUpOutput;
+  Auth_verificationCodeRequest: VerificationCodeRequestOutput;
+  Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
+  Book_addBook?: Maybe<Book>;
+};
+
+
+export type MutationAuth_PasswordResetArgs = {
+  input: PasswordResetInput;
+};
+
+
+export type MutationAuth_SignInArgs = {
+  input: SignInInput;
+};
+
+
+export type MutationAuth_SignUpArgs = {
+  input: SignUpInput;
+};
+
+
+export type MutationAuth_VerificationCodeRequestArgs = {
+  input: VerificationCodeRequestInput;
+};
+
+
+export type MutationAuth_VerificationCodeSubmitArgs = {
+  input: VerificationCodeSubmitInput;
+};
+
+
+export type MutationBook_AddBookArgs = {
+  author: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type NicknameExistsInput = {
@@ -108,6 +102,7 @@ export type NicknameExistsOutput = {
 };
 
 export enum PasswordResetError {
+  AccountNotExists = 'ACCOUNT_NOT_EXISTS',
   InvalidMethod = 'INVALID_METHOD',
   InvalidState = 'INVALID_STATE',
   RateLimited = 'RATE_LIMITED',
@@ -126,8 +121,25 @@ export type PasswordResetOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  book: BookQueries;
-  user: UserQueries;
+  Auth_authAccountExists: AuthAccountExistsOutput;
+  Book_book?: Maybe<Book>;
+  Book_books?: Maybe<Array<Maybe<Book>>>;
+  User_nicknameExists: NicknameExistsOutput;
+};
+
+
+export type QueryAuth_AuthAccountExistsArgs = {
+  input: AuthAccountExistsInput;
+};
+
+
+export type QueryBook_BookArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryUser_NicknameExistsArgs = {
+  input: NicknameExistsInput;
 };
 
 export enum SignInError {
@@ -182,16 +194,6 @@ export type UserPublicFields = {
   __typename?: 'UserPublicFields';
   accountType: AccountType;
   nickname: Scalars['String']['output'];
-};
-
-export type UserQueries = {
-  __typename?: 'UserQueries';
-  nicknameExists: NicknameExistsOutput;
-};
-
-
-export type UserQueriesNicknameExistsArgs = {
-  input: NicknameExistsInput;
 };
 
 export enum VerificationCodeRequestError {
@@ -309,11 +311,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   AccountType: AccountType;
+  AuthAccountExistsError: AuthAccountExistsError;
+  AuthAccountExistsInput: AuthAccountExistsInput;
+  AuthAccountExistsOutput: ResolverTypeWrapper<AuthAccountExistsOutput>;
   AuthMethod: AuthMethod;
-  AuthMutations: ResolverTypeWrapper<AuthMutations>;
   Book: ResolverTypeWrapper<Book>;
-  BookMutations: ResolverTypeWrapper<BookMutations>;
-  BookQueries: ResolverTypeWrapper<BookQueries>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   NicknameExistsInput: NicknameExistsInput;
@@ -332,7 +334,6 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>;
   UserPrivateFields: ResolverTypeWrapper<UserPrivateFields>;
   UserPublicFields: ResolverTypeWrapper<UserPublicFields>;
-  UserQueries: ResolverTypeWrapper<UserQueries>;
   VerificationCodeRequestError: VerificationCodeRequestError;
   VerificationCodeRequestInput: VerificationCodeRequestInput;
   VerificationCodeRequestOutput: ResolverTypeWrapper<VerificationCodeRequestOutput>;
@@ -345,10 +346,9 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  AuthMutations: AuthMutations;
+  AuthAccountExistsInput: AuthAccountExistsInput;
+  AuthAccountExistsOutput: AuthAccountExistsOutput;
   Book: Book;
-  BookMutations: BookMutations;
-  BookQueries: BookQueries;
   Boolean: Scalars['Boolean']['output'];
   Mutation: {};
   NicknameExistsInput: NicknameExistsInput;
@@ -364,19 +364,15 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
   UserPrivateFields: UserPrivateFields;
   UserPublicFields: UserPublicFields;
-  UserQueries: UserQueries;
   VerificationCodeRequestInput: VerificationCodeRequestInput;
   VerificationCodeRequestOutput: VerificationCodeRequestOutput;
   VerificationCodeSubmitInput: VerificationCodeSubmitInput;
   VerificationCodeSubmitOutput: VerificationCodeSubmitOutput;
 }>;
 
-export type AuthMutationsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthMutations'] = ResolversParentTypes['AuthMutations']> = ResolversObject<{
-  passwordReset?: Resolver<ResolversTypes['PasswordResetOutput'], ParentType, ContextType, RequireFields<AuthMutationsPasswordResetArgs, 'input'>>;
-  signIn?: Resolver<ResolversTypes['SignInOutput'], ParentType, ContextType, RequireFields<AuthMutationsSignInArgs, 'input'>>;
-  signUp?: Resolver<ResolversTypes['SignUpOutput'], ParentType, ContextType, RequireFields<AuthMutationsSignUpArgs, 'input'>>;
-  verificationCodeRequest?: Resolver<ResolversTypes['VerificationCodeRequestOutput'], ParentType, ContextType, RequireFields<AuthMutationsVerificationCodeRequestArgs, 'input'>>;
-  verificationCodeSubmit?: Resolver<ResolversTypes['VerificationCodeSubmitOutput'], ParentType, ContextType, RequireFields<AuthMutationsVerificationCodeSubmitArgs, 'input'>>;
+export type AuthAccountExistsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AuthAccountExistsOutput'] = ResolversParentTypes['AuthAccountExistsOutput']> = ResolversObject<{
+  exists?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  sanitizedAuthId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -387,20 +383,13 @@ export type BookResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type BookMutationsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['BookMutations'] = ResolversParentTypes['BookMutations']> = ResolversObject<{
-  addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<BookMutationsAddBookArgs, 'author' | 'title'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type BookQueriesResolvers<ContextType = Context, ParentType extends ResolversParentTypes['BookQueries'] = ResolversParentTypes['BookQueries']> = ResolversObject<{
-  book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<BookQueriesBookArgs, 'id'>>;
-  books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  auth?: Resolver<ResolversTypes['AuthMutations'], ParentType, ContextType>;
-  book?: Resolver<ResolversTypes['BookMutations'], ParentType, ContextType>;
+  Auth_passwordReset?: Resolver<ResolversTypes['PasswordResetOutput'], ParentType, ContextType, RequireFields<MutationAuth_PasswordResetArgs, 'input'>>;
+  Auth_signIn?: Resolver<ResolversTypes['SignInOutput'], ParentType, ContextType, RequireFields<MutationAuth_SignInArgs, 'input'>>;
+  Auth_signUp?: Resolver<ResolversTypes['SignUpOutput'], ParentType, ContextType, RequireFields<MutationAuth_SignUpArgs, 'input'>>;
+  Auth_verificationCodeRequest?: Resolver<ResolversTypes['VerificationCodeRequestOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeRequestArgs, 'input'>>;
+  Auth_verificationCodeSubmit?: Resolver<ResolversTypes['VerificationCodeSubmitOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeSubmitArgs, 'input'>>;
+  Book_addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationBook_AddBookArgs, 'author' | 'title'>>;
 }>;
 
 export type NicknameExistsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['NicknameExistsOutput'] = ResolversParentTypes['NicknameExistsOutput']> = ResolversObject<{
@@ -415,8 +404,10 @@ export type PasswordResetOutputResolvers<ContextType = Context, ParentType exten
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  book?: Resolver<ResolversTypes['BookQueries'], ParentType, ContextType>;
-  user?: Resolver<ResolversTypes['UserQueries'], ParentType, ContextType>;
+  Auth_authAccountExists?: Resolver<ResolversTypes['AuthAccountExistsOutput'], ParentType, ContextType, RequireFields<QueryAuth_AuthAccountExistsArgs, 'input'>>;
+  Book_book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBook_BookArgs, 'id'>>;
+  Book_books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  User_nicknameExists?: Resolver<ResolversTypes['NicknameExistsOutput'], ParentType, ContextType, RequireFields<QueryUser_NicknameExistsArgs, 'input'>>;
 }>;
 
 export type SignInOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SignInOutput'] = ResolversParentTypes['SignInOutput']> = ResolversObject<{
@@ -447,11 +438,6 @@ export type UserPublicFieldsResolvers<ContextType = Context, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type UserQueriesResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserQueries'] = ResolversParentTypes['UserQueries']> = ResolversObject<{
-  nicknameExists?: Resolver<ResolversTypes['NicknameExistsOutput'], ParentType, ContextType, RequireFields<UserQueriesNicknameExistsArgs, 'input'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type VerificationCodeRequestOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VerificationCodeRequestOutput'] = ResolversParentTypes['VerificationCodeRequestOutput']> = ResolversObject<{
   verificationCodeRequestToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -463,10 +449,8 @@ export type VerificationCodeSubmitOutputResolvers<ContextType = Context, ParentT
 }>;
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
-  AuthMutations?: AuthMutationsResolvers<ContextType>;
+  AuthAccountExistsOutput?: AuthAccountExistsOutputResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
-  BookMutations?: BookMutationsResolvers<ContextType>;
-  BookQueries?: BookQueriesResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   NicknameExistsOutput?: NicknameExistsOutputResolvers<ContextType>;
   PasswordResetOutput?: PasswordResetOutputResolvers<ContextType>;
@@ -476,7 +460,6 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   User?: UserResolvers<ContextType>;
   UserPrivateFields?: UserPrivateFieldsResolvers<ContextType>;
   UserPublicFields?: UserPublicFieldsResolvers<ContextType>;
-  UserQueries?: UserQueriesResolvers<ContextType>;
   VerificationCodeRequestOutput?: VerificationCodeRequestOutputResolvers<ContextType>;
   VerificationCodeSubmitOutput?: VerificationCodeSubmitOutputResolvers<ContextType>;
 }>;

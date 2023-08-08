@@ -1,12 +1,12 @@
-import { book } from './book'
-import { books } from './books'
-import { addBook } from './add-book'
+import { Book_book } from './book'
+import { Book_books } from './books'
+import { Book_addBook } from './add-book'
 
 export const BookQueries = {
-  book,
-  books,
+  Book_book,
+  Book_books,
 }
 
 export const BookMutations = {
-  addBook,
+  Book_addBook,
 }

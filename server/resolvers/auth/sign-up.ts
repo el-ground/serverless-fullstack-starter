@@ -1,27 +1,25 @@
 import { GraphQLError } from 'graphql'
-import type { AuthMutationsResolvers, User } from '#types'
+import type { MutationResolvers, User } from '#types'
 import { AuthMethod, SignUpError, VerificationCodeState } from '#types'
 import type { VerificationCodeSubmitTokenPayload } from './verification-code-submit/types'
 import type { NicknameOwnership } from '#model/nickname-ownership'
-import { compactDecrypt } from 'jose'
 import { AuthAccount } from '#framework/auth/auth-account'
-import jwt from 'jsonwebtoken'
 import { validate, sanitize } from '@/schema/auth/sign-up'
-import { getAuthKey, getAuthKeyObject } from '#framework/auth/key'
 import { create as createUUID } from '#util/uuid'
 import { getRolesAndPermissionsFromUser } from '#framework/auth/roles-and-permissions'
 import { createAuthToken } from '#framework/auth/auth-token'
 import { testRateLimiter } from '@/server/services/rate-limiter'
-import { createPasswordHash } from './util'
+import { createPasswordHash, decodeAuthKeySignedToken } from './util'
 import { runTransaction } from '@/server/framework/database/transaction'
 import { createInTransaction } from '@/server/framework/database/write/create'
+import { overwriteInTransaction } from '#framework/database/write/overwrite'
 import {
   readDirectly,
   readInTransaction,
 } from '@/server/framework/database/read'
 import { updateInTransaction } from '@/server/framework/database/write/update'
 
-export const signUp: AuthMutationsResolvers['signUp'] = async (
+export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
   _,
   { input: _input },
   { setAuthToken },
@@ -36,18 +34,11 @@ export const signUp: AuthMutationsResolvers['signUp'] = async (
   const { password, nickname, accountType, verificationCodeSubmitToken } =
     sanitize(_input)
 
-  //
-  const { plaintext: decryptedTokenBuffer /*, protectedHeader */ } =
-    await compactDecrypt(verificationCodeSubmitToken, getAuthKeyObject())
-
-  const decryptedToken = new TextDecoder().decode(decryptedTokenBuffer)
-
-  let jwtResult: VerificationCodeSubmitTokenPayload
+  let verificationCodeSubmitTokenPayload: VerificationCodeSubmitTokenPayload
   try {
-    jwtResult = jwt.verify(
-      decryptedToken,
-      getAuthKey(),
-    ) as VerificationCodeSubmitTokenPayload
+    verificationCodeSubmitTokenPayload = await decodeAuthKeySignedToken(
+      verificationCodeSubmitToken,
+    )
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((e as any)?.name === `TokenExpiredError`) {
@@ -66,7 +57,7 @@ export const signUp: AuthMutationsResolvers['signUp'] = async (
       createdAtMilliseconds, // this will be checked at the server.
       authId, // you can use this phone number!
     },
-  } = jwtResult
+  } = verificationCodeSubmitTokenPayload
 
   if (method !== AuthMethod.SignUp) {
     throw new GraphQLError(`Invalid method`, {
@@ -125,7 +116,7 @@ export const signUp: AuthMutationsResolvers['signUp'] = async (
       transaction,
     )
 
-    if (prevAuthAccount) {
+    if (prevAuthAccount && !prevAuthAccount.revoked) {
       throw new GraphQLError(`account already exists!`, {
         extensions: { code: SignUpError.AccountAlreadyExists },
       })
@@ -146,12 +137,13 @@ export const signUp: AuthMutationsResolvers['signUp'] = async (
       }
     }
 
-    createInTransaction<AuthAccount>(
+    overwriteInTransaction<AuthAccount>(
       `/auth-accounts/${authId}`,
       {
         authId,
         defaultUserId: userId,
         pwhash,
+        revoked: false,
       },
       transaction,
     )

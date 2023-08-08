@@ -21,45 +21,26 @@ export enum AccountType {
   User = 'USER'
 }
 
+export enum AuthAccountExistsError {
+  InvalidState = 'INVALID_STATE',
+  VerificationTimeExpired = 'VERIFICATION_TIME_EXPIRED'
+}
+
+export type AuthAccountExistsInput = {
+  verificationCodeSubmitToken: Scalars['String']['input'];
+};
+
+export type AuthAccountExistsOutput = {
+  __typename?: 'AuthAccountExistsOutput';
+  exists: Scalars['Boolean']['output'];
+  sanitizedAuthId: Scalars['String']['output'];
+};
+
 export enum AuthMethod {
   PasswordReset = 'PASSWORD_RESET',
   SignIn = 'SIGN_IN',
   SignUp = 'SIGN_UP'
 }
-
-export type AuthMutations = {
-  __typename?: 'AuthMutations';
-  passwordReset: PasswordResetOutput;
-  signIn: SignInOutput;
-  signUp: SignUpOutput;
-  verificationCodeRequest: VerificationCodeRequestOutput;
-  verificationCodeSubmit: VerificationCodeSubmitOutput;
-};
-
-
-export type AuthMutationsPasswordResetArgs = {
-  input: PasswordResetInput;
-};
-
-
-export type AuthMutationsSignInArgs = {
-  input: SignInInput;
-};
-
-
-export type AuthMutationsSignUpArgs = {
-  input: SignUpInput;
-};
-
-
-export type AuthMutationsVerificationCodeRequestArgs = {
-  input: VerificationCodeRequestInput;
-};
-
-
-export type AuthMutationsVerificationCodeSubmitArgs = {
-  input: VerificationCodeSubmitInput;
-};
 
 export type Book = {
   __typename?: 'Book';
@@ -68,32 +49,45 @@ export type Book = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
-export type BookMutations = {
-  __typename?: 'BookMutations';
-  addBook?: Maybe<Book>;
-};
-
-
-export type BookMutationsAddBookArgs = {
-  author: Scalars['String']['input'];
-  title: Scalars['String']['input'];
-};
-
-export type BookQueries = {
-  __typename?: 'BookQueries';
-  book?: Maybe<Book>;
-  books?: Maybe<Array<Maybe<Book>>>;
-};
-
-
-export type BookQueriesBookArgs = {
-  id: Scalars['String']['input'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  auth: AuthMutations;
-  book: BookMutations;
+  Auth_passwordReset: PasswordResetOutput;
+  Auth_signIn: SignInOutput;
+  Auth_signUp: SignUpOutput;
+  Auth_verificationCodeRequest: VerificationCodeRequestOutput;
+  Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
+  Book_addBook?: Maybe<Book>;
+};
+
+
+export type MutationAuth_PasswordResetArgs = {
+  input: PasswordResetInput;
+};
+
+
+export type MutationAuth_SignInArgs = {
+  input: SignInInput;
+};
+
+
+export type MutationAuth_SignUpArgs = {
+  input: SignUpInput;
+};
+
+
+export type MutationAuth_VerificationCodeRequestArgs = {
+  input: VerificationCodeRequestInput;
+};
+
+
+export type MutationAuth_VerificationCodeSubmitArgs = {
+  input: VerificationCodeSubmitInput;
+};
+
+
+export type MutationBook_AddBookArgs = {
+  author: Scalars['String']['input'];
+  title: Scalars['String']['input'];
 };
 
 export type NicknameExistsInput = {
@@ -107,6 +101,7 @@ export type NicknameExistsOutput = {
 };
 
 export enum PasswordResetError {
+  AccountNotExists = 'ACCOUNT_NOT_EXISTS',
   InvalidMethod = 'INVALID_METHOD',
   InvalidState = 'INVALID_STATE',
   RateLimited = 'RATE_LIMITED',
@@ -125,8 +120,25 @@ export type PasswordResetOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  book: BookQueries;
-  user: UserQueries;
+  Auth_authAccountExists: AuthAccountExistsOutput;
+  Book_book?: Maybe<Book>;
+  Book_books?: Maybe<Array<Maybe<Book>>>;
+  User_nicknameExists: NicknameExistsOutput;
+};
+
+
+export type QueryAuth_AuthAccountExistsArgs = {
+  input: AuthAccountExistsInput;
+};
+
+
+export type QueryBook_BookArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryUser_NicknameExistsArgs = {
+  input: NicknameExistsInput;
 };
 
 export enum SignInError {
@@ -183,16 +195,6 @@ export type UserPublicFields = {
   nickname: Scalars['String']['output'];
 };
 
-export type UserQueries = {
-  __typename?: 'UserQueries';
-  nicknameExists: NicknameExistsOutput;
-};
-
-
-export type UserQueriesNicknameExistsArgs = {
-  input: NicknameExistsInput;
-};
-
 export enum VerificationCodeRequestError {
   RateLimited = 'RATE_LIMITED'
 }
@@ -238,13 +240,53 @@ export enum VerificationService {
 export type GetBooks2QueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBooks2Query = { __typename?: 'Query', book: { __typename?: 'BookQueries', books?: Array<{ __typename?: 'Book', author?: string | null } | null> | null } };
+export type GetBooks2Query = { __typename?: 'Query', Book_books?: Array<{ __typename?: 'Book', author?: string | null } | null> | null };
 
 export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetBooksQuery = { __typename?: 'Query', book: { __typename?: 'BookQueries', books?: Array<{ __typename?: 'Book', author?: string | null, title?: string | null } | null> | null } };
+export type GetBooksQuery = { __typename?: 'Query', Book_books?: Array<{ __typename?: 'Book', author?: string | null, title?: string | null } | null> | null };
+
+export type SubmitPasswordResetMutationVariables = Exact<{
+  input: PasswordResetInput;
+}>;
 
 
-export const GetBooks2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getBooks2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"book"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]}}]} as unknown as DocumentNode<GetBooks2Query, GetBooks2QueryVariables>;
-export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"book"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
+export type SubmitPasswordResetMutation = { __typename?: 'Mutation', Auth_passwordReset: { __typename?: 'PasswordResetOutput', user: { __typename?: 'User', userId: string } } };
+
+export type SubmitSignIMutationVariables = Exact<{
+  input: SignInInput;
+}>;
+
+
+export type SubmitSignIMutation = { __typename?: 'Mutation', Auth_signIn: { __typename?: 'SignInOutput', user: { __typename?: 'User', userId: string } } };
+
+export type SubmitSignUpMutationVariables = Exact<{
+  input: SignUpInput;
+}>;
+
+
+export type SubmitSignUpMutation = { __typename?: 'Mutation', Auth_signUp: { __typename?: 'SignUpOutput', user: { __typename?: 'User', userId: string } } };
+
+export type SubmitVerificationCodeRequestMutationVariables = Exact<{
+  input: VerificationCodeRequestInput;
+}>;
+
+
+export type SubmitVerificationCodeRequestMutation = { __typename?: 'Mutation', Auth_verificationCodeRequest: { __typename?: 'VerificationCodeRequestOutput', verificationCodeRequestToken: string } };
+
+export type SubmitVerificationCodeSubmitMutationVariables = Exact<{
+  input: VerificationCodeSubmitInput;
+}>;
+
+
+export type SubmitVerificationCodeSubmitMutation = { __typename?: 'Mutation', Auth_verificationCodeSubmit: { __typename?: 'VerificationCodeSubmitOutput', verificationCodeSubmitToken: string } };
+
+
+export const GetBooks2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<GetBooks2Query, GetBooks2QueryVariables>;
+export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
+export const SubmitPasswordResetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitPasswordReset"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PasswordResetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_passwordReset"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}}]}}]}}]} as unknown as DocumentNode<SubmitPasswordResetMutation, SubmitPasswordResetMutationVariables>;
+export const SubmitSignIDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitSignI"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignInInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_signIn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}}]}}]}}]} as unknown as DocumentNode<SubmitSignIMutation, SubmitSignIMutationVariables>;
+export const SubmitSignUpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitSignUp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignUpInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_signUp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}}]}}]}}]} as unknown as DocumentNode<SubmitSignUpMutation, SubmitSignUpMutationVariables>;
+export const SubmitVerificationCodeRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitVerificationCodeRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerificationCodeRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_verificationCodeRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verificationCodeRequestToken"}}]}}]}}]} as unknown as DocumentNode<SubmitVerificationCodeRequestMutation, SubmitVerificationCodeRequestMutationVariables>;
+export const SubmitVerificationCodeSubmitDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitVerificationCodeSubmit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerificationCodeSubmitInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_verificationCodeSubmit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verificationCodeSubmitToken"}}]}}]}}]} as unknown as DocumentNode<SubmitVerificationCodeSubmitMutation, SubmitVerificationCodeSubmitMutationVariables>;

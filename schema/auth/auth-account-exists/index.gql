@@ -1,0 +1,20 @@
+input AuthAccountExistsInput {
+  # authId provided via verificationCodeSubmitToken
+  verificationCodeSubmitToken: String!
+}
+
+type AuthAccountExistsOutput {
+  exists: Boolean!
+  sanitizedAuthId: String!
+}
+
+enum AuthAccountExistsError {
+  VERIFICATION_TIME_EXPIRED
+  INVALID_STATE
+}
+
+extend type Query {
+  Auth_authAccountExists(
+    input: AuthAccountExistsInput!
+  ): AuthAccountExistsOutput!
+}

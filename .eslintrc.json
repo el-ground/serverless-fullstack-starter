@@ -23,7 +23,8 @@
             {
                 "additionalHooks": "(useBoxedCallback|useAsyncCallback|useAsyncEffect)"
             }
-        ]
+        ],
+        "camelcase": 0
     },
     "env": {
         "node": true

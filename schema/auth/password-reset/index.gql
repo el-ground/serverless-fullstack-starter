@@ -12,4 +12,9 @@ enum PasswordResetError {
   INVALID_METHOD
   INVALID_STATE
   RATE_LIMITED
+  ACCOUNT_NOT_EXISTS
+}
+
+extend type Mutation {
+  Auth_passwordReset(input: PasswordResetInput!): PasswordResetOutput!
 }

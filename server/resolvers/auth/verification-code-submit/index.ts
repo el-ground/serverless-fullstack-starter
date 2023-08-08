@@ -1,15 +1,19 @@
 import { GraphQLError } from 'graphql'
-import type { AuthMutationsResolvers } from '#types'
+import type { MutationResolvers } from '#types'
 import { VerificationCodeState, VerificationCodeSubmitError } from '#types'
 import { validate, sanitize } from '@/schema/auth/verification-code-submit'
-import { compactDecrypt, CompactEncrypt } from 'jose'
+import { CompactEncrypt } from 'jose'
 import jwt from 'jsonwebtoken'
-import { getAuthKey, getAuthKeyObject } from '#framework/auth/key'
+import { decodeAuthKeySignedToken } from '../util'
+import {
+  getAuthKeyStringRSA4096Private,
+  getAuthKeyObjectSymmetric256,
+} from '#framework/auth/key'
 import { testRateLimiter } from '@/server/services/rate-limiter'
 import type { VerificationCodeRequestTokenPayload } from '../verification-code-request/types'
 import type { VerificationCodeSubmitTokenPayload } from './types'
 
-export const verificationCodeSubmit: AuthMutationsResolvers['verificationCodeSubmit'] =
+export const Auth_verificationCodeSubmit: MutationResolvers['Auth_verificationCodeSubmit'] =
   async (_, { input: _input }) => {
     const errors = validate(_input)
     if (errors) {
@@ -23,16 +27,11 @@ export const verificationCodeSubmit: AuthMutationsResolvers['verificationCodeSub
       verificationCode: submittedVerificationCode,
     } = sanitize(_input)
 
-    const { plaintext: decryptedTokenBuffer /*, protectedHeader */ } =
-      await compactDecrypt(verificationCodeRequestToken, getAuthKeyObject())
-    const decryptedToken = new TextDecoder().decode(decryptedTokenBuffer)
-
-    let jwtResult: VerificationCodeRequestTokenPayload
+    let verificationCodeRequestTokenPayload: VerificationCodeRequestTokenPayload
     try {
-      jwtResult = jwt.verify(
-        decryptedToken,
-        getAuthKey(),
-      ) as VerificationCodeRequestTokenPayload
+      verificationCodeRequestTokenPayload = await decodeAuthKeySignedToken(
+        verificationCodeRequestToken,
+      )
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if ((e as any)?.name === `TokenExpiredError`) {
@@ -55,7 +54,7 @@ export const verificationCodeSubmit: AuthMutationsResolvers['verificationCodeSub
         createdAtMilliseconds,
         verificationCode,
       },
-    } = jwtResult
+    } = verificationCodeRequestTokenPayload
 
     // acquire two locks! 5 per 5 sec lock
 
@@ -127,16 +126,21 @@ export const verificationCodeSubmit: AuthMutationsResolvers['verificationCodeSub
       },
     }
 
-    const phoneVerificationSubmitToken = jwt.sign(payload, getAuthKey(), {
-      // 4 minutes to enter the token. Users will prompted for 3 min
-      expiresIn: '20m',
-    })
+    const phoneVerificationSubmitToken = jwt.sign(
+      payload,
+      getAuthKeyStringRSA4096Private(),
+      {
+        // 4 minutes to enter the token. Users will prompted for 3 min
+        expiresIn: '20m',
+        algorithm: 'RS256',
+      },
+    )
 
     const encryptedPhoneVerificationSubmitToken = await new CompactEncrypt(
       new TextEncoder().encode(phoneVerificationSubmitToken),
     )
-      .setProtectedHeader({ alg: 'RSA-OAEP-256', enc: 'A256GCM' })
-      .encrypt(getAuthKeyObject())
+      .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
+      .encrypt(getAuthKeyObjectSymmetric256())
 
     return {
       verificationCodeSubmitToken: encryptedPhoneVerificationSubmitToken,

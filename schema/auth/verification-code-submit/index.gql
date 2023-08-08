@@ -13,3 +13,9 @@ enum VerificationCodeSubmitError {
   VERIFICATION_CODE_MISMATCH
   RATE_LIMITED
 }
+
+extend type Mutation {
+  Auth_verificationCodeSubmit(
+    input: VerificationCodeSubmitInput!
+  ): VerificationCodeSubmitOutput!
+}

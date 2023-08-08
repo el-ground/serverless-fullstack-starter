@@ -1,5 +1,5 @@
-import { nicknameExists } from './nickname-exists'
+import { User_nicknameExists } from './nickname-exists'
 
 export const UserQueries = {
-  nicknameExists,
+  User_nicknameExists,
 }
