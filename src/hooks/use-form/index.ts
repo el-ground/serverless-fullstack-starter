@@ -173,17 +173,17 @@ export const useForm = <
         e.preventDefault()
       }
 
-      if (isSubmittingBox.current) {
-        // check lock
-        return
-      }
-      isSubmittingBox.current = true // lock
-
       setHasSubmitted(true)
 
       if (!canSubmit) {
         return
       }
+
+      if (isSubmittingBox.current) {
+        // check lock
+        return
+      }
+      isSubmittingBox.current = true // lock
 
       const sanitizedContent = getSanitizer()(content)
       const result = await getSubmit()(sanitizedContent)

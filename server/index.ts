@@ -5,7 +5,6 @@ import { EventEmitter } from 'events'
 import { app as expressApp } from './app'
 import { createRouter as createApolloRouter } from './framework/apollo'
 import { createApp as createNextApp } from '@/server/framework/next'
-
 EventEmitter.defaultMaxListeners = 100
 
 // https://nextjs.org/docs/pages/building-your-application/configuring/custom-server

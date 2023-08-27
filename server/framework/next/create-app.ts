@@ -3,6 +3,7 @@ import express from 'express'
 import type { IncomingMessage, ServerResponse } from 'http'
 import { asyncHandler } from '@/server/framework/express'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
+import { sessionIdCookieMiddleware } from '@/server/framework/session'
 import cookieParser from 'cookie-parser'
 
 // where is the NextServer type?
@@ -26,6 +27,7 @@ const createNextSSRRouteExpressWrapperApp = (nextServer: NextServer) => {
     Cookie update logic in front of next app handler
   */
   nextSSRRouteExpressWrapperApp.use(cookieParser())
+  nextSSRRouteExpressWrapperApp.use(sessionIdCookieMiddleware())
   nextSSRRouteExpressWrapperApp.use(
     validateParseAndRefreshAuthCookiesMiddleware({
       refresh: true,

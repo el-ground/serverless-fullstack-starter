@@ -57,14 +57,5 @@ export const validateParseAndRefreshAuthCookiesMiddleware = ({
       setAuthToken(null)
     }
 
-    if (authPayload.isAuthenticated) {
-      // any authenticated requests should be private!
-
-      res.setHeader(
-        'Cache-Control',
-        'private, no-store, no-cache, must-revalidate, proxy-revalidate',
-      )
-    }
-
     next()
   })

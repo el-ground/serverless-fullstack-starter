@@ -1,18 +1,26 @@
 import express from 'express'
-import { createRouter } from './framework/express'
-import { initialize as initializeRequestId } from './framework/express/middlewares/request-id'
+import { restAPIRouter } from './routers'
+import {
+  initialize as initializeRequestId,
+  requestId,
+} from './framework/express/middlewares/request-id'
 import { initialize as intiializeLogger } from './framework/express/middlewares/logger'
-import { getCORSAllosOrigins } from '@/config'
+import { setupRequestLogger } from './framework/express/middlewares/request-logger'
+
+// https://stackoverflow.com/a/14631683
 
 initializeRequestId()
 intiializeLogger()
 
 const app = express()
-const mainRouter = createRouter({
-  corsAllowOrigins: [...getCORSAllosOrigins()],
-})
+// to know ip address
+app.set('trust proxy', true)
+// attach requestId per express request
+app.use(requestId())
+setupRequestLogger(app)
 
-app.use(`/api/`, mainRouter)
+// REST API router
+app.use(`/api/rest/`, restAPIRouter)
 
 /*
   use this app for supertest!

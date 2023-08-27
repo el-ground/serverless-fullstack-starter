@@ -14,6 +14,7 @@ import {
 import { testRateLimiter } from '@/server/services/rate-limiter'
 import { getTestVerificationCode } from '../util'
 import type { VerificationCodeRequestTokenPayload } from './types'
+import { logDebug } from '#util/log'
 
 export const Auth_verificationCodeRequest: MutationResolvers['Auth_verificationCodeRequest'] =
   async (_, { input: _input }) => {
