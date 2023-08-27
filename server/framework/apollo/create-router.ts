@@ -10,6 +10,7 @@ import type { Context } from './context'
 import { schema } from './schema'
 import { logIdentifiers } from '#framework/express/middlewares/request-logger'
 import { logError } from '#util/log'
+import { LogPlugin } from './logger'
 import { sessionIdCookieMiddleware } from '../session'
 
 // https://github.com/apollographql/apollo-server/issues/1933
@@ -18,7 +19,7 @@ export const createRouter = async (httpServer: Server) => {
 
   const server = new ApolloServer<Context>({
     schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), LogPlugin],
     includeStacktraceInErrorResponses: true,
     // Development only
     introspection: process.env.NODE_ENV === `development`,
