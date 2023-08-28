@@ -9,7 +9,7 @@ import { useRefreshAuth } from '@/src/hooks/use-auth/client'
 import { validator, errorMessages, ValidatorErrorCodes } from './validator'
 
 const SUBMIT_SIGN_IN = gql(`
-  mutation submitSignI($input: SignInInput!) {
+  mutation submitSignIn($input: SignInInput!) {
     Auth_signIn(input: $input) {
       user {
         userId
