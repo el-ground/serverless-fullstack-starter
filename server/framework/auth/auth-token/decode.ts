@@ -5,7 +5,7 @@ import type { AuthTokenPayload, RefreshToken } from './types'
 import { ResError } from '#util/error'
 import { getRolesAndPermissionsFromUser } from '../roles-and-permissions'
 import { readDirectly, readAllDirectly } from '#framework/database/read'
-import { createAuthToken } from './create'
+import { createAuthToken, currentActiveAuthTokenVersion } from './create'
 import { AuthAccount } from '../auth-account'
 
 export interface DecodeResult {
@@ -20,6 +20,11 @@ export const decodeAuthTokenNoRefresh = async (
   const publicKey = await getAuthKeyStringRSA4096Public()
   // verify will throw
   const payload = jwt.verify(token, publicKey) as AuthTokenPayload
+
+  if (payload.version !== currentActiveAuthTokenVersion) {
+    throw new ResError(401, `invalid-auth-token-version`)
+  }
+
   return {
     token,
     payload,
@@ -38,6 +43,10 @@ export const decodeAuthTokenTryRefresh = async (
 
   try {
     const payload = jwt.verify(token, publicKey) as AuthTokenPayload
+
+    if (payload.version !== currentActiveAuthTokenVersion) {
+      throw new ResError(401, `invalid-auth-token-version`)
+    }
     // if verification success, proceed!
     return {
       token,
@@ -63,6 +72,10 @@ export const decodeAuthTokenTryRefresh = async (
   const payload = jwt.verify(token, publicKey, {
     ignoreExpiration: true,
   }) as AuthTokenPayload
+
+  if (payload.version !== currentActiveAuthTokenVersion) {
+    throw new ResError(401, `invalid-auth-token-version`)
+  }
 
   const { userId, authId, refreshTokenId } = payload
 

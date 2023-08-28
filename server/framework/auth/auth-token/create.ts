@@ -8,6 +8,8 @@ import { revokeRefreshTokenInTransaction } from './revoke'
 import { updateInTransaction } from '#framework/database/write/update'
 import { createInTransaction } from '#framework/database/write/create'
 
+export const currentActiveAuthTokenVersion = `1.0.1`
+
 export const createAuthToken = async ({
   userId,
   authId,
@@ -64,7 +66,7 @@ export const createAuthToken = async ({
     authId,
     rolesAndPermissions,
     refreshTokenId,
-    version: `1.0.0`,
+    version: currentActiveAuthTokenVersion,
   }
 
   const token = jwt.sign(payload, getAuthKeyStringRSA4096Private(), {
