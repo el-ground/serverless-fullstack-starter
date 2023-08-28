@@ -6,13 +6,14 @@ import { AuthAccountExistsError, VerificationCodeState } from '#types'
 import { decodeAuthKeySignedToken } from './util'
 import { readDirectly } from '@/server/framework/database/read'
 import { AuthAccount } from '@/server/framework/auth/auth-account'
+import { VALIDATION_FAIL } from '#types/common-errors'
 
 export const Auth_authAccountExists: QueryResolvers['Auth_authAccountExists'] =
   async (_, { input: _input }) => {
     const errors = validate(_input)
     if (errors) {
       throw new GraphQLError(`validation error!`, {
-        extensions: { code: 'VALIDATION_FAIL', errors },
+        extensions: { code: VALIDATION_FAIL, errors },
       })
     }
 

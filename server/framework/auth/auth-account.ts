@@ -1,3 +1,5 @@
+// If you want to support multiple accounts x multiple users,
+// you might think about delete-account
 export interface AuthAccount {
   authId: string
   // current implementation doesnt support single authId - multiple user
@@ -8,4 +10,5 @@ export interface AuthAccount {
   pwhash: string
   // set revoked to true on account delete
   revoked: boolean
+  // revokedAtSeconds : number
 }

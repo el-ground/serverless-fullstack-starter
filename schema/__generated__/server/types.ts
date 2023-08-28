@@ -38,6 +38,8 @@ export type AuthAccountExistsOutput = {
 };
 
 export enum AuthMethod {
+  DeleteAccount = 'DELETE_ACCOUNT',
+  LogOut = 'LOG_OUT',
   PasswordReset = 'PASSWORD_RESET',
   SignIn = 'SIGN_IN',
   SignUp = 'SIGN_UP'
@@ -52,12 +54,14 @@ export type Book = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  Auth_logOut?: Maybe<Scalars['Boolean']['output']>;
   Auth_passwordReset: PasswordResetOutput;
   Auth_signIn: SignInOutput;
   Auth_signUp: SignUpOutput;
   Auth_verificationCodeRequest: VerificationCodeRequestOutput;
   Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
   Book_addBook?: Maybe<Book>;
+  User_deleteAccount?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -193,6 +197,8 @@ export type UserPrivateFields = {
 export type UserPublicFields = {
   __typename?: 'UserPublicFields';
   accountType: AccountType;
+  deleted: Scalars['Boolean']['output'];
+  deletedAtSeconds?: Maybe<Scalars['Int']['output']>;
   nickname: Scalars['String']['output'];
 };
 
@@ -317,6 +323,7 @@ export type ResolversTypes = ResolversObject<{
   AuthMethod: AuthMethod;
   Book: ResolverTypeWrapper<Book>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
   NicknameExistsInput: NicknameExistsInput;
   NicknameExistsOutput: ResolverTypeWrapper<NicknameExistsOutput>;
@@ -350,6 +357,7 @@ export type ResolversParentTypes = ResolversObject<{
   AuthAccountExistsOutput: AuthAccountExistsOutput;
   Book: Book;
   Boolean: Scalars['Boolean']['output'];
+  Int: Scalars['Int']['output'];
   Mutation: {};
   NicknameExistsInput: NicknameExistsInput;
   NicknameExistsOutput: NicknameExistsOutput;
@@ -384,12 +392,14 @@ export type BookResolvers<ContextType = Context, ParentType extends ResolversPar
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  Auth_logOut?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   Auth_passwordReset?: Resolver<ResolversTypes['PasswordResetOutput'], ParentType, ContextType, RequireFields<MutationAuth_PasswordResetArgs, 'input'>>;
   Auth_signIn?: Resolver<ResolversTypes['SignInOutput'], ParentType, ContextType, RequireFields<MutationAuth_SignInArgs, 'input'>>;
   Auth_signUp?: Resolver<ResolversTypes['SignUpOutput'], ParentType, ContextType, RequireFields<MutationAuth_SignUpArgs, 'input'>>;
   Auth_verificationCodeRequest?: Resolver<ResolversTypes['VerificationCodeRequestOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeRequestArgs, 'input'>>;
   Auth_verificationCodeSubmit?: Resolver<ResolversTypes['VerificationCodeSubmitOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeSubmitArgs, 'input'>>;
   Book_addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationBook_AddBookArgs, 'author' | 'title'>>;
+  User_deleteAccount?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 }>;
 
 export type NicknameExistsOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['NicknameExistsOutput'] = ResolversParentTypes['NicknameExistsOutput']> = ResolversObject<{
@@ -434,6 +444,8 @@ export type UserPrivateFieldsResolvers<ContextType = Context, ParentType extends
 
 export type UserPublicFieldsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UserPublicFields'] = ResolversParentTypes['UserPublicFields']> = ResolversObject<{
   accountType?: Resolver<ResolversTypes['AccountType'], ParentType, ContextType>;
+  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  deletedAtSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   nickname?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

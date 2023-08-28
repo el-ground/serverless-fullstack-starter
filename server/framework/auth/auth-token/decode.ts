@@ -4,8 +4,9 @@ import { getAuthKeyStringRSA4096Public } from '#framework/auth/key'
 import type { AuthTokenPayload, RefreshToken } from './types'
 import { ResError } from '#util/error'
 import { getRolesAndPermissionsFromUser } from '../roles-and-permissions'
-import { readDirectly } from '#framework/database/read'
+import { readDirectly, readAllDirectly } from '#framework/database/read'
 import { createAuthToken } from './create'
+import { AuthAccount } from '../auth-account'
 
 export interface DecodeResult {
   token: string
@@ -63,7 +64,7 @@ export const decodeAuthTokenTryRefresh = async (
     ignoreExpiration: true,
   }) as AuthTokenPayload
 
-  const { userId, refreshTokenId } = payload
+  const { userId, authId, refreshTokenId } = payload
 
   const refreshToken = await readDirectly<RefreshToken>(
     `/refresh-tokens/${refreshTokenId}`,
@@ -71,18 +72,30 @@ export const decodeAuthTokenTryRefresh = async (
   if (refreshToken) {
     const {
       userId: refreshTokenUserId,
+      authId: refreshTokenAuthId,
       revoked,
       expiresAtSeconds,
       createdAtSeconds,
     } = refreshToken
 
     // normalized below
-    const user = await readDirectly<User>(`/users/${userId}`)
+    const [user, authAccount] = (await readAllDirectly<User | AuthAccount>([
+      `/users/${userId}`,
+      `/auth-accounts/${authId}`,
+    ])) as [User | null, AuthAccount | null]
     if (!user) {
       throw new ResError(401, `User not found`)
     }
 
-    if (!refreshTokenUserId || refreshTokenUserId !== userId) {
+    if (!authAccount || authAccount.revoked) {
+      throw new ResError(401, `Auth account not found`)
+    }
+
+    if (
+      !refreshTokenUserId ||
+      refreshTokenUserId !== userId ||
+      refreshTokenAuthId !== authId
+    ) {
       throw new ResError(401, `refresh-token-user-id-mismatch`)
     }
 
@@ -112,6 +125,7 @@ export const decodeAuthTokenTryRefresh = async (
     const rolesAndPermissions = getRolesAndPermissionsFromUser(user)
     const { token: newToken, payload } = await createAuthToken({
       userId,
+      authId,
       rolesAndPermissions,
       refreshTokenId: createNewRefreshToken ? undefined : refreshTokenId,
       refreshTokenIdToRevoke: createNewRefreshToken

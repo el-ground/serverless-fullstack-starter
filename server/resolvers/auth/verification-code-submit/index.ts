@@ -10,6 +10,7 @@ import {
   getAuthKeyObjectSymmetric256,
 } from '#framework/auth/key'
 import { testRateLimiter } from '@/server/services/rate-limiter'
+import { VALIDATION_FAIL } from '#types/common-errors'
 import type { VerificationCodeRequestTokenPayload } from '../verification-code-request/types'
 import type { VerificationCodeSubmitTokenPayload } from './types'
 
@@ -18,7 +19,7 @@ export const Auth_verificationCodeSubmit: MutationResolvers['Auth_verificationCo
     const errors = validate(_input)
     if (errors) {
       throw new GraphQLError(`validation error!`, {
-        extensions: { code: 'VALIDATION_FAIL', errors },
+        extensions: { code: VALIDATION_FAIL, errors },
       })
     }
 

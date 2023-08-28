@@ -6,6 +6,8 @@ enum AccountType {
 type UserPublicFields {
   nickname: String!
   accountType: AccountType!
+  deleted: Boolean!
+  deletedAtSeconds: Int
 }
 
 type UserPrivateFields {

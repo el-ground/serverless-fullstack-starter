@@ -57,6 +57,8 @@ export const validateParseAndRefresh = async (
       refreshedToken: refreshed ? token : undefined,
       authPayload: {
         userId: payload.userId,
+        authId: payload.authId,
+        refreshTokenId: payload.refreshTokenId,
         isAuthenticated: true,
         rolesAndPermissions: payload.rolesAndPermissions,
       },

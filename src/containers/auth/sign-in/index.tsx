@@ -5,6 +5,7 @@ import { useForm } from '@hooks/use-form'
 import { useRouter } from 'next/navigation'
 import { SignInError, SignInInput } from '@types'
 import type { SignInFormInput } from './types'
+import { useRefreshAuth } from '@/src/hooks/use-auth/client'
 import { validator, errorMessages, ValidatorErrorCodes } from './validator'
 
 const SUBMIT_SIGN_IN = gql(`
@@ -33,11 +34,11 @@ const defaultContent = {
 
 export const SignIn = () => {
   const router = useRouter()
+  const refreshAuth = useRefreshAuth()
   const onSuccess = React.useCallback(() => {
-    //
-    // TODO : change who I am
+    refreshAuth()
     router.replace(`/`)
-  }, [router])
+  }, [router, refreshAuth])
 
   const [submit] = useMutation<SignInError>(SUBMIT_SIGN_IN, {
     knownErrorMessages: mutationErrorMessages,

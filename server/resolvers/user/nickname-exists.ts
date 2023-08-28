@@ -3,13 +3,14 @@ import type { QueryResolvers } from '#types'
 import type { NicknameOwnership } from '#model/nickname-ownership'
 import { readDirectly } from '#framework/database/read'
 import { sanitize, validate } from '@/schema/user/nickname-exists'
+import { VALIDATION_FAIL } from '#types/common-errors'
 
 export const User_nicknameExists: QueryResolvers['User_nicknameExists'] =
   async (_, { input: _input }) => {
     const errors = validate(_input)
     if (errors) {
       throw new GraphQLError(`validation error!`, {
-        extensions: { code: 'VALIDATION_FAIL', errors },
+        extensions: { code: VALIDATION_FAIL, errors },
       })
     }
 

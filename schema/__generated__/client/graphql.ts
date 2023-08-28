@@ -37,6 +37,8 @@ export type AuthAccountExistsOutput = {
 };
 
 export enum AuthMethod {
+  DeleteAccount = 'DELETE_ACCOUNT',
+  LogOut = 'LOG_OUT',
   PasswordReset = 'PASSWORD_RESET',
   SignIn = 'SIGN_IN',
   SignUp = 'SIGN_UP'
@@ -51,12 +53,14 @@ export type Book = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  Auth_logOut?: Maybe<Scalars['Boolean']['output']>;
   Auth_passwordReset: PasswordResetOutput;
   Auth_signIn: SignInOutput;
   Auth_signUp: SignUpOutput;
   Auth_verificationCodeRequest: VerificationCodeRequestOutput;
   Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
   Book_addBook?: Maybe<Book>;
+  User_deleteAccount?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
@@ -192,6 +196,8 @@ export type UserPrivateFields = {
 export type UserPublicFields = {
   __typename?: 'UserPublicFields';
   accountType: AccountType;
+  deleted: Scalars['Boolean']['output'];
+  deletedAtSeconds?: Maybe<Scalars['Int']['output']>;
   nickname: Scalars['String']['output'];
 };
 
@@ -282,6 +288,16 @@ export type SubmitVerificationCodeSubmitMutationVariables = Exact<{
 
 export type SubmitVerificationCodeSubmitMutation = { __typename?: 'Mutation', Auth_verificationCodeSubmit: { __typename?: 'VerificationCodeSubmitOutput', verificationCodeSubmitToken: string } };
 
+export type DeleteAccountMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteAccountMutation = { __typename?: 'Mutation', User_deleteAccount?: boolean | null };
+
+export type SubmitLogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubmitLogoutMutation = { __typename?: 'Mutation', Auth_logOut?: boolean | null };
+
 
 export const GetBooks2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<GetBooks2Query, GetBooks2QueryVariables>;
 export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
@@ -290,3 +306,5 @@ export const SubmitSignIDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const SubmitSignUpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitSignUp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignUpInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_signUp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}}]}}]}}]}}]} as unknown as DocumentNode<SubmitSignUpMutation, SubmitSignUpMutationVariables>;
 export const SubmitVerificationCodeRequestDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitVerificationCodeRequest"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerificationCodeRequestInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_verificationCodeRequest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verificationCodeRequestToken"}}]}}]}}]} as unknown as DocumentNode<SubmitVerificationCodeRequestMutation, SubmitVerificationCodeRequestMutationVariables>;
 export const SubmitVerificationCodeSubmitDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitVerificationCodeSubmit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerificationCodeSubmitInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_verificationCodeSubmit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verificationCodeSubmitToken"}}]}}]}}]} as unknown as DocumentNode<SubmitVerificationCodeSubmitMutation, SubmitVerificationCodeSubmitMutationVariables>;
+export const DeleteAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"User_deleteAccount"}}]}}]} as unknown as DocumentNode<DeleteAccountMutation, DeleteAccountMutationVariables>;
+export const SubmitLogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitLogout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_logOut"}}]}}]} as unknown as DocumentNode<SubmitLogoutMutation, SubmitLogoutMutationVariables>;

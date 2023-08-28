@@ -5,6 +5,7 @@ import { ToRequestVerificationCode } from '../states/to-request-verification-cod
 import { ToSubmitVerificationCode } from '../states/to-submit-verification-code'
 import { ToSubmitSignUp } from './states/to-submit-sign-up'
 import { AuthMethod } from '@types'
+import { useRefreshAuth } from '@/src/hooks/use-auth/client'
 import { toast } from 'react-toastify'
 
 /*
@@ -41,13 +42,15 @@ export const SignUp = () => {
     setSignUpState(SignUpState.TO_REQUEST_VERIFICATION_CODE)
   }, [])
 
+  const refreshAuth = useRefreshAuth()
+
   const onSuccess = React.useCallback(() => {
-    // TODO : change who I am
+    refreshAuth()
     router.replace(`/`)
     toast.success(`회원가입에 성공했습니다.`, {
       position: toast.POSITION.BOTTOM_CENTER,
     })
-  }, [router])
+  }, [router, refreshAuth])
 
   const currentStateElement = React.useMemo(() => {
     switch (signUpState) {

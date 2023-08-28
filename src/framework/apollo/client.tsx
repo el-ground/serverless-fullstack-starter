@@ -1,6 +1,11 @@
 'use client'
 import React from 'react'
-import { SuspenseCache, HttpLink, ApolloLink } from '@apollo/client'
+import {
+  SuspenseCache,
+  HttpLink,
+  ApolloLink,
+  NormalizedCacheObject,
+} from '@apollo/client'
 import {
   ApolloNextAppProvider,
   useSuspenseQuery,
@@ -19,7 +24,13 @@ import { getOrigin } from '@/config'
   useSuspenseQuery : SSR initial render with data and hydrate later.
 */
 
-export const makeClient = () => {
+let client: NextSSRApolloClient<NormalizedCacheObject> | null = null
+
+export const getClient = () => {
+  if (client) {
+    return client
+  }
+
   // https://www.apollographql.com/docs/react/networking/advanced-http-networking/
   // https://github.com/apollographql/apollo-client-nextjs
 
@@ -35,7 +46,7 @@ export const makeClient = () => {
   }
   links.push(httpLink)
 
-  const client = new NextSSRApolloClient({
+  client = new NextSSRApolloClient({
     cache: new NextSSRInMemoryCache(),
     link: ApolloLink.from(links),
   })
@@ -50,7 +61,7 @@ const makeSuspenseCache = () => {
 export const ApolloProvider = ({ children }: React.PropsWithChildren) => {
   return (
     <ApolloNextAppProvider
-      makeClient={makeClient}
+      makeClient={getClient}
       makeSuspenseCache={makeSuspenseCache}
     >
       {children}

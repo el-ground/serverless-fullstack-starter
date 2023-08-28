@@ -1,6 +1,6 @@
 import { Resolvers } from '@/schema/__generated__/server/types'
 import { AuthQueries, AuthMutations } from './auth'
-import { UserQueries } from './user'
+import { UserQueries, UserMutations } from './user'
 import { BookQueries, BookMutations } from './book'
 
 /*
@@ -21,6 +21,7 @@ export const resolvers: Resolvers = {
     ...BookQueries,
   },
   Mutation: {
+    ...UserMutations,
     ...AuthMutations,
     ...BookMutations,
   },

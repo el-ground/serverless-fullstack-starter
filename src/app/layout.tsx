@@ -6,6 +6,8 @@ import { ErrorBoundary } from '@/src/components/error-boundary'
 import { ApolloProvider } from '@/src/framework/apollo/client'
 import { ForceRSC } from '@/src/components/force-rsc'
 import { ToastProvider } from '@components/toast-provider'
+import { IsSSRProvider } from '@hooks/use-is-ssr'
+import { AuthProvider } from '@hooks/use-auth/client'
 
 console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 
@@ -45,7 +47,9 @@ export default function RootLayout({
         <body>
           <ErrorBoundary>
             <ApolloProvider>
-              {children}
+              <IsSSRProvider>
+                <AuthProvider>{children}</AuthProvider>
+              </IsSSRProvider>
               <ToastProvider />
               <ForceRSC />
             </ApolloProvider>

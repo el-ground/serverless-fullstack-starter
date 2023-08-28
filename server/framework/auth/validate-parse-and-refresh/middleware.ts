@@ -50,6 +50,8 @@ export const validateParseAndRefreshAuthCookiesMiddleware = ({
       refresh,
     )
 
+    req.auth = authPayload
+
     if (refreshedToken) {
       // if used cookie, update using cookie!
       setAuthToken(refreshedToken)

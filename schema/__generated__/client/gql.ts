@@ -20,6 +20,8 @@ const documents = {
     "\n  mutation submitSignUp($input: SignUpInput!) {\n    Auth_signUp(input: $input) {\n      user {\n        userId\n      }\n    }\n  }\n": types.SubmitSignUpDocument,
     "\n  mutation submitVerificationCodeRequest($input: VerificationCodeRequestInput!) {\n    Auth_verificationCodeRequest(input: $input) {\n      verificationCodeRequestToken\n    }\n  }\n": types.SubmitVerificationCodeRequestDocument,
     "\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n": types.SubmitVerificationCodeSubmitDocument,
+    "\n    mutation deleteAccount {\n        User_deleteAccount\n    }\n": types.DeleteAccountDocument,
+    "\n    mutation submitLogout {\n        Auth_logOut\n    }\n": types.SubmitLogoutDocument,
 };
 
 /**
@@ -64,6 +66,14 @@ export function gql(source: "\n  mutation submitVerificationCodeRequest($input: 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n"): (typeof documents)["\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation deleteAccount {\n        User_deleteAccount\n    }\n"): (typeof documents)["\n    mutation deleteAccount {\n        User_deleteAccount\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation submitLogout {\n        Auth_logOut\n    }\n"): (typeof documents)["\n    mutation submitLogout {\n        Auth_logOut\n    }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

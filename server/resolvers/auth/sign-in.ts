@@ -8,6 +8,7 @@ import { createAuthToken } from '#framework/auth/auth-token'
 import { testRateLimiter } from '@/server/services/rate-limiter'
 import { readDirectly } from '@/server/framework/database/read'
 import { AuthAccount } from '@/server/framework/auth/auth-account'
+import { VALIDATION_FAIL } from '#types/common-errors'
 
 export const Auth_signIn: MutationResolvers['Auth_signIn'] = async (
   _,
@@ -17,7 +18,7 @@ export const Auth_signIn: MutationResolvers['Auth_signIn'] = async (
   const errors = validate(_input)
   if (errors) {
     throw new GraphQLError(`validation error!`, {
-      extensions: { code: 'VALIDATION_FAIL', errors },
+      extensions: { code: VALIDATION_FAIL, errors },
     })
   }
 
@@ -64,6 +65,7 @@ export const Auth_signIn: MutationResolvers['Auth_signIn'] = async (
   const rolesAndPermissions = getRolesAndPermissionsFromUser(user)
   const { token: authToken } = await createAuthToken({
     userId: defaultUserId,
+    authId,
     rolesAndPermissions,
   })
 

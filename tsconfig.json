@@ -53,11 +53,17 @@
       "@util/*": [
         "./src/util/*"
       ],
+      "@model/*": [
+        "./src/model/*"
+      ],
       "@framework/*": [
         "./src/framework/*"
       ],
       "#util/*": [
         "./server/util/*"
+      ],
+      "#types/*": [
+        "./server/types/*"
       ],
       "#services/*": [
         "./server/services/*"

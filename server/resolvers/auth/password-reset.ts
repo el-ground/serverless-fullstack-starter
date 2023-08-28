@@ -10,13 +10,14 @@ import { getRolesAndPermissionsFromUser } from '#framework/auth/roles-and-permis
 import { createAuthToken } from '#framework/auth/auth-token'
 import { updateDirectly } from '@/server/framework/database/write/update'
 import { readDirectly } from '@/server/framework/database/read'
+import { VALIDATION_FAIL } from '#types/common-errors'
 
 export const Auth_passwordReset: MutationResolvers['Auth_passwordReset'] =
   async (_, { input: _input }, { setAuthToken }) => {
     const errors = validate(_input)
     if (errors) {
       throw new GraphQLError(`validation error!`, {
-        extensions: { code: 'VALIDATION_FAIL', errors },
+        extensions: { code: VALIDATION_FAIL, errors },
       })
     }
 
@@ -119,6 +120,7 @@ export const Auth_passwordReset: MutationResolvers['Auth_passwordReset'] =
     const rolesAndPermissions = getRolesAndPermissionsFromUser(user)
     const { token: authToken } = await createAuthToken({
       userId: defaultUserId,
+      authId,
       rolesAndPermissions,
     })
 

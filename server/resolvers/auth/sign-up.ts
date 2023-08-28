@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import type { MutationResolvers, User } from '#types'
 import { AuthMethod, SignUpError, VerificationCodeState } from '#types'
 import type { VerificationCodeSubmitTokenPayload } from './verification-code-submit/types'
-import type { NicknameOwnership } from '#model/nickname-ownership'
+import { acquireNicknameOwnershipInTransaction } from '#model/nickname-ownership'
 import { AuthAccount } from '#framework/auth/auth-account'
 import { validate, sanitize } from '@/schema/auth/sign-up'
 import { create as createUUID } from '#util/uuid'
@@ -11,13 +11,13 @@ import { createAuthToken } from '#framework/auth/auth-token'
 import { testRateLimiter } from '@/server/services/rate-limiter'
 import { createPasswordHash, decodeAuthKeySignedToken } from './util'
 import { runTransaction } from '@/server/framework/database/transaction'
-import { createInTransaction } from '@/server/framework/database/write/create'
 import { overwriteInTransaction } from '#framework/database/write/overwrite'
 import {
   readDirectly,
   readInTransaction,
 } from '@/server/framework/database/read'
-import { updateInTransaction } from '@/server/framework/database/write/update'
+import { VALIDATION_FAIL } from '#types/common-errors'
+import { createUserInTransaction } from '@/server/model/user/create-user'
 
 export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
   _,
@@ -27,7 +27,7 @@ export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
   const errors = validate(_input)
   if (errors) {
     throw new GraphQLError(`validation error!`, {
-      extensions: { code: 'VALIDATION_FAIL', errors },
+      extensions: { code: VALIDATION_FAIL, errors },
     })
   }
 
@@ -110,7 +110,6 @@ export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
   const pwhash = await createPasswordHash(password)
 
   await runTransaction(async (transaction) => {
-    const currentTimeSeconds = Math.floor(Date.now() / 1000)
     const prevAuthAccount = await readInTransaction<AuthAccount>(
       `/auth-accounts/${authId}`,
       transaction,
@@ -122,19 +121,16 @@ export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
       })
     }
 
-    const encodedNickname = encodeURIComponent(nickname)
-    const prevNicknameOwnership = await readInTransaction<NicknameOwnership>(
-      `/nickname-ownerships/${encodedNickname}`,
+    const nicknameAcquireStatus = await acquireNicknameOwnershipInTransaction(
+      nickname,
+      userId,
       transaction,
     )
-    if (prevNicknameOwnership) {
-      const { revoked } = prevNicknameOwnership
-      if (!revoked) {
-        // unrevoked nickname owner exists!
-        throw new GraphQLError(`nickname already exists!`, {
-          extensions: { code: SignUpError.NicknameAlreadyExists },
-        })
-      }
+
+    if (nicknameAcquireStatus === `OCCUPIED`) {
+      throw new GraphQLError(`nickname already exists!`, {
+        extensions: { code: SignUpError.NicknameAlreadyExists },
+      })
     }
 
     overwriteInTransaction<AuthAccount>(
@@ -148,43 +144,11 @@ export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
       transaction,
     )
 
-    if (prevNicknameOwnership) {
-      // already exists! only switch ownership
-      updateInTransaction<NicknameOwnership>(
-        `/nickname-ownerships/${encodedNickname}`,
-        {
-          userId,
-          revoked: false,
-          acquiredAtSeconds: currentTimeSeconds,
-        },
-        transaction,
-      )
-    } else {
-      // create!
-      createInTransaction<NicknameOwnership>(
-        `/nickname-ownerships/${encodedNickname}`,
-        {
-          encodedNickname,
-          nickname,
-          userId,
-          revoked: false,
-          acquiredAtSeconds: currentTimeSeconds,
-        },
-        transaction,
-      )
-    }
-
-    createInTransaction<User>(
-      `/users/${userId}`,
+    createUserInTransaction(
       {
         userId,
-        public: {
-          nickname,
-          accountType,
-        },
-        private: {
-          isAdmin: false,
-        },
+        nickname,
+        accountType,
       },
       transaction,
     )
@@ -200,6 +164,7 @@ export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
   const rolesAndPermissions = getRolesAndPermissionsFromUser(user)
   const { token: authToken } = await createAuthToken({
     userId,
+    authId,
     rolesAndPermissions,
   })
 

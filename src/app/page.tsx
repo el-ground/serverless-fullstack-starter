@@ -6,6 +6,7 @@ const RootContainer = () => {
   return (
     <>
       <SSRHydrationClientComponentExample />
+      <RSCExample />
       <div className="t14">Hello world!!!</div>
     </>
   )
