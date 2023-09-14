@@ -27,12 +27,16 @@ export const validateParseAndRefreshAuthCookiesMiddleware = ({
       if (token) {
         const { payload, rest } = splitJWT(token)
 
+        // payload data might need to be read in the webapp.
         res.cookie('authorization-payload', payload, {
           secure,
+          sameSite: `strict`,
           maxAge: refreshTokenDurationSeconds,
         })
+
         res.cookie(`authorization-rest`, rest, {
           secure,
+          sameSite: `strict`,
           httpOnly: true, // set to http to prevent forgery
           maxAge: refreshTokenDurationSeconds,
         })

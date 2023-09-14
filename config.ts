@@ -3,8 +3,9 @@
 */
 export const getOrigin = () => {
   if (process.env.NODE_ENV === `production`) {
-    return 'http://localhost:3000' // change to production domain!!
+    return 'https://localhost:3000' // change to production domain!!
   }
 
-  return 'http://localhost:3000'
+  // recommended to dev in secure mode
+  return 'https://localhost:3000'
 }

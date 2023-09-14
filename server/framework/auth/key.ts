@@ -39,6 +39,14 @@ export const getAuthKeyStringRSA4096Public = () => {
   return key
 }
 
+export const getAuthKeyStringSymmetric256 = () => {
+  const key = process.env.AUTH_KEY_SYMMETRIC_256
+  if (!key) {
+    throw new Error(`AUTH_KEY_SYMMETRIC_256 not provided!`)
+  }
+  return key
+}
+
 export const getAuthKeyObjectSymmetric256 = () => {
   const key = process.env.AUTH_KEY_SYMMETRIC_256
   if (!key) {

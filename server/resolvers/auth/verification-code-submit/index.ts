@@ -6,7 +6,7 @@ import { CompactEncrypt } from 'jose'
 import jwt from 'jsonwebtoken'
 import { decodeAuthKeySignedToken } from '../util'
 import {
-  getAuthKeyStringRSA4096Private,
+  getAuthKeyStringSymmetric256,
   getAuthKeyObjectSymmetric256,
 } from '#framework/auth/key'
 import { testRateLimiter } from '@/server/services/rate-limiter'
@@ -129,11 +129,11 @@ export const Auth_verificationCodeSubmit: MutationResolvers['Auth_verificationCo
 
     const phoneVerificationSubmitToken = jwt.sign(
       payload,
-      getAuthKeyStringRSA4096Private(),
+      getAuthKeyStringSymmetric256(),
       {
         // 4 minutes to enter the token. Users will prompted for 3 min
         expiresIn: '20m',
-        algorithm: 'RS256',
+        algorithm: 'HS256',
       },
     )
 

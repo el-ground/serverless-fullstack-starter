@@ -8,7 +8,7 @@ import { create as createUUID } from '#util/uuid'
 import jwt from 'jsonwebtoken'
 import { sendVerificationCode } from '#services/message-sender/templates/verification'
 import {
-  getAuthKeyStringRSA4096Private,
+  getAuthKeyStringSymmetric256,
   getAuthKeyObjectSymmetric256,
 } from '#framework/auth/key'
 import { testRateLimiter } from '@/server/services/rate-limiter'
@@ -95,11 +95,11 @@ export const Auth_verificationCodeRequest: MutationResolvers['Auth_verificationC
 
     const phoneVerificationRequestToken = jwt.sign(
       payload,
-      getAuthKeyStringRSA4096Private(),
+      getAuthKeyStringSymmetric256(),
       {
         // 4 minutes to enter the token. Users will prompted for 3 min
         expiresIn: '4m',
-        algorithm: 'RS256',
+        algorithm: 'HS256',
       },
     )
 

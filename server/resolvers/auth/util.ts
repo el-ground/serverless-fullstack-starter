@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt'
 import { compactDecrypt } from 'jose'
 import {
   getAuthKeyObjectSymmetric256,
-  getAuthKeyStringRSA4096Public,
+  getAuthKeyStringSymmetric256,
 } from '#framework/auth/key'
 import jwt from 'jsonwebtoken'
 
@@ -31,6 +31,6 @@ export const decodeAuthKeySignedToken = async <PayloadType>(token: string) => {
   // throws error if time expire
   return jwt.verify(
     decryptedToken,
-    getAuthKeyStringRSA4096Public(),
+    getAuthKeyStringSymmetric256(),
   ) as PayloadType
 }

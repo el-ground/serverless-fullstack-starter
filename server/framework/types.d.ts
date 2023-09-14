@@ -1,4 +1,4 @@
-import type { AuthPayload } from './auth-payload'
+import type { AuthPayload } from './auth/auth-payload'
 
 declare module 'express-serve-static-core' {
   interface Request {

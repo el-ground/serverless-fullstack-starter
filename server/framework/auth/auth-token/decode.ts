@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { User } from '#types'
-import { getAuthKeyStringRSA4096Public } from '#framework/auth/key'
+import { getAuthKeyStringSymmetric256 } from '#framework/auth/key'
 import type { AuthTokenPayload, RefreshToken } from './types'
 import { ResError } from '#util/error'
 import { getRolesAndPermissionsFromUser } from '../roles-and-permissions'
@@ -14,12 +14,19 @@ export interface DecodeResult {
   refreshed: boolean
 }
 
+/*
+  Why not asymmetric signature??
+
+  Cuz we are monolithic and we dont carry jwt around, and we're not planning to do so.
+*/
+
 export const decodeAuthTokenNoRefresh = async (
   token: string,
 ): Promise<DecodeResult> => {
-  const publicKey = await getAuthKeyStringRSA4096Public()
+  //  const key = await getAuthKeyStringRSA4096Public()
+  const key = getAuthKeyStringSymmetric256()
   // verify will throw
-  const payload = jwt.verify(token, publicKey) as AuthTokenPayload
+  const payload = jwt.verify(token, key) as AuthTokenPayload
 
   if (payload.version !== currentActiveAuthTokenVersion) {
     throw new ResError(401, `invalid-auth-token-version`)
@@ -39,10 +46,11 @@ export const decodeAuthTokenNoRefresh = async (
 export const decodeAuthTokenTryRefresh = async (
   token: string,
 ): Promise<DecodeResult> => {
-  const publicKey = await getAuthKeyStringRSA4096Public()
+  // const publicKey = await getAuthKeyStringRSA4096Public()
+  const key = getAuthKeyStringSymmetric256()
 
   try {
-    const payload = jwt.verify(token, publicKey) as AuthTokenPayload
+    const payload = jwt.verify(token, key) as AuthTokenPayload
 
     if (payload.version !== currentActiveAuthTokenVersion) {
       throw new ResError(401, `invalid-auth-token-version`)
@@ -69,7 +77,7 @@ export const decodeAuthTokenTryRefresh = async (
 
   // token expired! might need a refresh.
   // decode without throwing on expire :)
-  const payload = jwt.verify(token, publicKey, {
+  const payload = jwt.verify(token, key, {
     ignoreExpiration: true,
   }) as AuthTokenPayload
 

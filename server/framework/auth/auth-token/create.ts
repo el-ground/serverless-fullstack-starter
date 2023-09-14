@@ -1,5 +1,5 @@
 import { create as createUUID } from '#util/uuid'
-import { getAuthKeyStringRSA4096Private } from '#framework/auth/key'
+import { getAuthKeyStringSymmetric256 } from '#framework/auth/key'
 import type { AuthTokenPayload, RefreshToken } from './types'
 import type { RolesAndPermissions } from '../roles-and-permissions'
 import jwt from 'jsonwebtoken'
@@ -69,10 +69,10 @@ export const createAuthToken = async ({
     version: currentActiveAuthTokenVersion,
   }
 
-  const token = jwt.sign(payload, getAuthKeyStringRSA4096Private(), {
+  const token = jwt.sign(payload, getAuthKeyStringSymmetric256(), {
     expiresIn: '1h',
     jwtid,
-    algorithm: 'RS256',
+    algorithm: 'HS256',
   })
 
   return {
