@@ -41,5 +41,9 @@ export const readMetadata = async (filePath: string): Promise<FileMetadata> => {
 
 export const getExists = async (filePath: string) => {
   // TODO : MUST_IMPLEMENT
+  /*
+    const processedFileRef = storage.bucket().file(processedFileName)
+    let exists = (await processedFileRef.exists())[0]
+  */
   return null as unknown as boolean
 }

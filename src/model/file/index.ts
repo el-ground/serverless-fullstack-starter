@@ -1,54 +1,71 @@
-import { toast } from 'react-toastify'
+// file, blob, or other abstractions.
 
-export interface FileUploadParameter {
-  blob: Blob
-  mimetype: string // mimetype : image/jpeg or so.
-}
+export type FileSource = File
+export type FileSourceType = `file`
 
-export const uploadFiles = async (
-  fileUploadParameters: FileUploadParameter[],
-) => {
-  const uploadingFilesToastId = toast.info(
-    `${fileUploadParameters.length}개 파일을 업로드하고 있습니다.`,
-    {
-      autoClose: false,
-      position: toast.POSITION.BOTTOM_CENTER,
-    },
-  )
-
-  const formData = new FormData()
-  fileUploadParameters.forEach(({ blob, mimetype }) => {
-    // https://stackoverflow.com/a/50875615
-    const blobWithType = new Blob([blob], { type: mimetype })
-    formData.append(`files[]`, blobWithType)
-  })
-
-  let resultPaths: string[]
-  try {
-    const fetchResult = await fetch(`/api/rest/file`, {
-      method: `POST`,
-      credentials: `include`, // send cookies
-      body: formData,
-    })
-
-    resultPaths = (await fetchResult.json()) as string[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    toast.update(uploadingFilesToastId, {
-      render: `파일 업로드 중 에러가 발생했습니다.\n${e?.message}`,
-      type: toast.TYPE.ERROR,
-      position: toast.POSITION.BOTTOM_CENTER,
-      autoClose: 5000,
-    })
-    throw e
+const getSourceType = (source: FileSource): FileSourceType => {
+  if (source instanceof File) {
+    return `file`
   }
 
-  toast.update(uploadingFilesToastId, {
-    render: `${resultPaths.length}개 파일 업로드 성공.`,
-    type: toast.TYPE.SUCCESS,
-    position: toast.POSITION.BOTTOM_CENTER,
-    autoClose: 5000,
-  })
+  throw new Error(`File source type unknown`)
+}
 
-  return resultPaths
+const getStaticKey = (source: FileSource) => {
+  if (source instanceof File) {
+    const key = `${source.size}-${source.type}-${source.lastModified}`.replace(
+      /\//g,
+      `_`,
+    )
+
+    return key
+  } else {
+    throw new Error(`File source unknown`)
+  }
+}
+
+const getSize = (source: FileSource) => {
+  if (source instanceof File) {
+    return source.size
+  } else {
+    throw new Error(`File source unknown`)
+  }
+}
+
+const getMimeType = (source: FileSource) => {
+  if (source instanceof File) {
+    return source.type
+  } else {
+    throw new Error(`File source unknown`)
+  }
+}
+
+/*
+    LocalFile represents static file (content not changing)
+    It lives with the file.
+
+    The releases will be handled by GC, since we're not using objectURI
+
+    Q : Why are we abstracting it? why not use file?
+    A : Hybrid environments might use native api and web api and they might not be abstracted;
+*/
+export class FileLike {
+  source: FileSource
+  sourceType: FileSourceType
+  key: string
+  size: number
+  mimetype: string
+  type: string
+  subtype: string
+
+  constructor(source: FileSource) {
+    this.source = source
+    this.sourceType = getSourceType(source)
+    this.key = getStaticKey(source)
+    this.size = getSize(source)
+    this.mimetype = getMimeType(source)
+    const [type, subtype] = this.mimetype.split(`/`)
+    this.type = type
+    this.subtype = subtype
+  }
 }

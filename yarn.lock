@@ -3348,6 +3348,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/clamp@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@types/clamp@npm:1.0.1"
+  checksum: 7f0bca2507abd56f4ddb41886710e6b0cb658302938aae8f1e058dc9574208e31414239993f92db8e46292058bf615d54a75bd32c7954092aef17ccd23f3297c
+  languageName: node
+  linkType: hard
+
 "@types/cls-hooked@npm:^4.3.4":
   version: 4.3.4
   resolution: "@types/cls-hooked@npm:4.3.4"
@@ -3556,6 +3563,13 @@ __metadata:
   version: 2.4.1
   resolution: "@types/normalize-package-data@npm:2.4.1"
   checksum: e87bccbf11f95035c89a132b52b79ce69a1e3652fe55962363063c9c0dae0fe2477ebc585e03a9652adc6f381d24ba5589cc5e51849df4ced3d3e004a7d40ed5
+  languageName: node
+  linkType: hard
+
+"@types/pica@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "@types/pica@npm:9.0.1"
+  checksum: 06765597c09874b0aeaec34fcce63c1aff2265bbb6dcf4fa75e61402db2239efe9b3dc4ec31f5dd739dfc555f1ce48abf5006a3d2086e7028142cebec1fda3c2
   languageName: node
   linkType: hard
 
@@ -4503,6 +4517,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"blueimp-load-image@npm:^5.16.0":
+  version: 5.16.0
+  resolution: "blueimp-load-image@npm:5.16.0"
+  checksum: 5250333c578938fa6c0130c925a70d35bd012f0f17a9e9fa7ea0c5c754ce9ec6ab0a9960aa760e603a0b3b06a2af3bff12026022b205ca13409ac73dbe436c00
+  languageName: node
+  linkType: hard
+
 "body-parser@npm:1.20.1":
   version: 1.20.1
   resolution: "body-parser@npm:1.20.1"
@@ -4869,6 +4890,13 @@ __metadata:
   version: 2.0.0
   resolution: "chownr@npm:2.0.0"
   checksum: c57cf9dd0791e2f18a5ee9c1a299ae6e801ff58fee96dc8bfd0dcb4738a6ce58dd252a3605b1c93c6418fe4f9d5093b28ffbf4d66648cb2a9c67eaef9679be2f
+  languageName: node
+  linkType: hard
+
+"clamp@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "clamp@npm:1.0.1"
+  checksum: 799bd7083736eb975cd4a9a7e8f1a1e38cc3cb6be0384f9732c1da263accb3205385e5c2880e661a0d5a74e0066bfbf8fcd17dd2f509595ce52dd04c84522833
   languageName: node
   linkType: hard
 
@@ -7150,6 +7178,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glur@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "glur@npm:1.1.2"
+  checksum: d80a50fe7f713a564cf50a8e46e2385e5256233c1180b94c06dfdf038655c8b11aa648dd8516b66025abfe437f4201aa10c0e759b68b9a37241375707cf107ea
+  languageName: node
+  linkType: hard
+
 "gopd@npm:^1.0.1":
   version: 1.0.1
   resolution: "gopd@npm:1.0.1"
@@ -9004,6 +9039,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"multimath@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "multimath@npm:2.0.0"
+  dependencies:
+    glur: ^1.1.2
+    object-assign: ^4.1.1
+  checksum: 420d2090e4c9466c8195281011643a7087a3f8db9f7621fb19e13dce34d468d16f6e686625426efd4dbd1c9fa1cbc3c07ff634d9d9534dc6fa47b0849c2bcd69
+  languageName: node
+  linkType: hard
+
 "mute-stream@npm:0.0.8":
   version: 0.0.8
   resolution: "mute-stream@npm:0.0.8"
@@ -9260,6 +9305,7 @@ __metadata:
     "@graphql-tools/schema": ^10.0.0
     "@svgr/webpack": ^8.0.1
     "@types/bcrypt": ^5.0.0
+    "@types/clamp": ^1.0.1
     "@types/cls-hooked": ^4.3.4
     "@types/compression": ^1.7.2
     "@types/cookie-parser": ^1.4.3
@@ -9272,6 +9318,7 @@ __metadata:
     "@types/morgan": ^1.9.4
     "@types/multer": ^1.4.7
     "@types/node": 18
+    "@types/pica": ^9.0.1
     "@types/react": ^18.2.14
     "@types/react-dom": ^18.2.6
     "@types/sharp": ^0.32.0
@@ -9279,6 +9326,8 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.60.1
     "@typescript-eslint/parser": ^5.60.1
     bcrypt: ^5.1.0
+    blueimp-load-image: ^5.16.0
+    clamp: ^1.0.1
     cls-hooked: ^4.2.2
     compression: ^1.7.4
     content-type-parser: ^1.0.2
@@ -9312,6 +9361,7 @@ __metadata:
     multer: ^1.4.5-lts.1
     nanoid: ^4.0.2
     next: ^13.4.9
+    pica: ^9.0.1
     prettier: ^2.8.8
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -9877,6 +9927,18 @@ __metadata:
   dependencies:
     through: ~2.3
   checksum: 3c4a14052a638b92e0c96eb00c0d7977df7f79ea28395250c525d197f1fc02d34ce1165d5362e2e6ebbb251524b94a76f3f0d4abc39ab8b016d97449fe15583c
+  languageName: node
+  linkType: hard
+
+"pica@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "pica@npm:9.0.1"
+  dependencies:
+    glur: ^1.1.2
+    multimath: ^2.0.0
+    object-assign: ^4.1.1
+    webworkify: ^1.5.0
+  checksum: 0063206643ef54c6641f3f8795807de9567acebbe3160839ae87bbf870ff2e4e4caca8135dd050e1f5427d12737488d4ede7f3cce4525ae86f2a0138d397f738
   languageName: node
   linkType: hard
 
@@ -12358,6 +12420,13 @@ __metadata:
   version: 3.0.1
   resolution: "webidl-conversions@npm:3.0.1"
   checksum: c92a0a6ab95314bde9c32e1d0a6dfac83b578f8fa5f21e675bc2706ed6981bc26b7eb7e6a1fab158e5ce4adf9caa4a0aee49a52505d4d13c7be545f15021b17c
+  languageName: node
+  linkType: hard
+
+"webworkify@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "webworkify@npm:1.5.0"
+  checksum: 426c10e0b94cac0678aed05fdf1abce98e8e11a523380537bab99fcd63df7c4b71b3630e61ab8052fdbd8d6e55e53700523b423cd475b258f95be5189d8cde49
   languageName: node
   linkType: hard
 
