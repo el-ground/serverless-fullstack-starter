@@ -1,7 +1,7 @@
 import next from 'next'
 import express from 'express'
 import type { IncomingMessage, ServerResponse } from 'http'
-import { asyncHandler } from '@/server/framework/express'
+import { asyncHandler } from '#framework/express'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
 import { sessionIdCookieMiddleware } from '@/server/framework/session'
 import cookieParser from 'cookie-parser'

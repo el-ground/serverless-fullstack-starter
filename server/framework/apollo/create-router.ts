@@ -1,6 +1,6 @@
 import { ApolloServer } from '@apollo/server'
 import type { Server } from 'http'
-import { Router, json } from 'express'
+import { RequestHandler, Router, json } from 'express'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import { createLoader } from '@/server/framework/database/loader'

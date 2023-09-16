@@ -1,4 +1,4 @@
-import { asyncHandler } from '@/server/framework/express'
+import { asyncHandler } from '#framework/express'
 import { Router } from 'express'
 import { ResError } from '#util/error'
 import { decodeSignedFilePath } from '@/server/framework/file/util'

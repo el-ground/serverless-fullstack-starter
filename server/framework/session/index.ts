@@ -1,4 +1,4 @@
-import { asyncHandler } from '@/server/framework/express'
+import { asyncHandler } from '#framework/express'
 import { create as createUuid } from '#util/uuid'
 /*
     requires cookie-parser

@@ -1,4 +1,9 @@
-import type { Request, Response, NextFunction } from 'express'
+import type {
+  Request,
+  Response,
+  NextFunction,
+  ErrorRequestHandler,
+} from 'express'
 import { logError } from '../logger'
 
 /*
@@ -23,8 +28,8 @@ export class ErrorWCode extends Error {
   }
 }
 
-export const errorHandler =
-  () => (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = () =>
+  ((err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err) {
       logError(
         `ErrorHandle caught:\nmessage↓\n${err.message}\nstack↓\n${err.stack}`,
@@ -45,4 +50,4 @@ export const errorHandler =
     // error was not handled, return 500
     res.status(500)
     res.send('Internal server error')
-  }
+  }) as ErrorRequestHandler

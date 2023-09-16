@@ -1,9 +1,8 @@
-import type { Router } from 'express'
+import type { Request, Router } from 'express'
 
 import { logInfo } from '../logger'
 import morgan from 'morgan'
-import type { Request } from 'express-serve-static-core'
-import { asyncHandler } from '../../async-handler'
+import { asyncHandler } from '#framework/express'
 
 export const setupRequestLogger = (app: Router) => {
   morgan.token('uid', function (req: Request) {

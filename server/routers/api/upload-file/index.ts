@@ -1,4 +1,4 @@
-import { asyncHandler } from '@/server/framework/express'
+import { asyncHandler } from '#framework/express'
 import { Router } from 'express'
 import multer from 'multer'
 import { MulterStorageEngine } from '#framework/file/multer'

@@ -1,4 +1,4 @@
-import { asyncHandler } from '@/server/framework/express'
+import { asyncHandler } from '#framework/express'
 import { splitJWT } from './util'
 import { refreshTokenDurationSeconds } from '../config'
 import { validateParseAndRefresh } from '.'

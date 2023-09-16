@@ -1,7 +1,7 @@
 import multer from 'multer'
 import { create as createUUID } from '#util/uuid'
 import { logInfo } from '#util/log'
-import { Request } from 'express-serve-static-core'
+import type { Request } from 'express'
 import { ResError } from '#util/error'
 import { FileMetadata } from './types'
 import { createWriteStream } from './service'
