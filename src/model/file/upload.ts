@@ -25,7 +25,7 @@ export const uploadFiles = async (
 
   let resultPaths: string[]
   try {
-    const fetchResult = await fetch(`/api/rest/file`, {
+    const fetchResult = await fetch(`/api/rest/files`, {
       method: `POST`,
       credentials: `include`, // send cookies
       body: formData,

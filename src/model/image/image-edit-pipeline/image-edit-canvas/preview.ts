@@ -16,6 +16,7 @@ export class ImageEditPreviewCanvas extends ImageEditCanvas {
     const canvas = new ImageEditPreviewCanvas(pipeline, width)
     await canvas.render()
     canvas.pipeline.previewCanvases.push(canvas)
+    return canvas
   }
 
   // @Virtual

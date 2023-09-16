@@ -181,11 +181,15 @@ export class ImageEditPipeline {
 
     releaseCanvasElement(filteredCanvas)
 
+    const mimetype = `image/jpeg`
     const blob = await taskRunner.run(() => {
-      return pica.toBlob(transformedCanvas, `image/jpeg`, 0.9)
+      return pica.toBlob(transformedCanvas, mimetype, 0.9)
     })
 
     releaseCanvasElement(transformedCanvas)
-    return blob
+    return {
+      blob,
+      mimetype,
+    }
   }
 }

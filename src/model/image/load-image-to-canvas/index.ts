@@ -1,5 +1,5 @@
 import { FileLike } from '@model/file'
-import * as jsLoadImageToCanvas from './index.js'
+import jsLoadImageToCanvas from './wrapper.js'
 
 /*
   Q : Why do we need load-image-to-canvas?

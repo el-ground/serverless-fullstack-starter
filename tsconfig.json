@@ -26,7 +26,7 @@
     // Allow JSON import
     "resolveJsonModule": true,
     "noImplicitAny": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "sourceMap": true,
     "rootDir": "./",
     "outDir": "dist",
