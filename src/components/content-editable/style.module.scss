@@ -1,0 +1,34 @@
+/* TODO : Implement me! */
+
+.editorWrapper {
+  /* stylelint-disable-next-line */
+  :global(.ProseMirror) {
+    box-sizing: border-box;
+    min-height: 150px;
+    padding: 10px 14px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    font-size: 16px;
+    white-space: pre-wrap;
+    word-break: break-all;
+
+    p {
+      /* text color */
+      color: black;
+      font-size: 16px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    p:global(.is-editor-empty):first-child::before {
+      /* placeholder color */
+      color: gray;
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
+    }
+  }
+}
