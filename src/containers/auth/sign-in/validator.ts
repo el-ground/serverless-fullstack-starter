@@ -13,9 +13,11 @@ export const validator: FormValidator<SignInFormInput, ValidatorErrorCodes> = (
 ) => {
   //
   const errors = applyValidators<SignInFormInput, ValidatorErrorCodes>(input, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     authId: (authId) => {
       // visible to user
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     password: (password) => {
       // visible to user
     },

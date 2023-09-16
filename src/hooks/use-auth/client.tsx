@@ -5,7 +5,6 @@ import equal from 'deep-equal'
 import { AuthPayload } from '#framework/auth'
 import { useGetter } from '@hooks/use-getter'
 import { useIsSSR } from '@hooks/use-is-ssr'
-import { clearAuthSession } from '@model/auth'
 import { getAuthPayloadFromCookieString } from './util'
 
 const readAuthPayload = () => {

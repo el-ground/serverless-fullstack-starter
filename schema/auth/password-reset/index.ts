@@ -5,6 +5,7 @@ import { InputSanitizer, InputValidator } from '@/schema/types'
   serversize validator and sanitizers!! 
 */
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const validate: InputValidator<PasswordResetInput> = (input) => {
   //
   return null

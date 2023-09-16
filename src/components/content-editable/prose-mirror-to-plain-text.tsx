@@ -41,9 +41,11 @@ export const proseMirrorToPlainText = (rootNode: ProseMirrorNode): string => {
             currentLine.push(grandChildNode.text || ``)
             break
           case `hardBreak`:
-            const joinedLine = currentLine.join(``).trimEnd()
-            lines.push(joinedLine) // commit current line
-            currentLine = []
+            {
+              const joinedLine = currentLine.join(``).trimEnd()
+              lines.push(joinedLine) // commit current line
+              currentLine = []
+            }
             break
           default:
             break

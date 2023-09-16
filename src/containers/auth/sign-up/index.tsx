@@ -38,6 +38,7 @@ export const SignUp = () => {
   const [verificationCodeSubmitToken, setVerificationCodeSubmitToken] =
     React.useState(``)
 
+  // eslint-disable-next-line
   const resetStateMachine = React.useCallback(() => {
     setSignUpState(SignUpState.TO_REQUEST_VERIFICATION_CODE)
   }, [])

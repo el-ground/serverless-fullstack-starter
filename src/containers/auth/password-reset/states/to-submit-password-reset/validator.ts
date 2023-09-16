@@ -16,9 +16,11 @@ export const validator: FormValidator<
   const errors = applyValidators<PasswordResetFormInput, ValidatorErrorCodes>(
     input,
     {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       newPassword: (newPassword) => {
         // visible to user
       },
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       newPasswordConfirm: (newPasswordConfirm) => {
         //
       },

@@ -43,11 +43,10 @@ export const ToSubmitPasswordReset = ({
     knownErrorMessages: mutationErrorMessages,
     onCompleted: onSuccess,
   })
-
   const {
-    canSubmit,
-    helperTexts,
-    errors,
+    // canSubmit,
+    // helperTexts,
+    // errors,
     content,
     setContent,
     submit: onSubmit,

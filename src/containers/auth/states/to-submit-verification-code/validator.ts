@@ -17,6 +17,7 @@ export const validator: FormValidator<
     VerificationCodeSubmitFormInput,
     ValidatorErrorCodes
   >(input, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     verificationCode: (verificationCode) => {
       // visible to user
     },

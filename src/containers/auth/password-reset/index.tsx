@@ -39,7 +39,7 @@ export const PasswordReset = () => {
   const [verificationCodeSubmitToken, setVerificationCodeSubmitToken] =
     React.useState(``)
 
-  //
+  // eslint-disable-next-line
   const resetStateMachine = React.useCallback(() => {
     setPasswordResetState(PasswordResetState.TO_REQUEST_VERIFICATION_CODE)
   }, [])

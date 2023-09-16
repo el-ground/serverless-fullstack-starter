@@ -47,9 +47,9 @@ export const ToSubmitSignUp = ({
   })
 
   const {
-    canSubmit,
-    helperTexts,
-    errors,
+    //    canSubmit,
+    //    helperTexts,
+    //    errors,
     content,
     setContent,
     submit: onSubmit,

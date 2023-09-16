@@ -38,6 +38,7 @@ export const useForm = <
   FormInput extends object,
   ValidationErrorCode extends string,
   SubmitInput = FormInput,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   SubmitResult = any,
 >({
   validator,

@@ -1,6 +1,7 @@
 import { SignInInput } from '#types'
 import { InputValidator, InputSanitizer } from '@/schema/types'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const validate: InputValidator<SignInInput> = (input) => {
   //
   return null

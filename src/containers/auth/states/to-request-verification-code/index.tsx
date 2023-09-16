@@ -46,9 +46,9 @@ export const ToRequestVerificationCode = ({
   })
 
   const {
-    canSubmit,
-    helperTexts,
-    errors,
+    //    canSubmit,
+    //    helperTexts,
+    //    errors,
     content,
     setContent,
     submit: onSubmit,

@@ -5,7 +5,6 @@ import type { RolesAndPermissions } from '../roles-and-permissions'
 import jwt from 'jsonwebtoken'
 import { runTransaction } from '../../database/transaction'
 import { revokeRefreshTokenInTransaction } from './revoke'
-import { updateInTransaction } from '#framework/database/write/update'
 import { createInTransaction } from '#framework/database/write/create'
 
 export const currentActiveAuthTokenVersion = `1.0.1`

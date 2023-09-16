@@ -2,6 +2,7 @@ import { Readable, Writable } from 'stream'
 import { FileMetadata } from './types'
 
 // write stream is synchronous :)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createWriteStream = (filePath: string, metadata: FileMetadata) => {
   // TODO : MUST_IMPLEMENT
 
@@ -22,6 +23,7 @@ export const createWriteStream = (filePath: string, metadata: FileMetadata) => {
   return null as unknown as Writable
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createReadStream = (filePath: string) => {
   // TODO : MUST_IMPLEMENT
   /*
@@ -33,12 +35,14 @@ export const createReadStream = (filePath: string) => {
   return null as unknown as Readable
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const readMetadata = async (filePath: string): Promise<FileMetadata> => {
   // TODO : MUST_IMPLEMENT
 
   return null as unknown as FileMetadata
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getExists = async (filePath: string) => {
   // TODO : MUST_IMPLEMENT
   /*

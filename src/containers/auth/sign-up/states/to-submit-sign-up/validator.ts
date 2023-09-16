@@ -13,12 +13,15 @@ export const validator: FormValidator<SignUpFormInput, ValidatorErrorCodes> = (
 ) => {
   //
   const errors = applyValidators<SignUpFormInput, ValidatorErrorCodes>(input, {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     nickname: (nickname) => {
       // visible to user
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     password: (password) => {
       // visible to user
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     passwordConfirm: (passwordConfirm) => {
       // visible to user
     },
