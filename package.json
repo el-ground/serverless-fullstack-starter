@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "yarn lint:js && yarn lint:css && yarn prettier && yarn typecheck",
     "clean": "rm -rf dist .next",
-    "codegen": "graphql-codegen --config codegen.ts",
+    "codegen": "graphql-codegen --config codegen.ts && node ./schema/combine.js",
     "copy:gql": "copyfiles schema/**/*.gql dist/",
     "package": "yarn workspaces focus --all && yarn codegen && next build && yarn copy:gql && tsc --project ./tsconfig.server.json && tsc-alias -p tsconfig.server.json",
     "start": "cross-env NODE_ENV=production node dist/server/index.js",
