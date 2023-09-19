@@ -14,8 +14,11 @@ import { exampleRouter } from './example'
 
 const restAPIRouter = Router()
 
-restAPIRouter.use(compression())
-
+restAPIRouter.use((req, res, next) => {
+  res.set(`Cache-Control`, `no-store`)
+  next()
+})
+restAPIRouter.use(compression()) // gzip
 restAPIRouter.use(cookieParser()) // required to parse auth
 restAPIRouter.use(sessionIdCookieMiddleware()) // required to parse auth
 restAPIRouter.use(

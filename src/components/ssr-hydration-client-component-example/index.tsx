@@ -17,18 +17,13 @@ const query = gql(`
   }
 `)
 
-/*
-  Problem when yarn build : 
-  Next.js static site depends on 
-*/
-
 export const SSRHydrationClientComponentExample = () => {
   const { userId, isAuthenticated } = useAuth()
   const { error, data } = useSuspenseQuery(query)
 
   if (error) return <p>Error : {error.message}</p>
   return (
-    <React.Suspense fallback="loading...">
+    <>
       {isAuthenticated ? (
         <>
           <button type="button" className="link" onClick={logOut}>
@@ -46,7 +41,6 @@ export const SSRHydrationClientComponentExample = () => {
       <div className={styles.rootContainer}>
         {data?.Book_books?.map((e) => JSON.stringify(e))}
       </div>
-      <input type="text" value="foo" />
       <button type="button" className="t14">
         버튼 버튼입니당
       </button>
@@ -55,6 +49,6 @@ export const SSRHydrationClientComponentExample = () => {
       </a>
       <input type="submit" value="Input submit button" className="t14" />
       <p className="t14 fit">하이하이</p>
-    </React.Suspense>
+    </>
   )
 }

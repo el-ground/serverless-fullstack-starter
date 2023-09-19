@@ -8,6 +8,8 @@ import { ForceRSC } from '@/src/components/force-rsc'
 import { ToastProvider } from '@components/toast-provider'
 import { IsSSRProvider } from '@hooks/use-is-ssr'
 import { AuthProvider } from '@hooks/use-auth/client'
+// initialize rsc client
+import '@framework/apollo/rsc'
 
 console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 

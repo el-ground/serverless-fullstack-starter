@@ -5,6 +5,7 @@ import { asyncHandler } from '#framework/express'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
 import { sessionIdCookieMiddleware } from '@/server/framework/session'
 import cookieParser from 'cookie-parser'
+import { getCacheHeader } from './get-cache-header'
 
 // where is the NextServer type?
 type NextServer = Awaited<ReturnType<typeof next>>
@@ -24,7 +25,7 @@ const createNextSSRRouteExpressWrapperApp = (nextServer: NextServer) => {
   // prepare next
 
   /*
-    Cookie update logic in front of next app handler
+    Cookie update logic in front of next app render handler
   */
   nextSSRRouteExpressWrapperApp.use(cookieParser())
   nextSSRRouteExpressWrapperApp.use(sessionIdCookieMiddleware())
@@ -69,6 +70,11 @@ export const createApp = async () => {
   ) => {
     if (url.pathname.includes(`.`)) {
       // resource with extension,
+
+      const cacheHeader = getCacheHeader(url.pathname)
+      if (cacheHeader) {
+        res.setHeader(`Cache-Control`, cacheHeader)
+      }
 
       return nextServer.render(
         req,

@@ -4,22 +4,29 @@
 */
 import { registerApolloClient } from '@apollo/experimental-nextjs-app-support/rsc'
 import { gql } from '@/schema/__generated__/client'
-import { InMemoryCache, ApolloLink } from '@apollo/client'
-import { NextSSRApolloClient } from '@apollo/experimental-nextjs-app-support/ssr'
+import { ApolloLink } from '@apollo/client'
+import {
+  NextSSRApolloClient,
+  NextSSRInMemoryCache,
+  SSRMultipartLink,
+} from '@apollo/experimental-nextjs-app-support/ssr'
 import { setContext } from '@apollo/client/link/context'
-import { SchemaLink } from '@apollo/client/link/schema'
-import { schema } from '@/server/framework/apollo/schema'
+import { validateParseAndRefresh } from '@/server/framework/auth/validate-parse-and-refresh'
 import { cookies } from 'next/headers'
 import { createLoader } from '@/server/framework/database/loader'
-import { validateParseAndRefresh } from '@/server/framework/auth/validate-parse-and-refresh'
+import { SchemaLink } from '@apollo/client/link/schema'
+import { schema } from '@/server/framework/apollo/schema'
 
 // https://www.apollographql.com/docs/react/api/link/apollo-link-schema/
-const { getClient } = registerApolloClient(() => {
+const { getClient: getSSRClient } = registerApolloClient(() => {
   const client = new NextSSRApolloClient({
-    cache: new InMemoryCache(),
+    cache: new NextSSRInMemoryCache(),
     ssrMode: true,
     // https://github.com/apollographql/apollo-link/blob/master/packages/apollo-link-schema/src/index.ts
     link: ApolloLink.from([
+      new SSRMultipartLink({
+        stripDefer: true,
+      }),
       setContext(async () => {
         const authorizationPayloadCookie =
           cookies().get(`authorization-payload`)?.value || ``
@@ -47,16 +54,18 @@ const { getClient } = registerApolloClient(() => {
   return client
 })
 
+globalThis.getSSRClient = getSSRClient
+
 /*
   Components that are completely rendered in server, no hydration, etc.
 */
 
-export { getClient, gql }
+export { getSSRClient, gql }
 
 /*
   https://www.apollographql.com/blog/apollo-client/next-js/how-to-use-apollo-client-with-next-js-13/
   how to use in server component : 
-  import { getClient } from "@/src/framework/apollo/ssr-client";
+  import { getSSRCient } from "@/src/framework/apollo/ssr-client";
   import { gql } from "@apollo/client";
 
   export const revalidate = 5;

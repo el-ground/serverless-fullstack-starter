@@ -1,52 +1,32 @@
 'use client'
 import React from 'react'
-import { HttpLink, ApolloLink, NormalizedCacheObject } from '@apollo/client'
+import { HttpLink, ApolloLink } from '@apollo/client'
 import {
   ApolloNextAppProvider,
   useSuspenseQuery,
   useQuery,
   NextSSRInMemoryCache,
   NextSSRApolloClient,
-  SSRMultipartLink,
+  //  SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 import { gql } from '@/schema/__generated__/client'
 import { useMutation, ErrorMessages } from './use-mutation'
 import { getOrigin } from '@/config'
-
-/*
-  SSR + hydration & client side render
-
-  useSuspenseQuery : SSR initial render with data and hydrate later.
-*/
-
-let client: NextSSRApolloClient<NormalizedCacheObject> | null = null
+import { getSSRClient } from './ssr'
 
 export const getClient = () => {
-  if (client) {
-    return client
-  }
-
-  // https://www.apollographql.com/docs/react/networking/advanced-http-networking/
-  // https://github.com/apollographql/apollo-client-nextjs
-
-  const httpLink = new HttpLink({ uri: `${getOrigin()}/api/graphql` })
-
-  const links: ApolloLink[] = []
   if (typeof window === `undefined`) {
-    links.push(
-      new SSRMultipartLink({
-        stripDefer: true,
-      }),
-    )
+    // ssr
+    return getSSRClient()
+  } else {
+    // browser
+    return new NextSSRApolloClient({
+      cache: new NextSSRInMemoryCache(),
+      link: ApolloLink.from([
+        new HttpLink({ uri: `${getOrigin()}/api/graphql` }),
+      ]),
+    })
   }
-  links.push(httpLink)
-
-  client = new NextSSRApolloClient({
-    cache: new NextSSRInMemoryCache(),
-    link: ApolloLink.from(links),
-  })
-
-  return client
 }
 
 export const ApolloProvider = ({ children }: React.PropsWithChildren) => {

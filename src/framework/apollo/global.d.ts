@@ -1,0 +1,11 @@
+import { NextSSRApolloClient } from '@apollo/experimental-nextjs-app-support/ssr'
+
+export declare global {
+  /*
+        reason : client module shouldn't import any server code.
+        but the context is shared between rsc(uses ssr code) and ssr(uses client code)
+        therefore we share graphql client of rsc and ssr by global variable.
+    */
+  // eslint-disable-next-line
+  var getSSRClient: () => NextSSRApolloClient
+}
