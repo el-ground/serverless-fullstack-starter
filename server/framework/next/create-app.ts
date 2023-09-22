@@ -1,28 +1,19 @@
 import next from 'next'
 import express from 'express'
+import type { RequestHandler } from 'next/dist/server/next'
 import type { IncomingMessage, ServerResponse } from 'http'
-import { asyncHandler } from '#framework/express'
+// import { asyncHandler } from '#framework/express'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
 import { sessionIdCookieMiddleware } from '@/server/framework/session'
 import cookieParser from 'cookie-parser'
 import { getCacheHeader } from './get-cache-header'
 
-// where is the NextServer type?
-type NextServer = Awaited<ReturnType<typeof next>>
-
-const port = process.env.PORT ? Number(process.env.PORT) : 3000
 const dev = process.env.NODE_ENV !== 'production'
-/* provide HOST_NAME in dev environments! */
-const hostname = process.env.HOST_NAME || 'localhost'
 
-const createNextSSRRouteExpressWrapperApp = (nextServer: NextServer) => {
+const createNextSSRRouteExpressWrapperHandler = (
+  nextServerRequestHandler: RequestHandler,
+) => {
   const nextSSRRouteExpressWrapperApp = express()
-
-  // https://expressjs.com/en/4x/api.html#app.settings.table
-  // uses node's native querystring : https://nodejs.org/api/querystring.html#querystringparsestr-sep-eq-options
-  nextSSRRouteExpressWrapperApp.set(`query parser`, `simple`)
-
-  // prepare next
 
   /*
     Cookie update logic in front of next app render handler
@@ -35,57 +26,50 @@ const createNextSSRRouteExpressWrapperApp = (nextServer: NextServer) => {
     }),
   )
 
-  const nextAppHandler = asyncHandler(async (req, res) => {
-    const query: Record<string, string> = {}
-    // nextApp render only takes string query, so just eliminate other queries.
-    Object.entries(req.query).forEach(([k, v]) => {
-      if (typeof v === `string`) {
-        query[k] = v
-      } else if (Array.isArray(v)) {
-        // if array, just take the first entry :)
-        const value = v[0]
-        if (typeof value === `string`) {
-          query[k] = value
-        }
-      }
-    })
-
-    await nextServer.render(req, res, req.path, query)
-  })
-
-  nextSSRRouteExpressWrapperApp.use(nextAppHandler)
+  nextSSRRouteExpressWrapperApp.use((req, res) =>
+    nextServerRequestHandler(req, res),
+  )
+  //  nextSSRRouteExpressWrapperApp.use(nextAppHandler)
   return nextSSRRouteExpressWrapperApp
 }
 
-export const createApp = async () => {
-  const nextServer = next({ dev, hostname, port })
+export const createApp = async (port: number) => {
+  const nextServer = next({ dev, port })
   await nextServer.prepare()
 
-  const nextExpressWrapperApp = createNextSSRRouteExpressWrapperApp(nextServer)
+  const requestHandler = nextServer.getRequestHandler()
 
-  const handler = async (
-    url: URL,
-    req: IncomingMessage,
-    res: ServerResponse,
-  ) => {
-    if (url.pathname.includes(`.`)) {
-      // resource with extension,
+  const nextExpressWrapperHandler =
+    createNextSSRRouteExpressWrapperHandler(requestHandler)
 
-      const cacheHeader = getCacheHeader(url.pathname)
-      if (cacheHeader) {
-        res.setHeader(`Cache-Control`, cacheHeader)
+  const handler = async (req: IncomingMessage, res: ServerResponse) => {
+    let useNextDefaultHandler = true
+    if (req.url && !req.url.includes(`/_next/`)) {
+      // path segment /foo/bar.ext
+      const dotSplittedLastSegment =
+        req.url.split(/[#?]/)[0].split('.').pop()?.trim() || ``
+      const extensionExists =
+        dotSplittedLastSegment && !dotSplittedLastSegment.includes(`/`)
+      // extension exists!
+
+      if (!extensionExists) {
+        useNextDefaultHandler = false
       }
+    }
 
-      return nextServer.render(
-        req,
-        res,
-        url.pathname,
-        Object.fromEntries(url.searchParams),
-      )
+    if (useNextDefaultHandler) {
+      // resource with extension,
+      if (req.url) {
+        const cacheHeader = getCacheHeader(req.url)
+        if (cacheHeader) {
+          res.setHeader(`Cache-Control`, cacheHeader)
+        }
+      }
+      return requestHandler(req, res)
     } else {
       // if no extension, this might be the ssr request.
       // check cookies for ssr request in order to use authentication
-      return nextExpressWrapperApp(req, res)
+      return nextExpressWrapperHandler(req, res)
     }
   }
 

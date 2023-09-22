@@ -6,20 +6,31 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import { createLoader } from '@/server/framework/database/loader'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
 import cookieParser from 'cookie-parser'
+import { createWebsocketServer } from './websocket'
 import type { Context } from './context'
 import { schema } from './schema'
 import { logIdentifiers } from '#framework/express/middlewares/request-logger'
 import { logError } from '#util/log'
 import { LogPlugin } from './logger'
+
 import { sessionIdCookieMiddleware } from '../session'
 
 // https://github.com/apollographql/apollo-server/issues/1933
 export const createRouter = async (httpServer: Server) => {
   const router = Router()
 
+  const apolloServerPluginDrainWebsocketServer =
+    createWebsocketServer(httpServer)
+
   const server = new ApolloServer<Context>({
     schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), LogPlugin],
+    plugins: [
+      // Proper shutdown for the HTTP server.
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      // Proper shutdown for the WebSocket server.
+      apolloServerPluginDrainWebsocketServer,
+      LogPlugin,
+    ],
     includeStacktraceInErrorResponses: true,
     // Development only
     introspection: process.env.NODE_ENV === `development`,
@@ -77,6 +88,7 @@ ${stringifiedRestExtensions}
       }
     },
   })
+
   // prepare apollo
   await server.start()
   // add apollo to express app

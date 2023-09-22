@@ -32,7 +32,7 @@ if (combinedGQLString.includes('`')) {
   throw new Error(`gql must not include backtick`)
 }
 
-const fileContent = `export const combinedString = \`${combinedGQLString}\``
+const fileContent = `/* eslint-disable */\nexport const combinedString = \`${combinedGQLString}\``
 writeFileSync(`./schema/combined-output.ts`, fileContent)
 
 console.log(

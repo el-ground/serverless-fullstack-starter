@@ -1,37 +1,40 @@
 import http from 'http'
 import https from 'https'
 import fs from 'fs'
-import { EventEmitter } from 'events'
+import express from 'express'
 import { app as expressApp } from './app'
+import { createProxyMiddleware } from 'http-proxy-middleware'
 import { createRouter as createApolloRouter } from './framework/apollo'
 import { createApp as createNextApp } from '@/server/framework/next'
-EventEmitter.defaultMaxListeners = 100
 
 // https://nextjs.org/docs/pages/building-your-application/configuring/custom-server
 
 const port = process.env.PORT ? Number(process.env.PORT) : 3000
-/* provide HOST_NAME in dev environments! */
-const hostname = process.env.HOST_NAME || 'localhost'
 
-const nextApp = await createNextApp()
+const nextPort = port + 1
+const nextApp = await createNextApp(nextPort)
+const nextServer = http.createServer(nextApp)
+console.log(`Next server port : ${nextPort}`)
+
+// main route
+const app = express()
 
 /*
-  This way, express / next / apollo doesn't share any middlewares!
+  Next does nasty stuff to websocket, so we need to split the http server.
+  We're not using hmr websocket.
 */
+const nextProxyMiddleware = createProxyMiddleware({
+  target: `http://localhost:${nextPort}`,
+})
 
-const handler = async (req: http.IncomingMessage, res: http.ServerResponse) => {
-  if (req.url) {
-    const url = new URL(
-      req.url,
-      `https://${req.headers.host || `${hostname}:${port}`}`,
-    )
-    if (url.pathname.indexOf(`/api`) === 0) {
-      expressApp(req, res)
-    } else {
-      nextApp(url, req, res)
-    }
+// route between next and our express app
+app.use((req, res, next) => {
+  if (req.url.indexOf(`/api/`) === 0 || req.url.indexOf(`/m/`) === 0) {
+    expressApp(req, res, next)
+  } else {
+    nextProxyMiddleware(req, res, next)
   }
-}
+})
 
 let server: http.Server | https.Server
 
@@ -40,7 +43,7 @@ const certPath = process.env.CERT || undefined
 const certKeyPath = process.env.CERT_KEY || undefined
 const isHTTPS = process.env.SECURE === `true`
 console.log(
-  `NODE_ENV: ${process.env.NODE_ENV} hostname : ${hostname} port : ${port} isHTTPS: ${isHTTPS} `,
+  `NODE_ENV: ${process.env.NODE_ENV} port : ${port} isHTTPS: ${isHTTPS} `,
 )
 
 if (isHTTPS) {
@@ -57,12 +60,13 @@ if (isHTTPS) {
     cert: fs.readFileSync(certPath),
   }
 
-  server = https.createServer(options, handler)
+  server = https.createServer(options, app)
 } else {
-  server = http.createServer(handler)
+  server = http.createServer(app)
 }
 
 // bind apollo to express app
 const apolloRouter = await createApolloRouter(server)
 expressApp.use(`/api/graphql`, apolloRouter)
+nextServer.listen(nextPort)
 server.listen(port)

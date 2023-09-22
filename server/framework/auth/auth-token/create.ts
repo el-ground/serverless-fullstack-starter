@@ -53,7 +53,7 @@ export const createAuthToken = async ({
           createdAtSeconds: currentTimeSeconds,
           revoked: false,
           expiresAtSeconds: currentTimeSeconds + 90 * 24 * 60 * 60,
-          // default 9 days expire
+          // default 90 days expire
         },
         transaction,
       )

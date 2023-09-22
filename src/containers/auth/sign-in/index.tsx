@@ -2,10 +2,9 @@
 import React from 'react'
 import { useMutation, ErrorMessages, gql } from '@framework/apollo/client'
 import { useForm } from '@hooks/use-form'
-import { useRouter } from 'next/navigation'
 import { SignInError, SignInInput } from '@types'
 import type { SignInFormInput } from './types'
-import { useRefreshAuth } from '@/src/hooks/use-auth/client'
+import { updateAuth } from '@/src/hooks/use-auth/client'
 import { validator, errorMessages, ValidatorErrorCodes } from './validator'
 
 const SUBMIT_SIGN_IN = gql(`
@@ -33,12 +32,9 @@ const defaultContent = {
 */
 
 export const SignIn = () => {
-  const router = useRouter()
-  const refreshAuth = useRefreshAuth()
   const onSuccess = React.useCallback(() => {
-    refreshAuth()
-    router.replace(`/`)
-  }, [router, refreshAuth])
+    updateAuth(`/`)
+  }, [])
 
   const [submit] = useMutation<SignInError>(SUBMIT_SIGN_IN, {
     knownErrorMessages: mutationErrorMessages,

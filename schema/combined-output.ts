@@ -1,6 +1,8 @@
+/* eslint-disable */
 export const combinedString = `-----COMBINEDGRAPHQLDELIMITER-----
 type Query
 type Mutation
+type Subscription
 -----COMBINEDGRAPHQLDELIMITER-----
 enum AccountType {
   SELLER
@@ -58,6 +60,15 @@ extend type Query {
 
 extend type Mutation {
   Book_addBook(title: String!, author: String!): Book
+}
+
+# testing subscription
+type BookPingResult {
+  message: String!
+}
+
+extend type Subscription {
+  Book_ping: BookPingResult! # testing subscription
 }
 -----COMBINEDGRAPHQLDELIMITER-----
 enum AuthMethod {

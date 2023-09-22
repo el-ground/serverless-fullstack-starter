@@ -1,5 +1,6 @@
 import { AuthTokenPayload } from '#framework/auth/auth-token/types'
 import { AuthPayload } from '#framework/auth'
+import { getCookies } from '@util/cookie'
 
 export const getAuthPayloadFromCookieString = (
   authorizationPayloadCookie?: string,
@@ -32,4 +33,19 @@ export const getAuthPayloadFromCookieString = (
   }
 
   return authPayload
+}
+
+export const getAuthDependencies = () => {
+  const [sidCookie, authorizationPayloadCookie] = getCookies([
+    `sid`,
+    `authorization-payload`,
+  ])
+
+  const authPayload = getAuthPayloadFromCookieString(authorizationPayloadCookie)
+
+  return {
+    sidCookie,
+    authorizationPayloadCookie,
+    authPayload,
+  }
 }

@@ -8,6 +8,10 @@ import { create as createUuid } from '#util/uuid'
     if sid not provided, set cookie and attach to res.
     Make sure to attach cookies to everyone!!! :) awesome :)
 */
+
+const isHTTPS = process.env.SECURE === `true`
+const secure = process.env.NODE_ENV === `development` ? isHTTPS : true
+
 export const sessionIdCookieMiddleware = () =>
   asyncHandler(async (req, res, next) => {
     let sessionId = req.cookies?.sid || ``
@@ -16,10 +20,9 @@ export const sessionIdCookieMiddleware = () =>
       // attach to res, go on.
     } else {
       // create sid.
-
       sessionId = createUuid(20)
       res.cookie(`sid`, sessionId, {
-        secure: true,
+        secure,
         httpOnly: true,
         // PRIVACY
         // track for sufficiently long time

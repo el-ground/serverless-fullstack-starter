@@ -1,7 +1,7 @@
 import React from 'react'
 import Like from '@/assets/sample.svg'
 import { getSSRClient, gql } from '@/src/framework/apollo/rsc'
-import { getAuthRSC } from '@hooks/use-auth/rsc'
+import { getAuth } from '@hooks/use-auth'
 
 const query = gql(`
   query GetBooks2 {
@@ -12,7 +12,7 @@ const query = gql(`
 
 export const RSCExample = async () => {
   const client = getSSRClient()
-  const { userId, isAuthenticated } = getAuthRSC()
+  const { userId, isAuthenticated } = getAuth()
 
   const { data } = await client.query({ query })
   return (

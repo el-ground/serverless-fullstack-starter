@@ -26,6 +26,9 @@ RUN yarn workspaces focus --production
 # this code is the production build output.
 COPY . ./
 
+# Copy environment variables (keys, etc.)
+COPY .env .env
+
 # Set user to run
 # USER $USERNAME
 

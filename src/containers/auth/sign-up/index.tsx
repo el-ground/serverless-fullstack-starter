@@ -1,11 +1,10 @@
 'use client'
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import { ToRequestVerificationCode } from '../states/to-request-verification-code'
 import { ToSubmitVerificationCode } from '../states/to-submit-verification-code'
 import { ToSubmitSignUp } from './states/to-submit-sign-up'
 import { AuthMethod } from '@types'
-import { useRefreshAuth } from '@/src/hooks/use-auth/client'
+import { updateAuth } from '@/src/hooks/use-auth/client'
 import { toast } from 'react-toastify'
 
 /*
@@ -29,7 +28,6 @@ enum SignUpState {
 }
 
 export const SignUp = () => {
-  const router = useRouter()
   const [signUpState, setSignUpState] = React.useState<SignUpState>(
     SignUpState.TO_REQUEST_VERIFICATION_CODE,
   )
@@ -43,15 +41,12 @@ export const SignUp = () => {
     setSignUpState(SignUpState.TO_REQUEST_VERIFICATION_CODE)
   }, [])
 
-  const refreshAuth = useRefreshAuth()
-
   const onSuccess = React.useCallback(() => {
-    refreshAuth()
-    router.replace(`/`)
     toast.success(`회원가입에 성공했습니다.`, {
       position: toast.POSITION.BOTTOM_CENTER,
     })
-  }, [router, refreshAuth])
+    updateAuth(`/`)
+  }, [])
 
   const currentStateElement = React.useMemo(() => {
     switch (signUpState) {

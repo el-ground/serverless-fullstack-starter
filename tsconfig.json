@@ -6,7 +6,8 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      "esnext.asynciterable"
     ],
     // Search under node_modules for non-relative imports.
     "moduleResolution": "node",

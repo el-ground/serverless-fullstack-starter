@@ -1,17 +1,22 @@
 'use client'
 import React from 'react'
-import { HttpLink, ApolloLink } from '@apollo/client'
+import { HttpLink, split, useSubscription } from '@apollo/client'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
+import { getMainDefinition } from '@apollo/client/utilities'
 import {
   ApolloNextAppProvider,
   useSuspenseQuery,
   useQuery,
+  useBackgroundQuery,
+  useFragment,
+  useReadQuery,
   NextSSRInMemoryCache,
   NextSSRApolloClient,
   //  SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 import { gql } from '@/schema/__generated__/client'
 import { useMutation, ErrorMessages } from './use-mutation'
-import { getOrigin } from '@/config'
+import { getWebsocketGraphQLClient } from './websocket'
 import { getSSRClient } from './ssr'
 
 export const getClient = () => {
@@ -20,11 +25,28 @@ export const getClient = () => {
     return getSSRClient()
   } else {
     // browser
+
+    const httpLink = new HttpLink({
+      uri: `${window.location.origin}/api/graphql`,
+    })
+    const websocketGraphQLClient = getWebsocketGraphQLClient()
+    const wsLink = new GraphQLWsLink(websocketGraphQLClient)
+    // https://www.apollographql.com/docs/react/data/subscriptions/#3-split-communication-by-operation-recommended
+    const splitLink = split(
+      ({ query }) => {
+        const definition = getMainDefinition(query)
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        )
+      },
+      wsLink,
+      httpLink,
+    )
+
     return new NextSSRApolloClient({
       cache: new NextSSRInMemoryCache(),
-      link: ApolloLink.from([
-        new HttpLink({ uri: `${getOrigin()}/api/graphql` }),
-      ]),
+      link: splitLink,
     })
   }
 }
@@ -37,7 +59,16 @@ export const ApolloProvider = ({ children }: React.PropsWithChildren) => {
   )
 }
 
-export { useSuspenseQuery, useQuery, useMutation, gql }
+export {
+  useSuspenseQuery,
+  useQuery,
+  useBackgroundQuery,
+  useFragment,
+  useReadQuery,
+  useMutation,
+  useSubscription,
+  gql,
+}
 export type { ErrorMessages }
 
 /*

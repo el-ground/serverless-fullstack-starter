@@ -52,6 +52,11 @@ export type Book = {
   title?: Maybe<Scalars['String']['output']>;
 };
 
+export type BookPingResult = {
+  __typename?: 'BookPingResult';
+  message: Scalars['String']['output'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   Auth_logOut?: Maybe<Scalars['Boolean']['output']>;
@@ -180,6 +185,11 @@ export type SignUpInput = {
 export type SignUpOutput = {
   __typename?: 'SignUpOutput';
   user: User;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  Book_ping: BookPingResult;
 };
 
 export type User = {
@@ -322,6 +332,7 @@ export type ResolversTypes = ResolversObject<{
   AuthAccountExistsOutput: ResolverTypeWrapper<AuthAccountExistsOutput>;
   AuthMethod: AuthMethod;
   Book: ResolverTypeWrapper<Book>;
+  BookPingResult: ResolverTypeWrapper<BookPingResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -338,6 +349,7 @@ export type ResolversTypes = ResolversObject<{
   SignUpInput: SignUpInput;
   SignUpOutput: ResolverTypeWrapper<SignUpOutput>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   UserPrivateFields: ResolverTypeWrapper<UserPrivateFields>;
   UserPublicFields: ResolverTypeWrapper<UserPublicFields>;
@@ -356,6 +368,7 @@ export type ResolversParentTypes = ResolversObject<{
   AuthAccountExistsInput: AuthAccountExistsInput;
   AuthAccountExistsOutput: AuthAccountExistsOutput;
   Book: Book;
+  BookPingResult: BookPingResult;
   Boolean: Scalars['Boolean']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
@@ -369,6 +382,7 @@ export type ResolversParentTypes = ResolversObject<{
   SignUpInput: SignUpInput;
   SignUpOutput: SignUpOutput;
   String: Scalars['String']['output'];
+  Subscription: {};
   User: User;
   UserPrivateFields: UserPrivateFields;
   UserPublicFields: UserPublicFields;
@@ -388,6 +402,11 @@ export type BookResolvers<ContextType = Context, ParentType extends ResolversPar
   author?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type BookPingResultResolvers<ContextType = Context, ParentType extends ResolversParentTypes['BookPingResult'] = ResolversParentTypes['BookPingResult']> = ResolversObject<{
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -430,6 +449,10 @@ export type SignUpOutputResolvers<ContextType = Context, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  Book_ping?: SubscriptionResolver<ResolversTypes['BookPingResult'], "Book_ping", ParentType, ContextType>;
+}>;
+
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   private?: Resolver<ResolversTypes['UserPrivateFields'], ParentType, ContextType>;
   public?: Resolver<ResolversTypes['UserPublicFields'], ParentType, ContextType>;
@@ -463,12 +486,14 @@ export type VerificationCodeSubmitOutputResolvers<ContextType = Context, ParentT
 export type Resolvers<ContextType = Context> = ResolversObject<{
   AuthAccountExistsOutput?: AuthAccountExistsOutputResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
+  BookPingResult?: BookPingResultResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   NicknameExistsOutput?: NicknameExistsOutputResolvers<ContextType>;
   PasswordResetOutput?: PasswordResetOutputResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   SignInOutput?: SignInOutputResolvers<ContextType>;
   SignUpOutput?: SignUpOutputResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserPrivateFields?: UserPrivateFieldsResolvers<ContextType>;
   UserPublicFields?: UserPublicFieldsResolvers<ContextType>;

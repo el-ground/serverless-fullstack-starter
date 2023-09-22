@@ -1,7 +1,7 @@
 import { Resolvers } from '@/schema/__generated__/server/types'
 import { AuthQueries, AuthMutations } from './auth'
 import { UserQueries, UserMutations } from './user'
-import { BookQueries, BookMutations } from './book'
+import { BookQueries, BookMutations, BookSubscriptions } from './book'
 
 /*
     ACL performed inside resolvers.
@@ -24,5 +24,8 @@ export const resolvers: Resolvers = {
     ...UserMutations,
     ...AuthMutations,
     ...BookMutations,
+  },
+  Subscription: {
+    ...BookSubscriptions,
   },
 }
