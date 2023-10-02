@@ -1,4 +1,5 @@
 import { asyncHandler } from '#framework/express'
+import { replaceCookiesInRequest } from '#framework/express/middlewares/replace-cookies-header'
 import { create as createUuid } from '#util/uuid'
 /*
     requires cookie-parser
@@ -21,6 +22,9 @@ export const sessionIdCookieMiddleware = () =>
     } else {
       // create sid.
       sessionId = createUuid(20)
+      // replace sid to use in the following middlewares.
+      replaceCookiesInRequest(req, `sid`, sessionId)
+
       res.cookie(`sid`, sessionId, {
         secure,
         httpOnly: true,

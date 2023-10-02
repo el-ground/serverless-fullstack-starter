@@ -10,12 +10,16 @@ export const setupRequestLogger = (app: Router) => {
   })
 
   morgan.token('sid', function (req: Request) {
-    return req.sessionId
+    return req.sessionId || ``
   })
+
+  // just to escape colon :)
+  morgan.token(`START`, () => `:START`)
+  morgan.token(`COMPLETE`, () => `:COMPLETE`)
 
   app.use(
     morgan(
-      'ip:[:remote-addr] [:date[iso]] Started :method :url referrer:[:referrer"] user-agent:[:user-agent]',
+      'step:[HT:START] ip:[:remote-addr] date:[:date[iso]] method:[:method] url:[:url] referrer:[:referrer] user-agent:[:user-agent]',
       {
         immediate: true,
         stream: {
@@ -27,7 +31,7 @@ export const setupRequestLogger = (app: Router) => {
 
   app.use(
     morgan(
-      'sid:[:sid] uid:[:uid] ip:[:remote-addr] [:date[iso]] Completed :status :res[content-length] in :response-time ms',
+      'step:[HT:COMPLETE] sid:[:sid] uid:[:uid] ip:[:remote-addr] date:[:date[iso]] duration:[:response-time] status:[:status] content-length:[:res[content-length]]',
       {
         stream: {
           write: logInfo,
@@ -43,6 +47,6 @@ export const logIdentifiers = () =>
     const sessionId = req.sessionId
     const ip = req.ip
 
-    logInfo(`sid:[${sessionId}] uid:[${userId}] ip:[${ip}] Identified`)
+    logInfo(`step:[HT:IDENTIFY] sid:[${sessionId}] uid:[${userId}] ip:[${ip}]`)
     next()
   })

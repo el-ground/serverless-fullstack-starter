@@ -3,22 +3,37 @@
 import { createLogger, format, transports } from 'winston'
 import type { Logger } from 'winston'
 import { getRequestId } from '../request-id'
+import { create as createUUID } from '#util/uuid'
+
+const processId = createUUID(6)
+let logCounter = 0 // to process multiline
 
 const { combine, colorize, simple } = format
 
+// create processId and counter;
+// increment counter on each log to generate a unique id;
+
 const prependRequestId = format((info) => {
   const requestId = getRequestId() // accesses request-id
+  let message: string = info.message
   if (requestId) {
-    info.message = `[#${requestId}] ${info.message}`
+    message = `${requestId} ${info.message}`
   }
 
+  const prefix = `l:[${processId}:${logCounter}]`
+
+  const newlineSplitMessage = message.split(`\n`)
+  const joinedMessage = newlineSplitMessage.join(`\n${prefix} `)
+
+  logCounter += 1
+  info.message = `${prefix} ${joinedMessage}`
   return info
 })
 
 let logger: Logger | null = null
 let initialized = false
 
-export const initialize = () => {
+const initialize = () => {
   if (initialized) {
     throw new Error(`Logger already initialized!`)
   }
@@ -36,6 +51,9 @@ export const initialize = () => {
   })
 }
 
+// changed : initialize in module load.
+initialize()
+
 /* 
     TODO : log objects 
     TODO : log errors 
@@ -48,12 +66,31 @@ export const logInfo = (message: string) => {
   logger.info(message)
 }
 
-export const logError = (message: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const logError = (messageOrError: any) => {
   if (!logger) {
     throw new Error(`Logger not initialized!`)
   }
 
-  logger.error(message)
+  if (typeof messageOrError === `string`) {
+    logger.error(messageOrError)
+    return
+  }
+
+  const stack = messageOrError?.stack
+  if (stack) {
+    logger.error(stack)
+    return
+  }
+
+  const message = messageOrError?.message
+  if (message) {
+    logger.error(message)
+    return
+  }
+
+  // toString
+  logger.error(`${messageOrError}`)
 }
 
 export const logDebug = (message: string) => {

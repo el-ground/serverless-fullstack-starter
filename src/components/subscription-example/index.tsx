@@ -10,8 +10,17 @@ const PING_SUBSCRIPTION = gql(`
     }
 `)
 
+const PING_SUBSCRIPTION2 = gql(`
+    subscription BookPing2 {
+        Book_ping {
+            message
+        }
+    }
+`)
+
 export const SubscriptionExample = () => {
   const { data, loading } = useSubscription(PING_SUBSCRIPTION)
+  useSubscription(PING_SUBSCRIPTION2) // second sub
 
   if (loading) {
     return `loading subscription; ${loading}`

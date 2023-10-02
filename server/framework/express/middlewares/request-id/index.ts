@@ -12,7 +12,7 @@ interface RequestWithId extends Request {
 let requestIdsNamespace: Namespace | null = null
 let initialized = false
 
-export const initialize = () => {
+const initialize = () => {
   if (initialized) {
     throw new Error(`RequestId already initialized!`)
   }
@@ -20,6 +20,9 @@ export const initialize = () => {
   initialized = true
   requestIdsNamespace = createNamespace('requestIds')
 }
+
+// changed : initialize in module load.
+initialize()
 
 export const getRequestId = () => {
   if (!requestIdsNamespace) {
@@ -29,6 +32,38 @@ export const getRequestId = () => {
   return requestIdsNamespace.get(`requestId`)
 }
 
+/*
+  it's log prefix. not necessarily a single id format.
+  reqid:[REQUEST_ID]
+  conid:[CONNECTION_ID] subid:[SUBSCRIPTION_ID]
+*/
+
+export const runWithRequestId = <T>(
+  requestId: string,
+  callback: () => T,
+): T => {
+  if (!requestIdsNamespace) {
+    throw new Error(`Request cls namespace not initialized!`)
+  }
+  const namespace = requestIdsNamespace
+
+  let resultSet = false
+  let result: T | null = null
+  namespace.run(() => {
+    // assumes addRequestId has appended request id.
+    namespace.set(`requestId`, requestId)
+    result = callback()
+    resultSet = true
+  })
+
+  if (!resultSet) {
+    throw new Error(`Namspace call should synchronously resolve`)
+  }
+
+  return result as T
+}
+
+// express middleware
 export const requestId = () => {
   if (!requestIdsNamespace) {
     throw new Error(`Request cls namespace not initialized!`)
@@ -45,8 +80,7 @@ export const requestId = () => {
     next: NextFunction,
   ) => {
     namespace.run(() => {
-      // assumes addRequestId has appended request id.
-      namespace.set(`requestId`, req.id)
+      namespace.set(`requestId`, `reqid:[${req.id}]`)
       next()
     })
   }

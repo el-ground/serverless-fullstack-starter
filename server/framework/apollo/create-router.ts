@@ -3,14 +3,15 @@ import type { Server } from 'http'
 import { Router, json } from 'express'
 import { expressMiddleware } from '@apollo/server/express4'
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import { createLoader } from '@/server/framework/database/loader'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
 import cookieParser from 'cookie-parser'
 import { createWebsocketServer } from './websocket'
 import type { Context } from './context'
+import { createContext } from './context'
 import { schema } from './schema'
 import { logIdentifiers } from '#framework/express/middlewares/request-logger'
 import { logError } from '#util/log'
+import { stringifyError } from './stringify-error'
 import { LogPlugin } from './logger'
 
 import { sessionIdCookieMiddleware } from '../session'
@@ -40,39 +41,11 @@ export const createRouter = async (httpServer: Server) => {
       // 2. formattedError.toString() // gql log
       // 3. formattedError.
 
-      const {
-        code = `INTERNAL_SERVER_ERROR`,
-        stacktrace,
-        ...rest
-      } = formattedError?.extensions || {}
-      const stringifiedError = error?.toString() || ``
-      let stringifiedStacktrace = ``
-      try {
-        stringifiedStacktrace = (stacktrace as string[]).join(`\n`)
-      } catch (e) {
-        /* no-op */
-      }
-      const stringifiedRestExtensions = JSON.stringify(rest, null, 2)
-      const fullErrorMessage = `START OF ERROR
-------------------------- Code ---------------------------------------
+      const extensions = formattedError?.extensions || {}
+      const stringifiedError = stringifyError(extensions, error)
+      logError(stringifiedError)
 
-${code}
-
-------------------------- Error.toString() ---------------------------
-
-${stringifiedError}
-
-------------------------- Stack --------------------------------------
-
-${stringifiedStacktrace}
-
-------------------------- JSON.stringify(Extensions, null, 2) --------
-
-${stringifiedRestExtensions}
-
-------------------------- END OF ERROR -------------------------------`
-
-      logError(fullErrorMessage)
+      const { code = `INTERNAL_SERVER_ERROR` } = extensions
 
       if (code !== `INTERNAL_SERVER_ERROR`) {
         // if code provided, the error was intended for client to handle.
@@ -96,19 +69,15 @@ ${stringifiedRestExtensions}
   router.use(cookieParser()) // required to parse auth
   router.use(sessionIdCookieMiddleware())
   // apollo can refresh token!
-  router.use(validateParseAndRefreshAuthCookiesMiddleware({ refresh: true }))
+  router.use(validateParseAndRefreshAuthCookiesMiddleware())
   router.use(logIdentifiers())
   router.use(
     expressMiddleware(server, {
       context: async ({ req, res }) => {
-        const loader = createLoader()
-        const setAuthToken = res.setAuthToken
-
-        return {
-          loader,
-          setAuthToken,
-          ...req.auth,
-        }
+        return createContext({
+          setAuthToken: res.setAuthToken,
+          auth: req.auth,
+        })
       },
     }),
   )

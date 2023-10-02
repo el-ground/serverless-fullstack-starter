@@ -10,10 +10,12 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr'
+import { createContext } from '#framework/apollo/context'
 import { setContext } from '@apollo/client/link/context'
 import { validateParseAndRefresh } from '@/server/framework/auth/validate-parse-and-refresh'
+import { getSetAuthToken } from '#framework/auth/validate-parse-and-refresh/util'
 import { cookies } from 'next/headers'
-import { createLoader } from '@/server/framework/database/loader'
+
 import { SchemaLink } from '@apollo/client/link/schema'
 import { schema } from '@/server/framework/apollo/schema'
 
@@ -28,19 +30,33 @@ const { getClient: getSSRClient } = registerApolloClient(() => {
         stripDefer: true,
       }),
       setContext(async () => {
+        const cookieStore = cookies()
+
         const authorizationPayloadCookie =
-          cookies().get(`authorization-payload`)?.value || ``
+          cookieStore.get(`authorization-payload`)?.value || ``
         const authorizationRestCookie =
-          cookies().get(`authorization-rest`)?.value || ``
+          cookieStore.get(`authorization-rest`)?.value || ``
         const authToken = authorizationPayloadCookie + authorizationRestCookie
 
-        const { authPayload } = await validateParseAndRefresh(authToken, false)
+        const { authPayload, refreshedToken } =
+          await validateParseAndRefresh(authToken)
 
-        const loader = createLoader()
-        return {
-          loader,
-          ...authPayload,
+        const setAuthToken = getSetAuthToken(
+          cookieStore.set.bind(cookieStore),
+          cookieStore.delete.bind(cookieStore),
+        )
+
+        if (refreshedToken) {
+          // if used cookie, update using cookie!
+          setAuthToken(refreshedToken)
+        } else if (authToken && !authPayload.isAuthenticated) {
+          setAuthToken(null)
         }
+
+        return createContext({
+          auth: authPayload,
+          setAuthToken,
+        })
       }),
       new SchemaLink({
         schema,

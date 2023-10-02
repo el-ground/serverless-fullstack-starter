@@ -9,6 +9,7 @@ import { ToastProvider } from '@components/toast-provider'
 // initialize rsc client
 import '@framework/apollo/rsc'
 import '@util/cookie/rsc'
+import '@hooks/use-auth/rsc'
 
 console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 

@@ -1,6 +1,5 @@
 import { NextSSRApolloClient } from '@apollo/experimental-nextjs-app-support/ssr'
 
-import { Client } from 'graphql-ws'
 export declare global {
   /*
         reason : client module shouldn't import any server code.
@@ -9,7 +8,4 @@ export declare global {
     */
   // eslint-disable-next-line no-var
   var getSSRClient: () => NextSSRApolloClient
-
-  // eslint-disable-next-line no-var
-  var client: Client
 }

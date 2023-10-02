@@ -1,20 +1,13 @@
 import { asyncHandler } from '#framework/express'
-import { splitJWT } from './util'
-import { refreshTokenDurationSeconds } from '../config'
+import { getSetAuthToken, splitJWT } from './util'
+import { replaceCookiesInRequest } from '#framework/express/middlewares/replace-cookies-header'
 import { validateParseAndRefresh } from '.'
 
 /*
     requires cookie-parser
 */
 
-const isHTTPS = process.env.SECURE === `true`
-const secure = process.env.NODE_ENV === `development` ? isHTTPS : true
-
-export const validateParseAndRefreshAuthCookiesMiddleware = ({
-  refresh,
-}: {
-  refresh: boolean
-}) =>
+export const validateParseAndRefreshAuthCookiesMiddleware = () =>
   asyncHandler(async (req, res, next) => {
     const authorizationPayloadCookie =
       req.cookies?.[`authorization-payload`] || ``
@@ -23,40 +16,29 @@ export const validateParseAndRefreshAuthCookiesMiddleware = ({
     const authToken = authorizationPayloadCookie + authorizationRestCookie
 
     // can be used to update auth status when signin
-    const setAuthToken = (token: string | null) => {
-      if (token) {
-        const { payload, rest } = splitJWT(token)
+    const setAuthToken = getSetAuthToken(
+      res.cookie.bind(res),
+      res.clearCookie.bind(res),
+    )
 
-        // payload data might need to be read in the webapp.
-        res.cookie('authorization-payload', payload, {
-          secure,
-          sameSite: `strict`,
-          maxAge: refreshTokenDurationSeconds,
-        })
-
-        res.cookie(`authorization-rest`, rest, {
-          secure,
-          sameSite: `strict`,
-          httpOnly: true, // set to http to prevent forgery
-          maxAge: refreshTokenDurationSeconds,
-        })
-      } else {
-        // if called with empty token, cookie delete
-        res.clearCookie('authorization-payload')
-        res.clearCookie('authorization-rest')
-      }
-    }
     res.setAuthToken = setAuthToken
 
     // favor header over cookie
-    const { refreshedToken, authPayload } = await validateParseAndRefresh(
-      authToken,
-      refresh,
-    )
+    const { refreshedToken, authPayload } =
+      await validateParseAndRefresh(authToken)
 
     req.auth = authPayload
 
     if (refreshedToken) {
+      /*
+        DANGEROUS : 
+        1. update cookies in the header;
+        2. update cookies in the cookie-parsed object
+      */
+      const { payload, rest } = splitJWT(refreshedToken)
+      replaceCookiesInRequest(req, `authorization-payload`, payload)
+      replaceCookiesInRequest(req, `authorization-rest`, rest)
+
       // if used cookie, update using cookie!
       setAuthToken(refreshedToken)
     } else if (authToken && !authPayload.isAuthenticated) {

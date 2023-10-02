@@ -11,6 +11,8 @@ const batchLoad = async (keys: readonly string[]) => {
 
 /*
     Create loader for every queries!
+    why not have a global loader? 
+    => set cache consistency for only the query.
 */
 export const createLoader = () => {
   const loader = new DataLoader(batchLoad, {

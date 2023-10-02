@@ -1,6 +1,7 @@
 import { ApolloServerPlugin } from '@apollo/server'
 import deepcopy from 'deepcopy'
 import { logInfo } from '#util/log'
+import { stringifyQuery } from './stringify-query'
 
 const fieldNamesToHide = [`password`, `newPassword`]
 
@@ -27,19 +28,7 @@ export const LogPlugin: ApolloServerPlugin = {
     const copiedVariables = deepcopy(variables)
     recursiveReplaceFieldNames(copiedVariables)
 
-    logInfo(
-      `START OF QUERY
-------------------------- Query --------------------------------------
-
-${query}
-
-------------------------- Variables ----------------------------------
-
-${JSON.stringify(copiedVariables, null, 2)}
-
-------------------------- END OF QUERY -------------------------------
-`,
-    )
+    logInfo(stringifyQuery(query, copiedVariables))
     return {}
   },
 }

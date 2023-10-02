@@ -1,9 +1,9 @@
 import type { AuthPayload } from '../auth-payload'
 import {
-  DecodeResult,
   decodeAuthTokenNoRefresh,
   decodeAuthTokenTryRefresh,
 } from '../auth-token/decode'
+import { logError } from '#util/log'
 /*
     1. on header get,
         check jwt and validate, populate data and return.
@@ -26,49 +26,60 @@ import {
 
 // https://stackoverflow.com/questions/52574099/security-of-storing-bearer-token-in-cookies
 
-export const validateParseAndRefresh = async (
-  authToken: string,
-  refresh: boolean, // only validate and parse if refresh false.
-): Promise<{
-  refreshedToken?: string
-  authPayload: AuthPayload
-}> => {
-  if (!authToken) {
-    return {
-      authPayload: {
-        isAuthenticated: false,
-      },
-    }
-  }
-
-  // jwt stuff. get rolesAndPermissions.
-
+export const validateAndParse = (authToken: string): AuthPayload => {
   try {
-    let decodeResult: DecodeResult
-    if (refresh) {
-      decodeResult = await decodeAuthTokenTryRefresh(authToken)
-    } else {
-      decodeResult = await decodeAuthTokenNoRefresh(authToken)
-    }
+    if (authToken) {
+      const { payload } = decodeAuthTokenNoRefresh(authToken)
 
-    const { token, payload, refreshed } = decodeResult
-
-    return {
-      refreshedToken: refreshed ? token : undefined,
-      authPayload: {
+      return {
         userId: payload.userId,
         authId: payload.authId,
         refreshTokenId: payload.refreshTokenId,
         isAuthenticated: true,
         rolesAndPermissions: payload.rolesAndPermissions,
-      },
+      }
     }
   } catch (e) {
-    // auth expire!
-    return {
-      authPayload: {
-        isAuthenticated: false,
-      },
+    logError(e)
+  }
+
+  return {
+    isAuthenticated: false,
+  }
+}
+
+export const validateParseAndRefresh = async (
+  authToken: string,
+): Promise<{
+  refreshedToken?: string
+  authPayload: AuthPayload
+}> => {
+  // jwt stuff. get rolesAndPermissions.
+
+  try {
+    if (authToken) {
+      const { token, payload, refreshed } =
+        await decodeAuthTokenTryRefresh(authToken)
+
+      return {
+        refreshedToken: refreshed ? token : undefined,
+        authPayload: {
+          userId: payload.userId,
+          authId: payload.authId,
+          refreshTokenId: payload.refreshTokenId,
+          isAuthenticated: true,
+          rolesAndPermissions: payload.rolesAndPermissions,
+        },
+      }
     }
+  } catch (e) {
+    logError(e)
+    // auth expire!
+  }
+
+  return {
+    authPayload: {
+      isAuthenticated: false,
+    },
   }
 }

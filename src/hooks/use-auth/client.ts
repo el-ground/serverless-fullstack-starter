@@ -3,6 +3,10 @@ import { getWebsocketGraphQLClient } from '@framework/apollo/websocket'
 import equal from 'deep-equal'
 import { getAuthDependencies } from './util'
 
+/*
+  why not just use provider?
+*/
+
 // need use-client
 // need to fulfill inside auth... useState etc.
 let {

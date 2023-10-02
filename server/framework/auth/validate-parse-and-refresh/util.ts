@@ -1,3 +1,9 @@
+import type { CookieOptions } from 'express'
+import { refreshTokenDurationSeconds } from '../config'
+
+const isHTTPS = process.env.SECURE === `true`
+const secure = process.env.NODE_ENV === `development` ? isHTTPS : true
+
 export const splitJWT = (token: string) => {
   /*
     content in javascript part,
@@ -14,5 +20,34 @@ export const splitJWT = (token: string) => {
   return {
     payload,
     rest,
+  }
+}
+
+export const getSetAuthToken = (
+  setCookie: (key: string, value: string, options: CookieOptions) => void,
+  clearCookie: (key: string) => void,
+) => {
+  return (token: string | null) => {
+    if (token) {
+      const { payload, rest } = splitJWT(token)
+
+      // payload data might need to be read in the webapp.
+      setCookie('authorization-payload', payload, {
+        secure,
+        sameSite: `strict`,
+        maxAge: refreshTokenDurationSeconds,
+      })
+
+      setCookie(`authorization-rest`, rest, {
+        secure,
+        sameSite: `strict`,
+        httpOnly: true, // set to http to prevent forgery
+        maxAge: refreshTokenDurationSeconds,
+      })
+    } else {
+      // if called with empty token, cookie delete
+      clearCookie('authorization-payload')
+      clearCookie('authorization-rest')
+    }
   }
 }

@@ -2,6 +2,7 @@ import { AuthTokenPayload } from '#framework/auth/auth-token/types'
 import { AuthPayload } from '#framework/auth'
 import { getCookies } from '@util/cookie'
 
+// only payload cookie!
 export const getAuthPayloadFromCookieString = (
   authorizationPayloadCookie?: string,
 ) => {
@@ -36,12 +37,18 @@ export const getAuthPayloadFromCookieString = (
 }
 
 export const getAuthDependencies = () => {
-  const [sidCookie, authorizationPayloadCookie] = getCookies([
-    `sid`,
-    `authorization-payload`,
-  ])
+  const [sidCookie, authorizationPayloadCookie, authorizationRestCookie] =
+    getCookies([`sid`, `authorization-payload`, `authorization-rest`])
 
-  const authPayload = getAuthPayloadFromCookieString(authorizationPayloadCookie)
+  let authPayload: AuthPayload
+  if (typeof window === `undefined`) {
+    // ssr environment! need to provide both cookies!
+    authPayload = globalThis.getAuthPayloadFromCookieStringServer(
+      authorizationPayloadCookie + authorizationRestCookie,
+    )
+  } else {
+    authPayload = getAuthPayloadFromCookieString(authorizationPayloadCookie)
+  }
 
   return {
     sidCookie,

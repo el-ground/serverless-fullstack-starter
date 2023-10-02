@@ -20,9 +20,7 @@ export interface DecodeResult {
   Cuz we are monolithic and we dont carry jwt around, and we're not planning to do so.
 */
 
-export const decodeAuthTokenNoRefresh = async (
-  token: string,
-): Promise<DecodeResult> => {
+export const decodeAuthTokenNoRefresh = (token: string): DecodeResult => {
   //  const key = await getAuthKeyStringRSA4096Public()
   const key = getAuthKeyStringSymmetric256()
   // verify will throw

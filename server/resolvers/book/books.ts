@@ -7,5 +7,5 @@ export const Book_books: QueryResolvers['Book_books'] = async (
   __,
   context,
 ) => {
-  return context.loader.loadMany(bookIds)
+  return context.getLoader().loadMany(bookIds)
 }

@@ -21,9 +21,7 @@ restAPIRouter.use((req, res, next) => {
 restAPIRouter.use(compression()) // gzip
 restAPIRouter.use(cookieParser()) // required to parse auth
 restAPIRouter.use(sessionIdCookieMiddleware()) // required to parse auth
-restAPIRouter.use(
-  validateParseAndRefreshAuthCookiesMiddleware({ refresh: true }),
-) // auth middleware. auto refresh
+restAPIRouter.use(validateParseAndRefreshAuthCookiesMiddleware()) // auth middleware. auto refresh
 restAPIRouter.use(logIdentifiers())
 
 restAPIRouter.get([`/`, `/healthy`, `/ping`], (req, res) => {

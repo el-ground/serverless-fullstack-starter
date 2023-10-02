@@ -21,9 +21,7 @@ const createNextSSRRouteExpressWrapperHandler = (
   nextSSRRouteExpressWrapperApp.use(cookieParser())
   nextSSRRouteExpressWrapperApp.use(sessionIdCookieMiddleware())
   nextSSRRouteExpressWrapperApp.use(
-    validateParseAndRefreshAuthCookiesMiddleware({
-      refresh: true,
-    }),
+    validateParseAndRefreshAuthCookiesMiddleware(),
   )
 
   nextSSRRouteExpressWrapperApp.use((req, res) =>

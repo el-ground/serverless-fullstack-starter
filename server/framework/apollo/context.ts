@@ -1,5 +1,7 @@
-import type { Loader } from '@/server/framework/database/loader'
+import { createLoader, Loader } from '@/server/framework/database/loader'
 import type { AuthPayload } from '@/server/framework/auth/auth-payload'
+import { create as createUUID } from '#util/uuid'
+
 /*
     Apollo graphQL Context
 
@@ -12,6 +14,45 @@ import type { AuthPayload } from '@/server/framework/auth/auth-payload'
     not accessible in RSC.
 */
 export interface Context extends AuthPayload {
-  loader: Loader
+  getLoader: () => Loader
   setAuthToken: (token: string | null) => void
+  contextId: string
+  connectionId?: string
+  requestId?: string
+  subscriptionId?: string
+}
+
+export const createContext = ({
+  setAuthToken,
+  auth,
+  // ids are optional
+  connectionId, // websocket connection id
+  requestId, // http request id
+  subscriptionId, // websocket subscription id
+}: {
+  setAuthToken: (token: string | null) => void
+  auth: AuthPayload
+  connectionId?: string
+  requestId?: string
+  subscriptionId?: string
+}): Context => {
+  const contextId = createUUID(20)
+
+  let loader: null | Loader = null
+  const getLoader = () => {
+    if (loader === null) {
+      loader = createLoader()
+    }
+    return loader
+  }
+
+  return {
+    getLoader,
+    setAuthToken,
+    ...auth,
+    contextId,
+    connectionId,
+    requestId,
+    subscriptionId,
+  }
 }

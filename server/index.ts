@@ -18,6 +18,8 @@ console.log(`Next server port : ${nextPort}`)
 
 // main route
 const app = express()
+// to know ip address; trust x-forwarded-for
+app.set('trust proxy', true)
 
 /*
   Next does nasty stuff to websocket, so we need to split the http server.

@@ -8,5 +8,5 @@ export const Book_book: QueryResolvers['Book_book'] = async (
   { id },
   context,
 ) => {
-  return context.loader.load(id)
+  return context.getLoader().load(id)
 }
