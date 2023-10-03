@@ -1,7 +1,7 @@
 import React from 'react'
 import Like from '@/assets/sample.svg'
 import { getSSRClient, gql } from '@/src/framework/apollo/rsc'
-import { getAuth } from '@hooks/use-auth'
+import { getAuth } from '@hooks/use-auth/rsc'
 
 const query = gql(`
   query GetBooks2 {

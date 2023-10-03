@@ -4,7 +4,7 @@ import React from 'react'
 import { useSuspenseQuery } from '@/src/framework/apollo/client'
 import { gql } from '@/schema/__generated__/client/gql'
 import Like from '@/assets/sample.svg'
-import { useAuth } from '@hooks/use-auth'
+import { useAuth } from '@hooks/use-auth/client'
 import { logOut, deleteAccount } from '@model/auth'
 import styles from './style.module.scss'
 

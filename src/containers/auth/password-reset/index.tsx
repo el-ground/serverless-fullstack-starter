@@ -4,7 +4,7 @@ import { ToRequestVerificationCode } from '../states/to-request-verification-cod
 import { ToSubmitVerificationCode } from '../states/to-submit-verification-code'
 import { ToSubmitPasswordReset } from './states/to-submit-password-reset'
 import { AuthMethod } from '@types'
-import { updateAuth } from '@/src/hooks/use-auth/client'
+import { useUpdateAuth } from '@/src/hooks/use-auth/client'
 import { toast } from 'react-toastify'
 
 /*
@@ -26,6 +26,7 @@ enum PasswordResetState {
 }
 
 export const PasswordReset = () => {
+  const updateAuth = useUpdateAuth()
   const [passwordResetState, setPasswordResetState] =
     React.useState<PasswordResetState>(
       PasswordResetState.TO_REQUEST_VERIFICATION_CODE,
@@ -45,7 +46,7 @@ export const PasswordReset = () => {
       position: toast.POSITION.BOTTOM_CENTER,
     })
     updateAuth(`/`)
-  }, [])
+  }, [updateAuth])
 
   const currentStateElement = React.useMemo(() => {
     switch (passwordResetState) {

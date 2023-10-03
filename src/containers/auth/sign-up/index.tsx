@@ -4,7 +4,7 @@ import { ToRequestVerificationCode } from '../states/to-request-verification-cod
 import { ToSubmitVerificationCode } from '../states/to-submit-verification-code'
 import { ToSubmitSignUp } from './states/to-submit-sign-up'
 import { AuthMethod } from '@types'
-import { updateAuth } from '@/src/hooks/use-auth/client'
+import { useUpdateAuth } from '@/src/hooks/use-auth/client'
 import { toast } from 'react-toastify'
 
 /*
@@ -28,6 +28,7 @@ enum SignUpState {
 }
 
 export const SignUp = () => {
+  const updateAuth = useUpdateAuth()
   const [signUpState, setSignUpState] = React.useState<SignUpState>(
     SignUpState.TO_REQUEST_VERIFICATION_CODE,
   )
@@ -45,8 +46,8 @@ export const SignUp = () => {
     toast.success(`회원가입에 성공했습니다.`, {
       position: toast.POSITION.BOTTOM_CENTER,
     })
-    updateAuth(`/`)
-  }, [])
+    updateAuth(`/`, true)
+  }, [updateAuth])
 
   const currentStateElement = React.useMemo(() => {
     switch (signUpState) {

@@ -4,7 +4,7 @@ import { useMutation, ErrorMessages, gql } from '@framework/apollo/client'
 import { useForm } from '@hooks/use-form'
 import { SignInError, SignInInput } from '@types'
 import type { SignInFormInput } from './types'
-import { updateAuth } from '@/src/hooks/use-auth/client'
+import { useUpdateAuth } from '@/src/hooks/use-auth/client'
 import { validator, errorMessages, ValidatorErrorCodes } from './validator'
 
 const SUBMIT_SIGN_IN = gql(`
@@ -32,9 +32,10 @@ const defaultContent = {
 */
 
 export const SignIn = () => {
+  const updateAuth = useUpdateAuth()
   const onSuccess = React.useCallback(() => {
     updateAuth(`/`)
-  }, [])
+  }, [updateAuth])
 
   const [submit] = useMutation<SignInError>(SUBMIT_SIGN_IN, {
     knownErrorMessages: mutationErrorMessages,
