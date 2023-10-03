@@ -17,11 +17,10 @@ import type {
 } from '@apollo/client'
 import { useAsyncCallback } from '@/src/hooks/use-async-callback'
 import { Id, toast } from 'react-toastify'
+import type { ErrorMessages } from './types'
 import { useGetter } from '@hooks/use-getter'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-export type ErrorMessages<TError extends string> = Record<TError, string>
 
 /*
     Wrapper for apollo useMutation that includes
@@ -97,6 +96,7 @@ export const useMutation = <
       let errorMessage: string | undefined
       let knownErrorCode: TKnownError | undefined
       if (error.graphQLErrors) {
+        // handles first encountered known error;
         for (let i = 0; i < error.graphQLErrors.length; i += 1) {
           const graphQLError = error.graphQLErrors[i]
           const code = graphQLError.extensions.code as string | undefined

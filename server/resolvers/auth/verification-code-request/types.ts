@@ -1,13 +1,13 @@
 import type {
   VerificationService,
-  AuthMethod,
+  VerificationRequiredAuthMethod,
   VerificationCodeState,
 } from '#types'
 
 export interface VerificationCodeRequestTokenPayload {
   data: {
     requestId: string
-    method: AuthMethod
+    method: VerificationRequiredAuthMethod
     verificationService: VerificationService
     authId: string
     state: VerificationCodeState

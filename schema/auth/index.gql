@@ -1,10 +1,8 @@
-enum AuthMethod {
+# Methods that require verification code
+enum VerificationRequiredAuthMethod {
   SIGN_IN
   SIGN_UP
   PASSWORD_RESET
-  LOG_OUT
-  DELETE_ACCOUNT
-  # ADD_SIGN_IN_METHOD
 }
 
 # list verification service types you use!
@@ -17,4 +15,8 @@ enum VerificationService {
 enum VerificationCodeState {
   VERIFICATION_CODE_REQUEST
   VERIFICATION_CODE_SUBMIT
+}
+
+enum AuthProviderService {
+  KAKAO
 }

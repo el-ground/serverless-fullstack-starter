@@ -1,9 +1,12 @@
-import type { AuthMethod, VerificationCodeState } from '#types'
+import type {
+  VerificationRequiredAuthMethod,
+  VerificationCodeState,
+} from '#types'
 
 export interface VerificationCodeSubmitTokenPayload {
   data: {
     requestId: string
-    method: AuthMethod
+    method: VerificationRequiredAuthMethod
     state: VerificationCodeState
     authId: string
     createdAtMilliseconds: number
@@ -17,7 +20,7 @@ export interface VerificationCodeSubmitTokenPayload {
 export interface VerificationCodeRequestTokenPayload {
   data: {
     requestId: string
-    method: AuthMethod
+    method: VerificationRequiredAuthMethod
     verificationService: VerificationService
     authId: string
     state: VerificationCodeState

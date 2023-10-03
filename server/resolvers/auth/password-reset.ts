@@ -1,7 +1,11 @@
 import { GraphQLError } from 'graphql'
 import type { MutationResolvers, User } from '#types'
 import type { AuthAccount } from '#framework/auth/auth-account'
-import { PasswordResetError, AuthMethod, VerificationCodeState } from '#types'
+import {
+  PasswordResetError,
+  VerificationRequiredAuthMethod,
+  VerificationCodeState,
+} from '#types'
 import { validate, sanitize } from '@/schema/auth/password-reset'
 import type { VerificationCodeSubmitTokenPayload } from './verification-code-submit/types'
 import { createPasswordHash, decodeAuthKeySignedToken } from './util'
@@ -48,7 +52,7 @@ export const Auth_passwordReset: MutationResolvers['Auth_passwordReset'] =
       },
     } = verificationCodeSubmitTokenPayload
 
-    if (method !== AuthMethod.PasswordReset) {
+    if (method !== VerificationRequiredAuthMethod.PasswordReset) {
       throw new GraphQLError(`Invalid method`, {
         extensions: { code: PasswordResetError.InvalidMethod },
       })

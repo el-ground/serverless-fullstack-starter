@@ -1,0 +1,17 @@
+input UpgradeInput {
+  service: AuthProviderService!
+  token: String!
+}
+
+type UpgradeOutput {
+  user: User!
+  created: Boolean!
+}
+
+enum UpgradeError {
+  TokenVerificationFail
+}
+
+extend type Mutation {
+  Auth_upgrade(input: UpgradeInput!): UpgradeOutput!
+}

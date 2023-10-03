@@ -2,7 +2,7 @@
 import React from 'react'
 import { useMutation, ErrorMessages, gql } from '@framework/apollo/client'
 import {
-  AuthMethod,
+  VerificationRequiredAuthMethod,
   VerificationCodeRequestError,
   VerificationCodeRequestInput,
   VerificationService,
@@ -36,7 +36,7 @@ export const ToRequestVerificationCode = ({
   method,
 }: {
   onSuccess: (verificationCodeRequestToken: string) => void
-  method: AuthMethod
+  method: VerificationRequiredAuthMethod
 }) => {
   const [submit] = useMutation(SUBMIT_VERIFICATION_CODE_REQUEST, {
     knownErrorMessages: mutationErrorMessages,

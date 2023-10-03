@@ -8,9 +8,6 @@ const SUBMIT_LOGOUT = gql(`
     }
 `)
 
-/*
-    TODO : might tell the server to expire the refresh token!!!
-*/
 export const logOut = async () => {
   // try server request first
   // then, remove cookie locally.

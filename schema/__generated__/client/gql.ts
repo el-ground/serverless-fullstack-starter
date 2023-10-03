@@ -24,6 +24,7 @@ const documents = {
     "\n  mutation submitVerificationCodeSubmit($input: VerificationCodeSubmitInput!) {\n    Auth_verificationCodeSubmit(input: $input) {\n      verificationCodeSubmitToken\n    }\n  }\n": types.SubmitVerificationCodeSubmitDocument,
     "\n    mutation deleteAccount {\n        User_deleteAccount\n    }\n": types.DeleteAccountDocument,
     "\n    mutation submitLogout {\n        Auth_logOut\n    }\n": types.SubmitLogoutDocument,
+    "\n    mutation submitUpgradeAuth($input: UpgradeInput!) {\n        Auth_upgrade(input: $input) {\n#            user \n            created\n        }\n    }\n": types.SubmitUpgradeAuthDocument,
 };
 
 /**
@@ -84,6 +85,10 @@ export function gql(source: "\n    mutation deleteAccount {\n        User_delete
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    mutation submitLogout {\n        Auth_logOut\n    }\n"): (typeof documents)["\n    mutation submitLogout {\n        Auth_logOut\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation submitUpgradeAuth($input: UpgradeInput!) {\n        Auth_upgrade(input: $input) {\n#            user \n            created\n        }\n    }\n"): (typeof documents)["\n    mutation submitUpgradeAuth($input: UpgradeInput!) {\n        Auth_upgrade(input: $input) {\n#            user \n            created\n        }\n    }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

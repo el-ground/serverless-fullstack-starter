@@ -1,6 +1,10 @@
 import { GraphQLError } from 'graphql'
 import type { MutationResolvers, User } from '#types'
-import { AuthMethod, SignUpError, VerificationCodeState } from '#types'
+import {
+  VerificationRequiredAuthMethod,
+  SignUpError,
+  VerificationCodeState,
+} from '#types'
 import type { VerificationCodeSubmitTokenPayload } from './verification-code-submit/types'
 import { acquireNicknameOwnershipInTransaction } from '#model/nickname-ownership'
 import { AuthAccount } from '#framework/auth/auth-account'
@@ -59,7 +63,7 @@ export const Auth_signUp: MutationResolvers['Auth_signUp'] = async (
     },
   } = verificationCodeSubmitTokenPayload
 
-  if (method !== AuthMethod.SignUp) {
+  if (method !== VerificationRequiredAuthMethod.SignUp) {
     throw new GraphQLError(`Invalid method`, {
       extensions: { code: SignUpError.InvalidMethod },
     })

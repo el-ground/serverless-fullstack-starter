@@ -3,7 +3,7 @@ import React from 'react'
 import { ToRequestVerificationCode } from '../states/to-request-verification-code'
 import { ToSubmitVerificationCode } from '../states/to-submit-verification-code'
 import { ToSubmitPasswordReset } from './states/to-submit-password-reset'
-import { AuthMethod } from '@types'
+import { VerificationRequiredAuthMethod } from '@types'
 import { useUpdateAuth } from '@/src/hooks/use-auth/client'
 import { toast } from 'react-toastify'
 
@@ -53,7 +53,7 @@ export const PasswordReset = () => {
       case PasswordResetState.TO_REQUEST_VERIFICATION_CODE:
         return (
           <ToRequestVerificationCode
-            method={AuthMethod.PasswordReset}
+            method={VerificationRequiredAuthMethod.PasswordReset}
             onSuccess={(verificationCodeRequestToken: string) => {
               setVerificationCodeRequestToken(verificationCodeRequestToken)
               setPasswordResetState(

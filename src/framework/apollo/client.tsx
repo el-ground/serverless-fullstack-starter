@@ -1,6 +1,11 @@
 'use client'
 import React from 'react'
-import { HttpLink, split, useSubscription } from '@apollo/client'
+import {
+  HttpLink,
+  NormalizedCacheObject,
+  split,
+  useSubscription,
+} from '@apollo/client'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import {
@@ -15,16 +20,22 @@ import {
   //  SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr'
 import { gql } from '@/schema/__generated__/client'
-import { useMutation, ErrorMessages } from './use-mutation'
+import type { ErrorMessages } from './types'
+import { useMutation } from './use-mutation'
 import { getWebsocketGraphQLClient } from './websocket'
 import { getSSRClient } from './ssr'
 
-export const getClient = () => {
+let cachedClient: NextSSRApolloClient<NormalizedCacheObject> | null = null
+
+export const getClient = (): NextSSRApolloClient<NormalizedCacheObject> => {
   if (typeof window === `undefined`) {
     // ssr
     return getSSRClient()
   } else {
-    // browser
+    // cache only in browser
+    if (cachedClient) {
+      return cachedClient
+    }
 
     const httpLink = new HttpLink({
       uri: `${window.location.origin}/api/graphql`,
@@ -44,10 +55,13 @@ export const getClient = () => {
       httpLink,
     )
 
-    return new NextSSRApolloClient({
+    const client = new NextSSRApolloClient({
       cache: new NextSSRInMemoryCache(),
       link: splitLink,
     })
+
+    cachedClient = client
+    return client
   }
 }
 

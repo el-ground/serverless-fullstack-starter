@@ -37,12 +37,8 @@ export type AuthAccountExistsOutput = {
   sanitizedAuthId: Scalars['String']['output'];
 };
 
-export enum AuthMethod {
-  DeleteAccount = 'DELETE_ACCOUNT',
-  LogOut = 'LOG_OUT',
-  PasswordReset = 'PASSWORD_RESET',
-  SignIn = 'SIGN_IN',
-  SignUp = 'SIGN_UP'
+export enum AuthProviderService {
+  Kakao = 'KAKAO'
 }
 
 export type Book = {
@@ -63,6 +59,7 @@ export type Mutation = {
   Auth_passwordReset: PasswordResetOutput;
   Auth_signIn: SignInOutput;
   Auth_signUp: SignUpOutput;
+  Auth_upgrade: UpgradeOutput;
   Auth_verificationCodeRequest: VerificationCodeRequestOutput;
   Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
   Book_addBook?: Maybe<Book>;
@@ -82,6 +79,11 @@ export type MutationAuth_SignInArgs = {
 
 export type MutationAuth_SignUpArgs = {
   input: SignUpInput;
+};
+
+
+export type MutationAuth_UpgradeArgs = {
+  input: UpgradeInput;
 };
 
 
@@ -192,6 +194,21 @@ export type Subscription = {
   Book_ping: BookPingResult;
 };
 
+export enum UpgradeError {
+  TokenVerificationFail = 'TokenVerificationFail'
+}
+
+export type UpgradeInput = {
+  service: AuthProviderService;
+  token: Scalars['String']['input'];
+};
+
+export type UpgradeOutput = {
+  __typename?: 'UpgradeOutput';
+  created: Scalars['Boolean']['output'];
+  user: User;
+};
+
 export type User = {
   __typename?: 'User';
   private: UserPrivateFields;
@@ -218,7 +235,7 @@ export enum VerificationCodeRequestError {
 
 export type VerificationCodeRequestInput = {
   authId: Scalars['String']['input'];
-  method: AuthMethod;
+  method: VerificationRequiredAuthMethod;
   verificationService: VerificationService;
 };
 
@@ -248,6 +265,12 @@ export type VerificationCodeSubmitOutput = {
   __typename?: 'VerificationCodeSubmitOutput';
   verificationCodeSubmitToken: Scalars['String']['output'];
 };
+
+export enum VerificationRequiredAuthMethod {
+  PasswordReset = 'PASSWORD_RESET',
+  SignIn = 'SIGN_IN',
+  SignUp = 'SIGN_UP'
+}
 
 export enum VerificationService {
   BizmsgAlimtalk = 'BIZMSG_ALIMTALK',
@@ -330,7 +353,7 @@ export type ResolversTypes = ResolversObject<{
   AuthAccountExistsError: AuthAccountExistsError;
   AuthAccountExistsInput: AuthAccountExistsInput;
   AuthAccountExistsOutput: ResolverTypeWrapper<AuthAccountExistsOutput>;
-  AuthMethod: AuthMethod;
+  AuthProviderService: AuthProviderService;
   Book: ResolverTypeWrapper<Book>;
   BookPingResult: ResolverTypeWrapper<BookPingResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -350,6 +373,9 @@ export type ResolversTypes = ResolversObject<{
   SignUpOutput: ResolverTypeWrapper<SignUpOutput>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
+  UpgradeError: UpgradeError;
+  UpgradeInput: UpgradeInput;
+  UpgradeOutput: ResolverTypeWrapper<UpgradeOutput>;
   User: ResolverTypeWrapper<User>;
   UserPrivateFields: ResolverTypeWrapper<UserPrivateFields>;
   UserPublicFields: ResolverTypeWrapper<UserPublicFields>;
@@ -360,6 +386,7 @@ export type ResolversTypes = ResolversObject<{
   VerificationCodeSubmitError: VerificationCodeSubmitError;
   VerificationCodeSubmitInput: VerificationCodeSubmitInput;
   VerificationCodeSubmitOutput: ResolverTypeWrapper<VerificationCodeSubmitOutput>;
+  VerificationRequiredAuthMethod: VerificationRequiredAuthMethod;
   VerificationService: VerificationService;
 }>;
 
@@ -383,6 +410,8 @@ export type ResolversParentTypes = ResolversObject<{
   SignUpOutput: SignUpOutput;
   String: Scalars['String']['output'];
   Subscription: {};
+  UpgradeInput: UpgradeInput;
+  UpgradeOutput: UpgradeOutput;
   User: User;
   UserPrivateFields: UserPrivateFields;
   UserPublicFields: UserPublicFields;
@@ -415,6 +444,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   Auth_passwordReset?: Resolver<ResolversTypes['PasswordResetOutput'], ParentType, ContextType, RequireFields<MutationAuth_PasswordResetArgs, 'input'>>;
   Auth_signIn?: Resolver<ResolversTypes['SignInOutput'], ParentType, ContextType, RequireFields<MutationAuth_SignInArgs, 'input'>>;
   Auth_signUp?: Resolver<ResolversTypes['SignUpOutput'], ParentType, ContextType, RequireFields<MutationAuth_SignUpArgs, 'input'>>;
+  Auth_upgrade?: Resolver<ResolversTypes['UpgradeOutput'], ParentType, ContextType, RequireFields<MutationAuth_UpgradeArgs, 'input'>>;
   Auth_verificationCodeRequest?: Resolver<ResolversTypes['VerificationCodeRequestOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeRequestArgs, 'input'>>;
   Auth_verificationCodeSubmit?: Resolver<ResolversTypes['VerificationCodeSubmitOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeSubmitArgs, 'input'>>;
   Book_addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationBook_AddBookArgs, 'author' | 'title'>>;
@@ -451,6 +481,12 @@ export type SignUpOutputResolvers<ContextType = Context, ParentType extends Reso
 
 export type SubscriptionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   Book_ping?: SubscriptionResolver<ResolversTypes['BookPingResult'], "Book_ping", ParentType, ContextType>;
+}>;
+
+export type UpgradeOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['UpgradeOutput'] = ResolversParentTypes['UpgradeOutput']> = ResolversObject<{
+  created?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -494,6 +530,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   SignInOutput?: SignInOutputResolvers<ContextType>;
   SignUpOutput?: SignUpOutputResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
+  UpgradeOutput?: UpgradeOutputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserPrivateFields?: UserPrivateFieldsResolvers<ContextType>;
   UserPublicFields?: UserPublicFieldsResolvers<ContextType>;

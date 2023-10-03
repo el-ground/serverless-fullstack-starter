@@ -36,12 +36,8 @@ export type AuthAccountExistsOutput = {
   sanitizedAuthId: Scalars['String']['output'];
 };
 
-export enum AuthMethod {
-  DeleteAccount = 'DELETE_ACCOUNT',
-  LogOut = 'LOG_OUT',
-  PasswordReset = 'PASSWORD_RESET',
-  SignIn = 'SIGN_IN',
-  SignUp = 'SIGN_UP'
+export enum AuthProviderService {
+  Kakao = 'KAKAO'
 }
 
 export type Book = {
@@ -62,6 +58,7 @@ export type Mutation = {
   Auth_passwordReset: PasswordResetOutput;
   Auth_signIn: SignInOutput;
   Auth_signUp: SignUpOutput;
+  Auth_upgrade: UpgradeOutput;
   Auth_verificationCodeRequest: VerificationCodeRequestOutput;
   Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
   Book_addBook?: Maybe<Book>;
@@ -81,6 +78,11 @@ export type MutationAuth_SignInArgs = {
 
 export type MutationAuth_SignUpArgs = {
   input: SignUpInput;
+};
+
+
+export type MutationAuth_UpgradeArgs = {
+  input: UpgradeInput;
 };
 
 
@@ -191,6 +193,21 @@ export type Subscription = {
   Book_ping: BookPingResult;
 };
 
+export enum UpgradeError {
+  TokenVerificationFail = 'TokenVerificationFail'
+}
+
+export type UpgradeInput = {
+  service: AuthProviderService;
+  token: Scalars['String']['input'];
+};
+
+export type UpgradeOutput = {
+  __typename?: 'UpgradeOutput';
+  created: Scalars['Boolean']['output'];
+  user: User;
+};
+
 export type User = {
   __typename?: 'User';
   private: UserPrivateFields;
@@ -217,7 +234,7 @@ export enum VerificationCodeRequestError {
 
 export type VerificationCodeRequestInput = {
   authId: Scalars['String']['input'];
-  method: AuthMethod;
+  method: VerificationRequiredAuthMethod;
   verificationService: VerificationService;
 };
 
@@ -247,6 +264,12 @@ export type VerificationCodeSubmitOutput = {
   __typename?: 'VerificationCodeSubmitOutput';
   verificationCodeSubmitToken: Scalars['String']['output'];
 };
+
+export enum VerificationRequiredAuthMethod {
+  PasswordReset = 'PASSWORD_RESET',
+  SignIn = 'SIGN_IN',
+  SignUp = 'SIGN_UP'
+}
 
 export enum VerificationService {
   BizmsgAlimtalk = 'BIZMSG_ALIMTALK',
@@ -318,6 +341,13 @@ export type SubmitLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type SubmitLogoutMutation = { __typename?: 'Mutation', Auth_logOut?: boolean | null };
 
+export type SubmitUpgradeAuthMutationVariables = Exact<{
+  input: UpgradeInput;
+}>;
+
+
+export type SubmitUpgradeAuthMutation = { __typename?: 'Mutation', Auth_upgrade: { __typename?: 'UpgradeOutput', created: boolean } };
+
 
 export const GetBooks2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<GetBooks2Query, GetBooks2QueryVariables>;
 export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
@@ -330,3 +360,4 @@ export const SubmitVerificationCodeRequestDocument = {"kind":"Document","definit
 export const SubmitVerificationCodeSubmitDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitVerificationCodeSubmit"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VerificationCodeSubmitInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_verificationCodeSubmit"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verificationCodeSubmitToken"}}]}}]}}]} as unknown as DocumentNode<SubmitVerificationCodeSubmitMutation, SubmitVerificationCodeSubmitMutationVariables>;
 export const DeleteAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"User_deleteAccount"}}]}}]} as unknown as DocumentNode<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const SubmitLogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitLogout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_logOut"}}]}}]} as unknown as DocumentNode<SubmitLogoutMutation, SubmitLogoutMutationVariables>;
+export const SubmitUpgradeAuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitUpgradeAuth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpgradeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_upgrade"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"created"}}]}}]}}]} as unknown as DocumentNode<SubmitUpgradeAuthMutation, SubmitUpgradeAuthMutationVariables>;

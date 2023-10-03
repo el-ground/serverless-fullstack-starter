@@ -3,7 +3,7 @@ import React from 'react'
 import { ToRequestVerificationCode } from '../states/to-request-verification-code'
 import { ToSubmitVerificationCode } from '../states/to-submit-verification-code'
 import { ToSubmitSignUp } from './states/to-submit-sign-up'
-import { AuthMethod } from '@types'
+import { VerificationRequiredAuthMethod } from '@types'
 import { useUpdateAuth } from '@/src/hooks/use-auth/client'
 import { toast } from 'react-toastify'
 
@@ -54,7 +54,7 @@ export const SignUp = () => {
       case SignUpState.TO_REQUEST_VERIFICATION_CODE:
         return (
           <ToRequestVerificationCode
-            method={AuthMethod.SignUp}
+            method={VerificationRequiredAuthMethod.SignUp}
             onSuccess={(verificationCodeRequestToken: string) => {
               setVerificationCodeRequestToken(verificationCodeRequestToken)
               setSignUpState(SignUpState.TO_SUBMIT_VERIFICATION_CODE)

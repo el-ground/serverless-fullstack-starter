@@ -71,13 +71,11 @@ extend type Subscription {
   Book_ping: BookPingResult! # testing subscription
 }
 -----COMBINEDGRAPHQLDELIMITER-----
-enum AuthMethod {
+# Methods that require verification code
+enum VerificationRequiredAuthMethod {
   SIGN_IN
   SIGN_UP
   PASSWORD_RESET
-  LOG_OUT
-  DELETE_ACCOUNT
-  # ADD_SIGN_IN_METHOD
 }
 
 # list verification service types you use!
@@ -90,6 +88,10 @@ enum VerificationService {
 enum VerificationCodeState {
   VERIFICATION_CODE_REQUEST
   VERIFICATION_CODE_SUBMIT
+}
+
+enum AuthProviderService {
+  KAKAO
 }
 -----COMBINEDGRAPHQLDELIMITER-----
 input VerificationCodeSubmitInput {
@@ -115,7 +117,7 @@ extend type Mutation {
 }
 -----COMBINEDGRAPHQLDELIMITER-----
 input VerificationCodeRequestInput {
-  method: AuthMethod!
+  method: VerificationRequiredAuthMethod!
   verificationService: VerificationService!
   authId: String! # request verification for the following authId
 }
@@ -132,6 +134,24 @@ extend type Mutation {
   Auth_verificationCodeRequest(
     input: VerificationCodeRequestInput!
   ): VerificationCodeRequestOutput!
+}
+-----COMBINEDGRAPHQLDELIMITER-----
+input UpgradeInput {
+  service: AuthProviderService!
+  token: String!
+}
+
+type UpgradeOutput {
+  user: User!
+  created: Boolean!
+}
+
+enum UpgradeError {
+  TokenVerificationFail
+}
+
+extend type Mutation {
+  Auth_upgrade(input: UpgradeInput!): UpgradeOutput!
 }
 -----COMBINEDGRAPHQLDELIMITER-----
 input SignUpInput {

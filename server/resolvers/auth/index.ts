@@ -5,6 +5,7 @@ import { Auth_signUp } from './sign-up'
 import { Auth_logOut } from './log-out'
 import { Auth_verificationCodeRequest } from './verification-code-request'
 import { Auth_verificationCodeSubmit } from './verification-code-submit'
+import { Auth_upgrade } from './upgrade'
 
 export const AuthQueries = {
   Auth_authAccountExists,
@@ -17,4 +18,5 @@ export const AuthMutations = {
   Auth_verificationCodeRequest,
   Auth_verificationCodeSubmit,
   Auth_logOut,
+  Auth_upgrade,
 }
