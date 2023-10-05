@@ -1,0 +1,7 @@
+type VapidKeyOutput {
+  publicKey: String!
+}
+
+extend type Query {
+  Push_vapidKey: VapidKeyOutput!
+}

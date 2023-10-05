@@ -110,3 +110,9 @@ export const useAuth = () => {
   const authPayload = React.useContext(AuthPayloadContext)
   return authPayload
 }
+
+// used for getting auth outside react hooks
+export const getAuth = () => {
+  const { authPayload } = getAuthDependencies()
+  return authPayload
+}

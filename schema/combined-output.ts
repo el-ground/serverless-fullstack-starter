@@ -43,6 +43,29 @@ extend type Mutation {
   User_deleteAccount: Boolean
 }
 -----COMBINEDGRAPHQLDELIMITER-----
+type VapidKeyOutput {
+  publicKey: String!
+}
+
+extend type Query {
+  Push_vapidKey: VapidKeyOutput!
+}
+-----COMBINEDGRAPHQLDELIMITER-----
+input RegisterPushTokenInput {
+  uniqueInstallationId: String!
+  pushToken: String
+}
+
+type RegisterPushTokenOutput {
+  success: Boolean!
+}
+
+extend type Mutation {
+  Push_registerPushToken(
+    input: RegisterPushTokenInput!
+  ): RegisterPushTokenOutput!
+}
+-----COMBINEDGRAPHQLDELIMITER-----
 # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
 
 # both server and client and database should agree to this

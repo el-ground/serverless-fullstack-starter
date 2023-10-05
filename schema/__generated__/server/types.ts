@@ -63,6 +63,7 @@ export type Mutation = {
   Auth_verificationCodeRequest: VerificationCodeRequestOutput;
   Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
   Book_addBook?: Maybe<Book>;
+  Push_registerPushToken: RegisterPushTokenOutput;
   User_deleteAccount?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -102,6 +103,11 @@ export type MutationBook_AddBookArgs = {
   title: Scalars['String']['input'];
 };
 
+
+export type MutationPush_RegisterPushTokenArgs = {
+  input: RegisterPushTokenInput;
+};
+
 export type NicknameExistsInput = {
   nickname: Scalars['String']['input'];
 };
@@ -135,6 +141,7 @@ export type Query = {
   Auth_authAccountExists: AuthAccountExistsOutput;
   Book_book?: Maybe<Book>;
   Book_books?: Maybe<Array<Maybe<Book>>>;
+  Push_vapidKey: VapidKeyOutput;
   User_nicknameExists: NicknameExistsOutput;
 };
 
@@ -151,6 +158,16 @@ export type QueryBook_BookArgs = {
 
 export type QueryUser_NicknameExistsArgs = {
   input: NicknameExistsInput;
+};
+
+export type RegisterPushTokenInput = {
+  pushToken?: InputMaybe<Scalars['String']['input']>;
+  uniqueInstallationId: Scalars['String']['input'];
+};
+
+export type RegisterPushTokenOutput = {
+  __typename?: 'RegisterPushTokenOutput';
+  success: Scalars['Boolean']['output'];
 };
 
 export enum SignInError {
@@ -227,6 +244,11 @@ export type UserPublicFields = {
   deleted: Scalars['Boolean']['output'];
   deletedAtSeconds?: Maybe<Scalars['Int']['output']>;
   nickname: Scalars['String']['output'];
+};
+
+export type VapidKeyOutput = {
+  __typename?: 'VapidKeyOutput';
+  publicKey: Scalars['String']['output'];
 };
 
 export enum VerificationCodeRequestError {
@@ -365,6 +387,8 @@ export type ResolversTypes = ResolversObject<{
   PasswordResetInput: PasswordResetInput;
   PasswordResetOutput: ResolverTypeWrapper<PasswordResetOutput>;
   Query: ResolverTypeWrapper<{}>;
+  RegisterPushTokenInput: RegisterPushTokenInput;
+  RegisterPushTokenOutput: ResolverTypeWrapper<RegisterPushTokenOutput>;
   SignInError: SignInError;
   SignInInput: SignInInput;
   SignInOutput: ResolverTypeWrapper<SignInOutput>;
@@ -379,6 +403,7 @@ export type ResolversTypes = ResolversObject<{
   User: ResolverTypeWrapper<User>;
   UserPrivateFields: ResolverTypeWrapper<UserPrivateFields>;
   UserPublicFields: ResolverTypeWrapper<UserPublicFields>;
+  VapidKeyOutput: ResolverTypeWrapper<VapidKeyOutput>;
   VerificationCodeRequestError: VerificationCodeRequestError;
   VerificationCodeRequestInput: VerificationCodeRequestInput;
   VerificationCodeRequestOutput: ResolverTypeWrapper<VerificationCodeRequestOutput>;
@@ -404,6 +429,8 @@ export type ResolversParentTypes = ResolversObject<{
   PasswordResetInput: PasswordResetInput;
   PasswordResetOutput: PasswordResetOutput;
   Query: {};
+  RegisterPushTokenInput: RegisterPushTokenInput;
+  RegisterPushTokenOutput: RegisterPushTokenOutput;
   SignInInput: SignInInput;
   SignInOutput: SignInOutput;
   SignUpInput: SignUpInput;
@@ -415,6 +442,7 @@ export type ResolversParentTypes = ResolversObject<{
   User: User;
   UserPrivateFields: UserPrivateFields;
   UserPublicFields: UserPublicFields;
+  VapidKeyOutput: VapidKeyOutput;
   VerificationCodeRequestInput: VerificationCodeRequestInput;
   VerificationCodeRequestOutput: VerificationCodeRequestOutput;
   VerificationCodeSubmitInput: VerificationCodeSubmitInput;
@@ -448,6 +476,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   Auth_verificationCodeRequest?: Resolver<ResolversTypes['VerificationCodeRequestOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeRequestArgs, 'input'>>;
   Auth_verificationCodeSubmit?: Resolver<ResolversTypes['VerificationCodeSubmitOutput'], ParentType, ContextType, RequireFields<MutationAuth_VerificationCodeSubmitArgs, 'input'>>;
   Book_addBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationBook_AddBookArgs, 'author' | 'title'>>;
+  Push_registerPushToken?: Resolver<ResolversTypes['RegisterPushTokenOutput'], ParentType, ContextType, RequireFields<MutationPush_RegisterPushTokenArgs, 'input'>>;
   User_deleteAccount?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
 }>;
 
@@ -466,7 +495,13 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   Auth_authAccountExists?: Resolver<ResolversTypes['AuthAccountExistsOutput'], ParentType, ContextType, RequireFields<QueryAuth_AuthAccountExistsArgs, 'input'>>;
   Book_book?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBook_BookArgs, 'id'>>;
   Book_books?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
+  Push_vapidKey?: Resolver<ResolversTypes['VapidKeyOutput'], ParentType, ContextType>;
   User_nicknameExists?: Resolver<ResolversTypes['NicknameExistsOutput'], ParentType, ContextType, RequireFields<QueryUser_NicknameExistsArgs, 'input'>>;
+}>;
+
+export type RegisterPushTokenOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['RegisterPushTokenOutput'] = ResolversParentTypes['RegisterPushTokenOutput']> = ResolversObject<{
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SignInOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SignInOutput'] = ResolversParentTypes['SignInOutput']> = ResolversObject<{
@@ -509,6 +544,11 @@ export type UserPublicFieldsResolvers<ContextType = Context, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type VapidKeyOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VapidKeyOutput'] = ResolversParentTypes['VapidKeyOutput']> = ResolversObject<{
+  publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type VerificationCodeRequestOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VerificationCodeRequestOutput'] = ResolversParentTypes['VerificationCodeRequestOutput']> = ResolversObject<{
   verificationCodeRequestToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -527,6 +567,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   NicknameExistsOutput?: NicknameExistsOutputResolvers<ContextType>;
   PasswordResetOutput?: PasswordResetOutputResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RegisterPushTokenOutput?: RegisterPushTokenOutputResolvers<ContextType>;
   SignInOutput?: SignInOutputResolvers<ContextType>;
   SignUpOutput?: SignUpOutputResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
@@ -534,6 +575,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   User?: UserResolvers<ContextType>;
   UserPrivateFields?: UserPrivateFieldsResolvers<ContextType>;
   UserPublicFields?: UserPublicFieldsResolvers<ContextType>;
+  VapidKeyOutput?: VapidKeyOutputResolvers<ContextType>;
   VerificationCodeRequestOutput?: VerificationCodeRequestOutputResolvers<ContextType>;
   VerificationCodeSubmitOutput?: VerificationCodeSubmitOutputResolvers<ContextType>;
 }>;

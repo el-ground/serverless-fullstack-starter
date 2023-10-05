@@ -62,6 +62,7 @@ export type Mutation = {
   Auth_verificationCodeRequest: VerificationCodeRequestOutput;
   Auth_verificationCodeSubmit: VerificationCodeSubmitOutput;
   Book_addBook?: Maybe<Book>;
+  Push_registerPushToken: RegisterPushTokenOutput;
   User_deleteAccount?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -101,6 +102,11 @@ export type MutationBook_AddBookArgs = {
   title: Scalars['String']['input'];
 };
 
+
+export type MutationPush_RegisterPushTokenArgs = {
+  input: RegisterPushTokenInput;
+};
+
 export type NicknameExistsInput = {
   nickname: Scalars['String']['input'];
 };
@@ -134,6 +140,7 @@ export type Query = {
   Auth_authAccountExists: AuthAccountExistsOutput;
   Book_book?: Maybe<Book>;
   Book_books?: Maybe<Array<Maybe<Book>>>;
+  Push_vapidKey: VapidKeyOutput;
   User_nicknameExists: NicknameExistsOutput;
 };
 
@@ -150,6 +157,16 @@ export type QueryBook_BookArgs = {
 
 export type QueryUser_NicknameExistsArgs = {
   input: NicknameExistsInput;
+};
+
+export type RegisterPushTokenInput = {
+  pushToken?: InputMaybe<Scalars['String']['input']>;
+  uniqueInstallationId: Scalars['String']['input'];
+};
+
+export type RegisterPushTokenOutput = {
+  __typename?: 'RegisterPushTokenOutput';
+  success: Scalars['Boolean']['output'];
 };
 
 export enum SignInError {
@@ -226,6 +243,11 @@ export type UserPublicFields = {
   deleted: Scalars['Boolean']['output'];
   deletedAtSeconds?: Maybe<Scalars['Int']['output']>;
   nickname: Scalars['String']['output'];
+};
+
+export type VapidKeyOutput = {
+  __typename?: 'VapidKeyOutput';
+  publicKey: Scalars['String']['output'];
 };
 
 export enum VerificationCodeRequestError {
@@ -348,6 +370,18 @@ export type SubmitUpgradeAuthMutationVariables = Exact<{
 
 export type SubmitUpgradeAuthMutation = { __typename?: 'Mutation', Auth_upgrade: { __typename?: 'UpgradeOutput', created: boolean } };
 
+export type RegisterPushTokenMutationVariables = Exact<{
+  input: RegisterPushTokenInput;
+}>;
+
+
+export type RegisterPushTokenMutation = { __typename?: 'Mutation', Push_registerPushToken: { __typename?: 'RegisterPushTokenOutput', success: boolean } };
+
+export type GetVapidKeyQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetVapidKeyQuery = { __typename?: 'Query', Push_vapidKey: { __typename?: 'VapidKeyOutput', publicKey: string } };
+
 
 export const GetBooks2Document = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks2"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<GetBooks2Query, GetBooks2QueryVariables>;
 export const GetBooksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBooks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Book_books"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"title"}}]}}]}}]} as unknown as DocumentNode<GetBooksQuery, GetBooksQueryVariables>;
@@ -361,3 +395,5 @@ export const SubmitVerificationCodeSubmitDocument = {"kind":"Document","definiti
 export const DeleteAccountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteAccount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"User_deleteAccount"}}]}}]} as unknown as DocumentNode<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const SubmitLogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitLogout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_logOut"}}]}}]} as unknown as DocumentNode<SubmitLogoutMutation, SubmitLogoutMutationVariables>;
 export const SubmitUpgradeAuthDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"submitUpgradeAuth"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpgradeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Auth_upgrade"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"created"}}]}}]}}]} as unknown as DocumentNode<SubmitUpgradeAuthMutation, SubmitUpgradeAuthMutationVariables>;
+export const RegisterPushTokenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RegisterPushToken"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RegisterPushTokenInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Push_registerPushToken"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<RegisterPushTokenMutation, RegisterPushTokenMutationVariables>;
+export const GetVapidKeyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVapidKey"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"Push_vapidKey"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicKey"}}]}}]}}]} as unknown as DocumentNode<GetVapidKeyQuery, GetVapidKeyQueryVariables>;

@@ -6,6 +6,7 @@ import { ErrorBoundary } from '@/src/components/error-boundary'
 import { ApolloProvider } from '@/src/framework/apollo/client'
 import { ForceRSC } from '@/src/components/force-rsc'
 import { ToastProvider } from '@components/toast-provider'
+import { PushProvider } from '@hooks/use-push'
 // initialize rsc client
 import '@framework/apollo/rsc'
 import '@util/cookie/rsc'
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <>
       <Head>
+        <link rel="manifest" href="manifest.json" />
         <link
           rel="preload"
           href="/fonts/nanum-gothic/nanum-gothic-400.woff2"
@@ -49,7 +51,7 @@ export default function RootLayout({
         <body>
           <ErrorBoundary>
             <ApolloProvider>
-              {children}
+              <PushProvider>{children}</PushProvider>
               <ToastProvider />
               <ForceRSC />
             </ApolloProvider>

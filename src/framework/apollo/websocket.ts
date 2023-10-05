@@ -6,7 +6,7 @@ import { Client, createClient } from 'graphql-ws'
 let client: Client | null = null
 
 let connectionToastId: Id | null = null
-let toastManuallyClosed = false
+let retrying = false
 
 export const getWebsocketGraphQLClient = () => {
   if (typeof window === `undefined`) {
@@ -20,24 +20,25 @@ export const getWebsocketGraphQLClient = () => {
       }/api/graphql`,
       on: {
         connected: () => {
-          if (connectionToastId) {
+          if (retrying) {
             console.log(`Websocket reconnected :)`)
-            if (toastManuallyClosed) {
-              toast.success(`서버와 재연결되었습니다.`, {
-                autoClose: 2000,
-                position: toast.POSITION.BOTTOM_CENTER,
-              })
-            } else {
+
+            // prevent multiple connect - reconnect being stacked
+            if (connectionToastId && toast.isActive(connectionToastId)) {
               toast.update(connectionToastId, {
                 render: `서버와 재연결되었습니다.`,
                 type: toast.TYPE.SUCCESS,
                 autoClose: 2000,
                 isLoading: false,
               })
+            } else {
+              connectionToastId = toast.success(`서버와 재연결되었습니다.`, {
+                autoClose: 2000,
+                position: toast.POSITION.BOTTOM_CENTER,
+              })
             }
           }
-          connectionToastId = null
-          toastManuallyClosed = false
+          retrying = false
         },
       },
       // https://the-guild.dev/graphql/ws/docs/interfaces/client.ClientOptions#shouldretry
@@ -46,7 +47,6 @@ export const getWebsocketGraphQLClient = () => {
         console.error(errOrCloseEvent)
         console.error(`Retrying connection...`)
         if (!connectionToastId) {
-          toastManuallyClosed = false
           connectionToastId = toast.error(
             `서버와의 연결을 재시도하고 있습니다.`,
             {
@@ -56,13 +56,8 @@ export const getWebsocketGraphQLClient = () => {
               isLoading: true,
             },
           )
-          const unsubscribe = toast.onChange(({ id, status }) => {
-            if (id === connectionToastId && status === `removed`) {
-              toastManuallyClosed = true
-              unsubscribe()
-            }
-          })
         }
+        retrying = true
         return true
       },
       retryAttempts: Infinity, // retryyyyyy

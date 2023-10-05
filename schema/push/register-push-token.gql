@@ -1,0 +1,14 @@
+input RegisterPushTokenInput {
+  uniqueInstallationId: String!
+  pushToken: String
+}
+
+type RegisterPushTokenOutput {
+  success: Boolean!
+}
+
+extend type Mutation {
+  Push_registerPushToken(
+    input: RegisterPushTokenInput!
+  ): RegisterPushTokenOutput!
+}

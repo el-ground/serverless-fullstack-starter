@@ -8,7 +8,7 @@ import { ErrorWCode } from '@/src/util/error'
 */
 export const tryThrowError = <TKnownError extends string>(
   errors: readonly GraphQLError[] | undefined,
-  knownErrorMessages: ErrorMessages<TKnownError>,
+  knownErrorMessages?: ErrorMessages<TKnownError>,
 ) => {
   if (!errors || errors.length === 0) {
     return
@@ -21,7 +21,7 @@ export const tryThrowError = <TKnownError extends string>(
     const error = errors[i]
     const code = error.extensions.code as string | undefined
 
-    if (code && code in knownErrorMessages) {
+    if (knownErrorMessages && code && code in knownErrorMessages) {
       knownErrorCode = code as TKnownError
       errorMessage = knownErrorMessages[knownErrorCode]
       break

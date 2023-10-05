@@ -25,6 +25,8 @@ const documents = {
     "\n    mutation deleteAccount {\n        User_deleteAccount\n    }\n": types.DeleteAccountDocument,
     "\n    mutation submitLogout {\n        Auth_logOut\n    }\n": types.SubmitLogoutDocument,
     "\n    mutation submitUpgradeAuth($input: UpgradeInput!) {\n        Auth_upgrade(input: $input) {\n#            user \n            created\n        }\n    }\n": types.SubmitUpgradeAuthDocument,
+    "\n    mutation RegisterPushToken($input: RegisterPushTokenInput!) {\n        Push_registerPushToken(input: $input) {\n            success\n        }\n    }\n": types.RegisterPushTokenDocument,
+    "\n    query GetVapidKey {\n        Push_vapidKey {\n            publicKey\n        }\n    }\n": types.GetVapidKeyDocument,
 };
 
 /**
@@ -89,6 +91,14 @@ export function gql(source: "\n    mutation submitLogout {\n        Auth_logOut\
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    mutation submitUpgradeAuth($input: UpgradeInput!) {\n        Auth_upgrade(input: $input) {\n#            user \n            created\n        }\n    }\n"): (typeof documents)["\n    mutation submitUpgradeAuth($input: UpgradeInput!) {\n        Auth_upgrade(input: $input) {\n#            user \n            created\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation RegisterPushToken($input: RegisterPushTokenInput!) {\n        Push_registerPushToken(input: $input) {\n            success\n        }\n    }\n"): (typeof documents)["\n    mutation RegisterPushToken($input: RegisterPushTokenInput!) {\n        Push_registerPushToken(input: $input) {\n            success\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query GetVapidKey {\n        Push_vapidKey {\n            publicKey\n        }\n    }\n"): (typeof documents)["\n    query GetVapidKey {\n        Push_vapidKey {\n            publicKey\n        }\n    }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
