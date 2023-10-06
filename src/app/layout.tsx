@@ -7,10 +7,14 @@ import { ApolloProvider } from '@/src/framework/apollo/client'
 import { ForceRSC } from '@/src/components/force-rsc'
 import { ToastProvider } from '@components/toast-provider'
 import { PushProvider } from '@hooks/use-push'
+import { AuthProvider } from '@hooks/use-auth/client'
 // initialize rsc client
 import '@framework/apollo/rsc'
 import '@util/cookie/rsc'
 import '@hooks/use-auth/rsc'
+// initialize app methods
+import '@framework/app'
+import { InjectSafeAreaInset } from '@framework/app/inject-safe-area-inset'
 
 console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 
@@ -46,12 +50,15 @@ export default function RootLayout({
           as="font"
           type="font/woff2"
         />
+        <InjectSafeAreaInset />
       </Head>
       <html lang="kr">
         <body>
           <ErrorBoundary>
             <ApolloProvider>
-              <PushProvider>{children}</PushProvider>
+              <AuthProvider>
+                <PushProvider>{children}</PushProvider>
+              </AuthProvider>
               <ToastProvider />
               <ForceRSC />
             </ApolloProvider>

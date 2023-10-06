@@ -3,25 +3,25 @@ import React from 'react'
 import { useGetIsMounted } from '@hooks/use-get-is-mounted'
 import { useAsyncCallback } from '@hooks/use-async-callback'
 import { hookRefreshesWith } from '@util/hook-refreshes-with'
-import { isApp } from '@model/app'
+import { isApp } from '@framework/app'
 import {
   checkPermission as checkPermissionWeb,
   requestPermission as requestPermissionWeb,
   register as registerWeb,
   unregister as unregisterWeb,
   initialize as initializeWeb,
-} from '@model/push/web'
+} from '@framework/push/web'
 import {
   checkPermission as checkPermissionApp,
   requestPermission as requestPermissionApp,
   register as registerApp,
   unregister as unregisterApp,
   initialize as initializeApp,
-} from '@model/push/app'
-import { get } from '@model/preferences'
+} from '@framework/push/app'
+import { get } from '@framework/preferences'
 import { useAuth } from '@/src/hooks/use-auth/client'
-import { registerPushToken } from '@model/push/register-push-token'
-import type { PushNotificationPermissionState } from '@model/push/types'
+import { registerPushToken } from '@framework/push/register-push-token'
+import type { PushNotificationPermissionState } from '@framework/push/types'
 
 const PushContext = React.createContext<{
   checkPermission: () => Promise<PushNotificationPermissionState>

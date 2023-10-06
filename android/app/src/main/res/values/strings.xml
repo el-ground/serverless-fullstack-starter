@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">serverless-fullstack-starter</string>
+    <string name="title_activity_main">serverless-fullstack-starter</string>
+    <string name="package_name">com.serverless_fullstack_starter.app</string>
+    <string name="custom_url_scheme">com.serverless_fullstack_starter.app</string>
+    <string name="asset_statements">
+  [{
+    \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+    \"target\": {
+      \"namespace\": \"web\",
+      \"site\": \"https://YOUR-DOMAIN-HERE\"
+    }
+  }]
+</string>
+</resources>

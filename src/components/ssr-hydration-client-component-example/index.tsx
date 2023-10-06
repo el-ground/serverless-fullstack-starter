@@ -5,7 +5,7 @@ import { useSuspenseQuery } from '@/src/framework/apollo/client'
 import { gql } from '@/schema/__generated__/client/gql'
 import Like from '@/assets/sample.svg'
 import { useAuth } from '@hooks/use-auth/client'
-import { logOut, deleteAccount } from '@model/auth'
+import { logOut, deleteAccount } from '@framework/auth'
 import styles from './style.module.scss'
 
 const query = gql(`

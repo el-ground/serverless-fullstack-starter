@@ -4,6 +4,7 @@ import type { Context } from './context'
 import { logInfo } from '#util/log'
 import { GraphQLResolveInfo } from 'graphql'
 import { createNamespace } from 'cls-hooked'
+import { createLoader, Loader } from '@/server/framework/database/loader'
 
 const subscriptionContextNamespace = createNamespace(`subscription-context`)
 
@@ -61,6 +62,21 @@ export const wrapResolve =
       return undefined as unknown as TResult
     }
 
+    // pass in replaced dataloder!
+    // since subscription resolve context is created on subscription, not each resolve.
+    let loader: null | Loader = null
+    const getLoader = () => {
+      if (loader === null) {
+        loader = createLoader()
+      }
+      return loader
+    }
+
+    const loaderReplacedContext = {
+      ...context,
+      getLoader,
+    }
+
     const { id, value } = parent
 
     return runWithRequestId(
@@ -69,7 +85,7 @@ export const wrapResolve =
       }] psregid:[${id || ``}]`,
       () => {
         logInfo(`step:[WS:RESOLVE]`)
-        return resolve(value, args, context, info)
+        return resolve(value, args, loaderReplacedContext, info)
       },
     )
   }

@@ -1,8 +1,8 @@
 import React from 'react'
 import { useAsyncEffect } from '@hooks/use-async-effect'
-import { ImageEditPipeline } from '@model/image/image-edit-pipeline'
+import { ImageEditPipeline } from '@framework/image/image-edit-pipeline'
 import { useStateRef } from '@hooks/use-state-ref'
-import { ImageEditPreviewCanvas } from '@model/image/image-edit-pipeline/image-edit-canvas/preview'
+import { ImageEditPreviewCanvas } from '@framework/image/image-edit-pipeline/image-edit-canvas/preview'
 import { useRenderElementAsChild } from '@hooks/use-render-element-as-child'
 
 import styles from './style.module.scss'

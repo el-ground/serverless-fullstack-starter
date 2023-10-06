@@ -41,6 +41,31 @@
 - nvm
 - yarn (corepack enable)
 
+### Required environment variables
+
+- AUTH_KEY_SYMMETRIC_256
+- VAPID_KEY_PUBLIC, VAPID_KEY_PRIVATE
+- FILE_KEY_SYMMETRIC_256
+
+### Setting up app (Checklist)
+
+https://capacitorjs.com/docs/basics/workflow
+
+- Icon, name, splash screen
+- Permissions
+- Push Notification
+  - https://capacitorjs.com/docs/guides/push-notifications-firebase
+  - Need to setup firebase & place GoogleServiceInfo
+- Deep link
+  - .well-known/apple-app-site-association / assetlinks.json
+- Safe area (notch in android)
+
+### Setups not in this stater
+
+- SEO (meta, og / twitter tags, structured data (json-ld, microdata, RDFa)), OpenSearch.xml, Sitemap.xml, robots.txt
+- Analytics : GA4, Facebook
+- App analytics (attribution) : Google, Facebook // needs app id, etc setup.
+
 ### How to use HTTPS
 
 1. create a key pair

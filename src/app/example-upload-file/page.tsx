@@ -1,11 +1,11 @@
 'use client'
 import React from 'react'
-import { FileLike } from '@model/file'
-import { ImageEditPipeline } from '@/src/model/image/image-edit-pipeline'
+import { FileLike } from '@framework/file'
+import { ImageEditPipeline } from '@framework/image/image-edit-pipeline'
 import { PipelineImagePreview } from '@components/pipeline-image-preview'
 import { PipelineImageEditor } from '@containers/pipeline-image-editor'
 import { useAsyncCallback } from '@hooks/use-async-callback'
-import { uploadFiles } from '@model/file/upload'
+import { uploadFiles } from '@framework/file/upload'
 
 /*
     choose file,

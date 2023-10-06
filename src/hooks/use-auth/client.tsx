@@ -4,7 +4,7 @@ import { getWebsocketGraphQLClient } from '@framework/apollo/websocket'
 import equal from 'deep-equal'
 import { getAuthDependencies } from './util'
 import { useBoxedCallback } from '../use-boxed-callback'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import type { AuthPayload } from '@/server/framework/auth'
 
 const UpdateAuthHandleContext = React.createContext<
@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     */
 
       if (hasLoggedOut || hasUserChanged) {
+        setAuthDependencies(newAuthDependencies)
         console.log(`auth payload changed. reloading page `)
         window.localStorage.clear()
         if (to) {
@@ -72,13 +73,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           window.location.reload()
         }
       } else if (hasLoggedIn || hasAuthPayloadChanged) {
-        setAuthDependencies(authDependencies)
+        setAuthDependencies(newAuthDependencies)
         if (to) {
           if (replace) {
             router.replace(to)
           } else {
             router.push(to)
           }
+        }
+      } else if (prevUserId === userId && to) {
+        // userId stays the same;
+        // if manually called, just navigate!
+        if (replace) {
+          router.replace(to)
+        } else {
+          router.push(to)
         }
       }
     },
