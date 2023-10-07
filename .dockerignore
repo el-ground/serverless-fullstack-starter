@@ -8,6 +8,7 @@
 !dist/**
 !.next/**
 !public/**
+!temp/config/**
 
 # ignore files within allowed files and directories
 *.test.js
