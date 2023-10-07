@@ -11,7 +11,9 @@
 * Shared type system between frontend and backend
 * Authenticated server component
 * Websocket subscription
+* Super powerful logging system (easy to debug / track in cloud logger with flooding logs)
 * PWA + service worker
+* Almost done app setup ;)
 
 ### Structure
 
@@ -49,6 +51,8 @@
 ### Setting up a new project
 
 - copy contents & remove .git, replace .git of the target repo.
+- Create secrets for the new project and put to .env & save it somewhere;
+- Setup service (below)
 - setup deployment & create yarn deploy commands : deploy:staging & deploy:prod
 - create backend configuration for dev & prod, add yarn command for switching environment, switch environment before deploy scripts
 - find MUST_IMPLEMENT comments, setup services and replace!
