@@ -1,4 +1,4 @@
-1. Create project
+1. Create project; You need owner permission;
 2. gcloud auth login
 3. console : artifact registry -> create repository "application"
 4. gcloud auth configure-docker `<region>-docker.pkg.dv`

@@ -33,6 +33,9 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
+      "@config/*": [
+        "./temp/config/*"
+      ],
       "@types": [
         "./schema/__generated__/client/graphql"
       ],
