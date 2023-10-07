@@ -1,4 +1,5 @@
 # fill environment variables!
-AUTH_KEY_RSA_4096_PRIVATE
-AUTH_KEY_RSA_4096_PUBLIC
-AUTH_KEY_SYMMETRIC_256
+VAPID_KEY_PUBLIC="<PLACE_YOUR_KEY : npx web-push generate-vapid-keys>"
+VAPID_KEY_PRIVATE="<PLACE_YOUR_KEY : npx web-push generate-vapid-keys>"
+AUTH_KEY_SYMMETRIC_256="<PLACE_YOUR_KEY : openssl rand -hex 32>"
+FILE_KEY_SYMMETRIC_256="<PLACE_YOUR_KEY : openssl rand -hex 32>"

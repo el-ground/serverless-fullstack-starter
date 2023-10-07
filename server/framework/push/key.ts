@@ -3,16 +3,7 @@ import 'dotenv'
 /*
     VAPID KEY!
 
-    const webpush = require('web-push');
-
-    // VAPID keys should be generated only once.
-    const {
-        publicKey, // store to VAPID_KEY_PUBLIC
-        privateKey // store to VAPID_KEY_PRIVATE
-    } = webpush.generateVAPIDKeys();
-
-    store to 
-
+    npx web-push generate-valid-keys
 */
 
 export const getVapidKeyPrivate = () => {

@@ -80,7 +80,8 @@
     "typescript": "^5.2.2",
     "typescript-bundle": "^1.0.18",
     "typescript-plugin-css-modules": "^5.0.1",
-    "uglify-js": "^3.17.4"
+    "uglify-js": "^3.17.4",
+    "web-push": "^3.6.6"
   },
   "dependencies": {
     "@apollo/client": "^3.8.5",

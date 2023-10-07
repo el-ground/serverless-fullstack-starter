@@ -36,6 +36,10 @@
 - Error Boundary (use next's implementation)
 - onPopState (back button)
 
+### Milestones (future)
+
+- Implement ECommerce purchase patterns : approve, cancel
+
 ### Recommended setup
 
 - vscode
