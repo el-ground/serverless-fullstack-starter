@@ -57,7 +57,7 @@ try {
             destinationTargetName,
           )
           console.log(
-            `@set-config : Copying ${configName}/${targetFileOrDirName} -> ./temp/config/${destinationTargetName}`,
+            `@set-config : Copying ./config/${configName}/${targetFileOrDirName} -> ./temp/config/${destinationTargetName}`,
           )
           fs.cpSync(sourceTargetPath, destinationPath, {
             recursive: true,
