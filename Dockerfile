@@ -1,5 +1,6 @@
 # Sample dockerfile for containerized environment.
-FROM --platform=linux/amd64 node:20-slim
+# FROM --platform=linux/amd64 node:20-slim
+FROM node:20-slim
 
 RUN apt-get update || : && apt-get install python-is-python3 make g++ -y
 

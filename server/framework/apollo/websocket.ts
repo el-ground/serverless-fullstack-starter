@@ -9,6 +9,7 @@ import { AuthPayload } from '../auth'
 import { create as createUUID } from '#util/uuid'
 import dayjs from 'dayjs'
 import { logInfo, logError } from '#util/log'
+import { getRequestIpAddress } from '#util/ip'
 import { runWithRequestId } from '../express/middlewares/request-id'
 import { stringifyError } from './stringify-error'
 import { stringifyQuery } from './stringify-query'
@@ -130,18 +131,7 @@ export const createWebsocketServer = (httpServer: Server) => {
         ctx.extra.sessionId = sessionId || ``
 
         // 4. ip
-        let ip = request.socket.remoteAddress
-
-        let forwardedFor =
-          headers[`x-forwarded-for`] || headers[`X-Forwarded-For`]
-        if (forwardedFor) {
-          if (Array.isArray(forwardedFor)) {
-            // if array, just select first
-            forwardedFor = forwardedFor[0]
-          }
-
-          ip = forwardedFor.split(`,`)[0] // first address
-        }
+        const ip = getRequestIpAddress(request)
         ctx.extra.ip = ip || ``
 
         contextLogInfo(

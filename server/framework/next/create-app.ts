@@ -6,6 +6,8 @@ import type { IncomingMessage, ServerResponse } from 'http'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
 import { sessionIdCookieMiddleware } from '@/server/framework/session'
 import cookieParser from 'cookie-parser'
+import { requestId } from '#framework/express/middlewares/request-id'
+import { setupRequestLogger } from '#framework/express/middlewares/request-logger'
 import { getCacheHeader } from './get-cache-header'
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -18,6 +20,9 @@ const createNextSSRRouteExpressWrapperHandler = (
   /*
     Cookie update logic in front of next app render handler
   */
+
+  nextSSRRouteExpressWrapperApp.use(requestId())
+  setupRequestLogger(nextSSRRouteExpressWrapperApp)
   nextSSRRouteExpressWrapperApp.use(cookieParser())
   nextSSRRouteExpressWrapperApp.use(sessionIdCookieMiddleware())
   nextSSRRouteExpressWrapperApp.use(

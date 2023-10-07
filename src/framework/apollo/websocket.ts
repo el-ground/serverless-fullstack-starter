@@ -46,18 +46,29 @@ export const getWebsocketGraphQLClient = () => {
         console.error(`Websocket errOrCloseEvent:`)
         console.error(errOrCloseEvent)
         console.error(`Retrying connection...`)
-        if (!connectionToastId) {
-          connectionToastId = toast.error(
-            `서버와의 연결을 재시도하고 있습니다.`,
-            {
+        if (!retrying) {
+          if (!connectionToastId) {
+            connectionToastId = toast.error(
+              `서버와의 연결을 재시도하고 있습니다.`,
+              {
+                position: toast.POSITION.BOTTOM_CENTER,
+                closeButton: true,
+                autoClose: false,
+                isLoading: true,
+              },
+            )
+          } else if (toast.isActive(connectionToastId)) {
+            toast.update(connectionToastId, {
+              render: `서버와의 연결을 재시도하고 있습니다.`,
+              type: toast.TYPE.ERROR,
               position: toast.POSITION.BOTTOM_CENTER,
               closeButton: true,
               autoClose: false,
               isLoading: true,
-            },
-          )
+            })
+          }
+          retrying = true
         }
-        retrying = true
         return true
       },
       retryAttempts: Infinity, // retryyyyyy

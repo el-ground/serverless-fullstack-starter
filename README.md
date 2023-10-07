@@ -31,9 +31,8 @@
 
 ### Additional features TODO
 
-- Error Boundary, onPopState (back button)
-- Capacitor setup for hybrid app deployment
-- Safe area
+- Error Boundary (use next's implementation)
+- onPopState (back button)
 
 ### Recommended setup
 
@@ -46,6 +45,29 @@
 - AUTH_KEY_SYMMETRIC_256
 - VAPID_KEY_PUBLIC, VAPID_KEY_PRIVATE
 - FILE_KEY_SYMMETRIC_256
+
+### Setting up a new project
+
+- copy contents & remove .git, replace .git of the target repo.
+- setup deployment & create yarn deploy commands : deploy:staging & deploy:prod
+- create backend configuration for dev & prod, add yarn command for switching environment, switch environment before deploy scripts
+- find MUST_IMPLEMENT comments, setup services and replace!
+  - database
+  - storage
+  - pubsub
+  - push
+  - message-sender (verification-code, sms)
+  - rate limiter
+  - 3rd party auth (upgrade)
+
+### Setting up service (using GCP cloud run)
+
+- create gcp project
+- follow deployment/gcp-cloud-run/README.md
+- setup load balancer
+- connect domain
+- setup firestore, storage
+- setup firebase (messaging)
 
 ### Setting up app (Checklist)
 

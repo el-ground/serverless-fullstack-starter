@@ -1,5 +1,9 @@
 import type { Request, Router } from 'express'
+import { getRequestIpAddress } from '#util/ip'
 
+/*
+  TODO : get rid of morgan. we don't need it;
+*/
 import { logInfo } from '../logger'
 import morgan from 'morgan'
 import { asyncHandler } from '#framework/express'
@@ -11,6 +15,10 @@ export const setupRequestLogger = (app: Router) => {
 
   morgan.token('sid', function (req: Request) {
     return req.sessionId || ``
+  })
+
+  morgan.token(`ip`, function (req: Request) {
+    return getRequestIpAddress(req)
   })
 
   // just to escape colon :)

@@ -1,4 +1,3 @@
-// MUST_IMPLEMENT
 import { Capacitor } from '@capacitor/core'
 
 export const isApp = () => {
