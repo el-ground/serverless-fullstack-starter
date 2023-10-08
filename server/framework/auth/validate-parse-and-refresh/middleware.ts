@@ -42,6 +42,13 @@ export const validateParseAndRefreshAuthCookiesMiddleware = () =>
       // if used cookie, update using cookie!
       setAuthToken(refreshedToken)
     } else if (authToken && !authPayload.isAuthenticated) {
+      /*
+        If token exists, it must be authenticated.
+        Being not authenticated means the token is malformed or cannot validate or etc.
+      */
+      replaceCookiesInRequest(req, `authorization-payload`, null)
+      replaceCookiesInRequest(req, `authorization-rest`, null)
+
       setAuthToken(null)
     }
 

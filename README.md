@@ -72,18 +72,23 @@
 
 - create gcp project
 - follow deployment/gcp-cloud-run/README.md
-- add `gcloud config set project <YOUR_DEV_PROJECT_NAME>` in front of `yarn dev`
 - setup load balancer
 - connect domain
 - setup storage
 - setup firestore, firebase messaging
 
-### Setting up firebase
+### Setting up @google-cloud/storage
+
+- Enable cloud storage, create bucket non-public (since we'll stream)
+- make sure you set GOOGLE_APPLICATION_CREDENTIAL before running any environment; see Setting up firebase below;
+
+### Setting up firebase (firestore, firebase messaging)
 
 - Create firebase project
 - download service acount key json from firebase console OR IAM -> application's service account (minimal permission) -> save to dev instance `~/<safe-place>/<service-account-key>.json`
 - store the service account key file path as shell environment variable `<MY_GOOGLE_APPLICATION_CREDENTIAL_ENV_VAR_NAME>`
 - add `GOOGLE_APPLICATON_CREDENTIAL=$<MY_GOOGLE_APPLICATION_CREDENTIAL_ENV_VAR_NAME>` in `yarn _dev:start` before `node dist/...`
+- **IMPORTANT** DONT use @google-cloud/firestore! it infers database from GOOGLE_APPLICATION_CREDENTIAL and no safety, which might use a totally different project that was used in your dev machine.
 
 ### Setting up app (Checklist)
 

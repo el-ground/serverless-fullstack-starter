@@ -12,8 +12,7 @@ import {
 } from '@apollo/experimental-nextjs-app-support/ssr'
 import { createContext } from '#framework/apollo/context'
 import { setContext } from '@apollo/client/link/context'
-import { validateParseAndRefresh } from '@/server/framework/auth/validate-parse-and-refresh'
-import { getSetAuthToken } from '#framework/auth/validate-parse-and-refresh/util'
+import { validateAndParse } from '@/server/framework/auth/validate-parse-and-refresh'
 import { cookies } from 'next/headers'
 
 import { SchemaLink } from '@apollo/client/link/schema'
@@ -37,25 +36,15 @@ const { getClient: getSSRClient } = registerApolloClient(() => {
         const authorizationRestCookie =
           cookieStore.get(`authorization-rest`)?.value || ``
         const authToken = authorizationPayloadCookie + authorizationRestCookie
+        // getAuthPayload from authToken
 
-        const { authPayload, refreshedToken } =
-          await validateParseAndRefresh(authToken)
-
-        const setAuthToken = getSetAuthToken(
-          cookieStore.set.bind(cookieStore),
-          cookieStore.delete.bind(cookieStore),
-        )
-
-        if (refreshedToken) {
-          // if used cookie, update using cookie!
-          setAuthToken(refreshedToken)
-        } else if (authToken && !authPayload.isAuthenticated) {
-          setAuthToken(null)
-        }
+        const authPayload = validateAndParse(authToken)
 
         return createContext({
           auth: authPayload,
-          setAuthToken,
+          setAuthToken: () => {
+            throw new Error(`cannot set auth token in rsc`)
+          },
         })
       }),
       new SchemaLink({

@@ -63,7 +63,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       4. payload change : just update payload
     */
 
-      if (hasLoggedOut || hasUserChanged) {
+      if (
+        hasLoggedOut ||
+        hasUserChanged ||
+        (!hasLoggedIn && hasAuthPayloadChanged)
+      ) {
         setAuthDependencies(newAuthDependencies)
         console.log(`auth payload changed. reloading page `)
         window.localStorage.clear()
@@ -72,7 +76,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           window.location.reload()
         }
-      } else if (hasLoggedIn || hasAuthPayloadChanged) {
+      } else if (hasLoggedIn) {
         setAuthDependencies(newAuthDependencies)
         if (to) {
           if (replace) {

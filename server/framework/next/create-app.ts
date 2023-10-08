@@ -4,10 +4,13 @@ import type { RequestHandler } from 'next/dist/server/next'
 import type { IncomingMessage, ServerResponse } from 'http'
 // import { asyncHandler } from '#framework/express'
 import { validateParseAndRefreshAuthCookiesMiddleware } from '@/server/framework/auth/validate-parse-and-refresh/middleware'
+import {
+  logIdentifiers,
+  setupRequestLogger,
+} from '#framework/express/middlewares/request-logger'
 import { sessionIdCookieMiddleware } from '@/server/framework/session'
 import cookieParser from 'cookie-parser'
 import { requestId } from '#framework/express/middlewares/request-id'
-import { setupRequestLogger } from '#framework/express/middlewares/request-logger'
 import { getCacheHeader } from './get-cache-header'
 
 const dev = process.env.NODE_ENV !== 'production'
@@ -28,6 +31,7 @@ const createNextSSRRouteExpressWrapperHandler = (
   nextSSRRouteExpressWrapperApp.use(
     validateParseAndRefreshAuthCookiesMiddleware(),
   )
+  nextSSRRouteExpressWrapperApp.use(logIdentifiers())
 
   nextSSRRouteExpressWrapperApp.use((req, res) =>
     nextServerRequestHandler(req, res),
@@ -68,10 +72,14 @@ export const createApp = async (port: number) => {
           res.setHeader(`Cache-Control`, cacheHeader)
         }
       }
+
+      res.setHeader(`X-next-handler-type`, `default`)
       return requestHandler(req, res)
     } else {
       // if no extension, this might be the ssr request.
       // check cookies for ssr request in order to use authentication
+
+      res.setHeader(`X-next-handler-type`, `wrapped`)
       return nextExpressWrapperHandler(req, res)
     }
   }
