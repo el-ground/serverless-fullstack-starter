@@ -34,12 +34,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         authPayload: prevAuthPayload,
       } = authDependencies
 
-      const { userId: prevUserId } = prevAuthPayload
-
       const { sidCookie, authorizationPayloadCookie, authPayload } =
         newAuthDependencies
-
-      const { userId } = authPayload
 
       const hasAuthPayloadChanged = !equal(authPayload, prevAuthPayload)
       const hasSessionChanged =
@@ -52,22 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         getWebsocketGraphQLClient().terminate()
       }
 
-      const hasLoggedIn = !prevUserId && userId
-      const hasUserChanged = prevUserId && userId && userId !== prevUserId
-      const hasLoggedOut = prevUserId && !userId
-
-      /*
-      1. logout : reload with clear localStorage
-      2. user change : reload with clear localStorage
-      3. login : just update payload
-      4. payload change : just update payload
-    */
-
-      if (
-        hasLoggedOut ||
-        hasUserChanged ||
-        (!hasLoggedIn && hasAuthPayloadChanged)
-      ) {
+      if (hasAuthPayloadChanged) {
         setAuthDependencies(newAuthDependencies)
         console.log(`auth payload changed. reloading page `)
         window.localStorage.clear()
@@ -76,16 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         } else {
           window.location.reload()
         }
-      } else if (hasLoggedIn) {
-        setAuthDependencies(newAuthDependencies)
-        if (to) {
-          if (replace) {
-            router.replace(to)
-          } else {
-            router.push(to)
-          }
-        }
-      } else if (prevUserId === userId && to) {
+      } else if (to) {
         // userId stays the same;
         // if manually called, just navigate!
         if (replace) {

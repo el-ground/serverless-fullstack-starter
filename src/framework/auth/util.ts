@@ -4,7 +4,11 @@
 
     not on log in
 */
-export const clearAuthSession = () => {
+export const clearAuthSession = (to?: string) => {
   window.localStorage.clear()
-  window.location.reload()
+  if (to) {
+    window.location.href = to
+  } else {
+    window.location.reload()
+  }
 }

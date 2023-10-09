@@ -8,7 +8,7 @@ const SUBMIT_LOGOUT = gql(`
     }
 `)
 
-export const logOut = async () => {
+export const logOut = async (to?: string) => {
   // try server request first
   // then, remove cookie locally.
 
@@ -23,5 +23,5 @@ export const logOut = async () => {
   }
 
   Cookies.remove(`authorization-payload`)
-  clearAuthSession()
+  clearAuthSession(to)
 }
