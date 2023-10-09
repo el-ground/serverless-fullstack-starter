@@ -55,7 +55,7 @@
 ### Setting up a new project
 
 - copy contents & remove .git, replace .git of the target repo.
-- Create secrets for the new project and put to .env & save it somewhere;
+- Create secrets for the new project and put to secrets/.env & save it somewhere;
 - Setup service (below)
 - setup deployment & create yarn deploy commands : deploy:staging & deploy:prod
 - create backend configuration for dev & prod, add yarn command for switching environment, switch environment before deploy scripts

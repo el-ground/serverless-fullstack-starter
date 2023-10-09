@@ -13,4 +13,4 @@
       2. storage object user
       3. cloud datastore user (firestore)
       4. firebase cloudmessaging api admin
-   5. Container:Secret mount (grant permission); mount as volume at /users/handsomejang/app/.env (application path in docker)
+   5. Container:Secret mount (grant permission); mount as volume at mount path /user/handsomejang/app/secrets and specified path for for secret versions : .env  so that the file will get mounted in /user/handsomejang/app/secrets/.env (application path in docker)

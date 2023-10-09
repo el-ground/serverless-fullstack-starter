@@ -1,4 +1,4 @@
-import 'dotenv'
+import '#util/env'
 
 /*
     VAPID KEY!

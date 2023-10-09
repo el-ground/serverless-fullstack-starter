@@ -1,5 +1,5 @@
 import crypto from 'node:crypto'
-import 'dotenv'
+import '#util/env'
 
 /*
   generating RSA key :
