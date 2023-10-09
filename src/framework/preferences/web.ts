@@ -40,7 +40,7 @@ export const get = (key: string): Promise<string | null> =>
     }
 
     const request = db
-      .transaction(`preferences`)
+      .transaction(`preferences`, `readonly`)
       .objectStore(`preferences`)
       .get(key)
 
@@ -69,7 +69,7 @@ export const set = (key: string, value: string): Promise<void> =>
     }
 
     const request = db
-      .transaction(`preferences`)
+      .transaction(`preferences`, `readwrite`)
       .objectStore(`preferences`)
       .add(value, key)
 
@@ -95,7 +95,7 @@ export const del = (key: string): Promise<void> =>
     }
 
     const request = db
-      .transaction(`preferences`)
+      .transaction(`preferences`, `readwrite`)
       .objectStore(`preferences`)
       .delete(key)
 
