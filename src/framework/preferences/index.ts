@@ -1,4 +1,5 @@
 import { isApp } from '@framework/app'
+import { CombinedTaskRunner } from '@util/combined-task-runner'
 import {
   initialize as initializeWeb,
   get as getWeb,
@@ -11,7 +12,7 @@ let initialized = false
 /*
     TODO : check for initialize race conditiions 
 */
-export const initialize = async () => {
+export const initialize = new CombinedTaskRunner(async () => {
   console.log(`@preferences:initialize`)
 
   if (isApp()) {
@@ -21,11 +22,11 @@ export const initialize = async () => {
   await initializeWeb()
 
   initialized = true
-}
+})
 
 export const get = async (key: string): Promise<string | null> => {
   if (!initialized) {
-    await initialize()
+    await initialize.run()
   }
 
   if (isApp()) {
@@ -37,7 +38,7 @@ export const get = async (key: string): Promise<string | null> => {
 
 export const set = async (key: string, value: string) => {
   if (!initialized) {
-    await initialize()
+    await initialize.run()
   }
 
   if (isApp()) {
@@ -49,7 +50,7 @@ export const set = async (key: string, value: string) => {
 
 export const del = async (key: string) => {
   if (!initialized) {
-    await initialize()
+    await initialize.run()
   }
 
   if (isApp()) {
