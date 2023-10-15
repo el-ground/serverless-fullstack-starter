@@ -5,9 +5,15 @@ export interface FileUploadParameter {
   mimetype: string // mimetype : image/jpeg or so.
 }
 
-export const uploadFiles = async (
-  fileUploadParameters: FileUploadParameter[],
-) => {
+export const uploadFiles = async ({
+  fileUploadParameters,
+  accessLevel,
+  privateAccessLabels = [],
+}: {
+  fileUploadParameters: FileUploadParameter[]
+  accessLevel: `private` | `public`
+  privateAccessLabels?: string[]
+}) => {
   const uploadingFilesToastId = toast.info(
     `${fileUploadParameters.length}개 파일을 업로드하고 있습니다.`,
     {
@@ -25,11 +31,16 @@ export const uploadFiles = async (
 
   let resultPaths: string[]
   try {
-    const fetchResult = await fetch(`/api/rest/files`, {
-      method: `POST`,
-      credentials: `include`, // send cookies
-      body: formData,
-    })
+    const fetchResult = await fetch(
+      `/api/rest/files?accessLevel=${accessLevel}&privateAccessLabels=${privateAccessLabels.join(
+        `,`,
+      )}`,
+      {
+        method: `POST`,
+        credentials: `include`, // send cookies
+        body: formData,
+      },
+    )
 
     resultPaths = (await fetchResult.json()) as string[]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

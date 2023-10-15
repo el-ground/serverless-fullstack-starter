@@ -52,6 +52,22 @@
 - VAPID_KEY_PUBLIC, VAPID_KEY_PRIVATE
 - FILE_KEY_SYMMETRIC_256
 
+### Implement process
+
+- Design pages / ux
+- setup blueprints
+
+  1. app/`<page>/page.tsx`
+  2. containers/`<container>/index.tsx`
+  3. schema/`<object>.gql`
+  4. resolvers/`<resolver>.gql`
+  5. connect resolvers to containers (query, mutation)
+
+* implement blueprints
+  1. resolvers
+  2. container elements
+  3. styles
+
 ### Setting up a new project
 
 - copy contents & remove .git, replace .git of the target repo.

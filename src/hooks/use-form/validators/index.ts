@@ -3,12 +3,11 @@ import {
   FormErrors,
   PartialEntries,
   FormFieldKey,
-  FormFieldInput,
 } from '../types'
 
 type FormFieldValidatorDict<T, ValidationErrorCode> = {
   [fieldKey in FormFieldKey<T>]?: FormFieldValidator<
-    FormFieldInput<T>,
+    T[fieldKey],
     ValidationErrorCode
   >
 }

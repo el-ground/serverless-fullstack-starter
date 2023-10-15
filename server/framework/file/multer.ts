@@ -63,14 +63,20 @@ export class MulterStorageEngine implements multer.StorageEngine {
 
     const writeStream = createWriteStream(filePath, metadata)
 
-    file.stream.pipe(writeStream)
-
+    let bytesWritten = 0
+    file.stream.on('data', (chunk) => {
+      bytesWritten += chunk.length
+    })
     writeStream.on('error', cb)
     writeStream.on('finish', function () {
       cb(null, {
         path: filePath,
+        size: bytesWritten,
+        mimetype: contentType,
       })
     })
+
+    file.stream.pipe(writeStream)
   }
 
   _removeFile(

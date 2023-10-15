@@ -12,7 +12,7 @@ export type FormFieldValidator<FormFieldInput, ValidationErrorCode> = (
   value: FormFieldInput,
 ) => ValidationErrorCode | null | void
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-export type FormFieldSanitizer = <FormFieldInput, SubmitFieldInput>(
+export type FormFieldSanitizer<FormFieldInput, SubmitFieldInput> = (
   value: FormFieldInput,
 ) => SubmitFieldInput
 

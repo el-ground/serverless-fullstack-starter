@@ -84,7 +84,10 @@ const ExampleUploadFilePage = () => {
       imageEditPipelineList.map((pipeline) => pipeline.exportImage(1440)),
     )
 
-    const res = await uploadFiles(uploadParameters)
+    const res = await uploadFiles({
+      fileUploadParameters: uploadParameters,
+      accessLevel: `public`,
+    })
 
     console.log(res)
   }, [imageEditPipelineList])

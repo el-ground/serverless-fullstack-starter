@@ -19,7 +19,7 @@ const hashOnlyIdent = (context, _, exportName) =>
     .replace(/^(-?\d|--)/, '_$1')
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   experimental: {
     serverActions: true,
   },
