@@ -1,10 +1,9 @@
 import type { SubscriptionSubscribeFn, SubscriptionResolveFn } from '#types'
 import { runWithRequestId } from '../express/middlewares/request-id'
 import type { Context } from './context'
-import { logInfo } from '#util/log'
+import { logInfo, logDebug } from '#util/log'
 import { GraphQLResolveInfo } from 'graphql'
 import { createNamespace } from 'cls-hooked'
-import { createLoader, Loader } from '@/server/framework/database/loader'
 
 const subscriptionContextNamespace = createNamespace(`subscription-context`)
 
@@ -57,25 +56,15 @@ export const wrapResolve =
   ) => {
     // TODO : why do we get this root === undefined call?
     if (typeof parent === `undefined`) {
-      // logDebug(`why do we get this root === undefined call in @wrapResolve?`)
+      logDebug(`why do we get this root === undefined call in @wrapResolve?`)
       // skip root undefined
       return undefined as unknown as TResult
     }
 
     // pass in replaced dataloder!
     // since subscription resolve context is created on subscription, not each resolve.
-    let loader: null | Loader = null
-    const getLoader = () => {
-      if (loader === null) {
-        loader = createLoader()
-      }
-      return loader
-    }
 
-    const loaderReplacedContext = {
-      ...context,
-      getLoader,
-    }
+    context.resetLoader()
 
     const { id, value } = parent
 
@@ -85,7 +74,7 @@ export const wrapResolve =
       }] psregid:[${id || ``}]`,
       () => {
         logInfo(`step:[WS:RESOLVE]`)
-        return resolve(value, args, loaderReplacedContext, info)
+        return resolve(value, args, context, info)
       },
     )
   }

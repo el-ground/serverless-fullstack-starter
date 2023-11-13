@@ -146,6 +146,7 @@ input VerificationCodeRequestInput {
 }
 
 type VerificationCodeRequestOutput {
+  authId: String!
   verificationCodeRequestToken: String!
 }
 

@@ -263,6 +263,7 @@ export type VerificationCodeRequestInput = {
 
 export type VerificationCodeRequestOutput = {
   __typename?: 'VerificationCodeRequestOutput';
+  authId: Scalars['String']['output'];
   verificationCodeRequestToken: Scalars['String']['output'];
 };
 
@@ -550,6 +551,7 @@ export type VapidKeyOutputResolvers<ContextType = Context, ParentType extends Re
 }>;
 
 export type VerificationCodeRequestOutputResolvers<ContextType = Context, ParentType extends ResolversParentTypes['VerificationCodeRequestOutput'] = ResolversParentTypes['VerificationCodeRequestOutput']> = ResolversObject<{
+  authId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   verificationCodeRequestToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

@@ -4,9 +4,25 @@ textarea,
 .content-editable,
 input,
 .button-style,
+.ProseMirror,
 .input-style {
   line-height: 1.5em;
   letter-spacing: -0.3px;
   font-size: max(16px, 1.6em); /* disable zoom */
   font-family: font.$font-family;
+
+  &:focus-visible {
+    outline: #8dab90 auto 1px;
+  }
+}
+
+/* https://stackoverflow.com/a/51076231 */
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  appearance: textfield;
 }

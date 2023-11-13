@@ -49,7 +49,12 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
   private context: Context
   private doneResult: IteratorResult<T>
 
-  constructor(pubsub: PubSub, eventNames: string | string[], context: Context) {
+  constructor(
+    pubsub: PubSub,
+    eventNames: string | string[],
+    context: Context,
+    initialValue?: T,
+  ) {
     this.pubsub = pubsub
     this.pullQueue = []
     this.pushQueue = []
@@ -64,6 +69,10 @@ export class PubSubAsyncIterator<T> implements AsyncIterator<T> {
       done: true,
     }
     this.context = context
+
+    if (initialValue) {
+      this.pushQueue.push(initialValue)
+    }
   }
 
   public async next(): Promise<IteratorResult<T>> {

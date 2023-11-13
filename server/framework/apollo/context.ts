@@ -15,6 +15,7 @@ import { create as createUUID } from '#util/uuid'
 */
 export interface Context extends AuthPayload {
   getLoader: () => Loader
+  resetLoader: () => void // used for websocket resolvers
   setAuthToken: (token: string | null) => void
   contextId: string
   connectionId?: string
@@ -46,8 +47,15 @@ export const createContext = ({
     return loader
   }
 
+  const resetLoader = () => {
+    if (loader) {
+      loader = createLoader()
+    }
+  }
+
   return {
     getLoader,
+    resetLoader,
     setAuthToken,
     ...auth,
     contextId,

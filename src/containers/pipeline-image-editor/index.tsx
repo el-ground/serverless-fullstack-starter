@@ -7,6 +7,9 @@ import { ImageEditSourceCanvas } from '@framework/image/image-edit-pipeline/imag
 import { useRenderElementAsChild } from '@hooks/use-render-element-as-child'
 import { useGesture } from '@use-gesture/react'
 import { useStateRef } from '@hooks/use-state-ref'
+import { useDisableCallout } from '@/src/hooks/use-disable-callout'
+import { useDisableZoom } from '@/src/hooks/use-disable-zoom'
+import { useDisableOverscrollRefresh } from '@/src/hooks/use-disable-overscroll-refresh'
 
 import styles from './style.module.scss'
 
@@ -31,6 +34,15 @@ export const PipelineImageEditor = ({
   const rootRef = useStateRef<HTMLDivElement>()
   const [imageEditSourceCanvas, setImageEditSourceCanvas] =
     React.useState<ImageEditSourceCanvas | null>(null)
+
+  const [disableZoom, enableZoom] = useDisableZoom(rootRef.current)
+  useDisableCallout()
+  useDisableOverscrollRefresh()
+
+  React.useEffect(() => {
+    disableZoom()
+    return enableZoom
+  }, [disableZoom, enableZoom])
 
   // eslint-disable-next-line
   useAsyncEffect(async () => {
@@ -121,8 +133,15 @@ export const PipelineImageEditor = ({
 
   return (
     <div
-      className={`${styles.rootContainer} ${className || ``}`}
-      ref={rootRef}
-    />
+      className={styles.aspectRatioWrapper}
+      style={{ paddingBottom: `${100 * pipeline.aspectRatio}%` }}
+    >
+      <div className={styles.aspectRatioInnerWrapper}>
+        <div
+          className={`${styles.rootContainer} ${className || ``}`}
+          ref={rootRef}
+        />
+      </div>
+    </div>
   )
 }

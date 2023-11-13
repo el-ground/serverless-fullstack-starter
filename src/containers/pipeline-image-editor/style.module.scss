@@ -1,6 +1,17 @@
+.aspectRatioWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.aspectRatioInnerWrapper {
+  position: absolute;
+  inset: 0;
+}
+
 .rootContainer {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 
   canvas {
     width: calc(100% + 1px);

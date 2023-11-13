@@ -13,15 +13,17 @@ $hover-highlight-background-color: rgb(128 128 128 / 13%);
 */
 
 @media (hover: hover) and (pointer: fine) {
-  a:hover {
+  a:hover:not(.button),
+  .a:hover:not(.button) {
     text-decoration: underline;
   }
 
-  button:hover,
+  .button:hover:not(.a),
+  button:hover:not(.a),
   /* input[type='submit']:hover*/
-  [type='submit']:hover,
+  [type='submit']:hover:not(.a),
   /* input[type='reset']:hover*/
-  [type='reset']:hover {
+  [type='reset']:hover:not(.a) {
     background-color: $hover-highlight-background-color;
   }
 }

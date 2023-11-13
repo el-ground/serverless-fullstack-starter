@@ -109,6 +109,7 @@ export const Auth_verificationCodeRequest: MutationResolvers['Auth_verificationC
       .encrypt(getAuthKeyObjectSymmetric256())
 
     return {
+      authId,
       verificationCodeRequestToken: encryptedPhoneVerificationRequestToken,
     }
   }

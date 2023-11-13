@@ -8,6 +8,8 @@ import { ForceRSC } from '@/src/components/force-rsc'
 import { ToastProvider } from '@components/toast-provider'
 import { PushProvider } from '@hooks/use-push'
 import { AuthProvider } from '@hooks/use-auth/client'
+import { IsSSRProvider } from '@hooks/use-is-ssr'
+import { ProgressBar } from '@components/progress-bar'
 // initialize rsc client
 import '@framework/apollo/rsc'
 import '@util/cookie/rsc'
@@ -15,6 +17,7 @@ import '@hooks/use-auth/rsc'
 // initialize app methods
 import '@framework/app'
 import { InjectSafeAreaInset } from '@framework/app/inject-safe-area-inset'
+import { DisableOverscrollRefreshProvider } from '@hooks/use-disable-overscroll-refresh'
 
 console.log(`NODE_ENV : ${process.env.NODE_ENV}`)
 
@@ -55,12 +58,19 @@ export default function RootLayout({
       <html lang="kr">
         <body>
           <ErrorBoundary>
+            <ProgressBar />
             <ApolloProvider>
-              <AuthProvider>
-                <PushProvider>{children}</PushProvider>
-              </AuthProvider>
-              <ToastProvider />
-              <ForceRSC />
+              <IsSSRProvider>
+                <AuthProvider>
+                  <PushProvider>
+                    <DisableOverscrollRefreshProvider>
+                      {children}
+                    </DisableOverscrollRefreshProvider>
+                  </PushProvider>
+                </AuthProvider>
+                <ToastProvider />
+                <ForceRSC />
+              </IsSSRProvider>
             </ApolloProvider>
           </ErrorBoundary>
         </body>

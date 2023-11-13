@@ -18,6 +18,10 @@ body {
   font-family: $font-family;
 }
 
+.disable-scroll {
+  overflow: hidden;
+}
+
 .no-overscroll-refresh {
   overscroll-behavior-y: contain;
 }
@@ -25,6 +29,18 @@ body {
 .no-callout {
   user-select: none;
   -webkit-touch-callout: none;
+}
+
+.no-scroll-bar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+    width: 0; /* Remove scrollbar space */
+    height: 0;
+    background: transparent; /* Optional: just make scrollbar invisible */
+  }
 }
 
 /* apple font accessibility */

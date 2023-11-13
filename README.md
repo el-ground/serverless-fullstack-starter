@@ -30,6 +30,8 @@
 ### TODO
 
 - Prerender with bot
+- Graphql error handle  (display toast) for useQuery & subscriptions
+- Websocket resolver context should be updated when subscription trigger;
 
 ### Additional features TODO
 

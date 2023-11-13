@@ -27,7 +27,6 @@ export const sessionIdCookieMiddleware = () =>
 
       res.cookie(`sid`, sessionId, {
         secure,
-        httpOnly: true,
         // PRIVACY
         // track for sufficiently long time
         maxAge: 200 * 365 * 24 * 60 * 60,

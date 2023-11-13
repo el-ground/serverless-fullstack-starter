@@ -4,6 +4,7 @@ import {
   useSynchronousState,
   ObjectFieldEditor,
 } from '@hooks/use-synchronous-state'
+import { useGetIsMounted } from '../use-get-is-mounted'
 import type {
   FormValidator,
   FormSanitizer,
@@ -21,12 +22,16 @@ interface UseFormProps<
   ValidationErrorCode extends string,
   SubmitInput,
   SubmitResult,
+  SubmitInputExtraArgs,
 > {
   validator: FormValidator<FormInput, ValidationErrorCode>
   sanitizer: FormSanitizer<FormInput, SubmitInput>
   defaultContent: FormInput
   canSubmitDefault?: boolean
-  submit: (fieldsContent: SubmitInput) => PromiseLike<SubmitResult>
+  submit: (
+    fieldsContent: SubmitInput,
+    args: SubmitInputExtraArgs,
+  ) => PromiseLike<SubmitResult>
   computeChangeDiff?: (
     currentContent: FormInput,
     defaultContent: FormInput,
@@ -40,6 +45,7 @@ export const useForm = <
   SubmitInput = FormInput,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   SubmitResult = any,
+  SubmitInputExtraArgs = void,
 >({
   validator,
   sanitizer,
@@ -48,8 +54,15 @@ export const useForm = <
   submit,
   computeChangeDiff,
   errorMessages,
-}: UseFormProps<FormInput, ValidationErrorCode, SubmitInput, SubmitResult>): {
+}: UseFormProps<
+  FormInput,
+  ValidationErrorCode,
+  SubmitInput,
+  SubmitResult,
+  SubmitInputExtraArgs
+>): {
   // return type
+  isSubmitting: boolean
   hasSubmitted: boolean
   canSubmit: boolean
   validationPassed: boolean
@@ -59,12 +72,13 @@ export const useForm = <
   helperTexts: FormHelperTexts<FormInput>
   setContent: ObjectFieldEditor<FormInput>
   content: FormInput
-  submit: (e?: React.FormEvent<HTMLFormElement>) => void
+  submit: (args: SubmitInputExtraArgs) => void
   getOnFieldChange: (
     fieldName: FormFieldKey<FormInput>,
     defaultValue?: FormFieldInput<FormInput>,
   ) => (value?: FormFieldInput<FormInput>) => void // not necessarily needed
 } => {
+  const getIsMounted = useGetIsMounted()
   const [contentBox, , setContent] = useSynchronousState<FormInput>(
     defaultContent,
     true,
@@ -73,6 +87,7 @@ export const useForm = <
 
   const [hasSubmitted, setHasSubmitted] = React.useState(false)
   const isSubmittingBox = React.useRef(false)
+  const [isSubmittingState, setIsSubmittingState] = React.useState(false)
 
   const hasChanged = React.useMemo(() => {
     if (computeChangeDiff) {
@@ -169,11 +184,7 @@ export const useForm = <
   const getSanitizer = useGetter(sanitizer)
   const getSubmit = useGetter(submit)
   const onSubmit = useAsyncCallback(
-    async (e?: React.FormEvent<HTMLFormElement>) => {
-      if (e) {
-        e.preventDefault()
-      }
-
+    async (args: SubmitInputExtraArgs) => {
       setHasSubmitted(true)
 
       if (!canSubmit) {
@@ -185,16 +196,29 @@ export const useForm = <
         return
       }
       isSubmittingBox.current = true // lock
+      setIsSubmittingState(true)
 
       const sanitizedContent = getSanitizer()(content)
-      const result = await getSubmit()(sanitizedContent)
-      isSubmittingBox.current = false // unlock
-      return result
+      try {
+        const result = await getSubmit()(sanitizedContent, args)
+        if (getIsMounted()) {
+          setIsSubmittingState(false)
+        }
+        isSubmittingBox.current = false // unlock
+        return result
+      } catch (e) {
+        if (getIsMounted()) {
+          setIsSubmittingState(false)
+        }
+        isSubmittingBox.current = false // unlock
+        console.error(e)
+      }
     },
-    [getSanitizer, content, canSubmit, getSubmit],
+    [getSanitizer, content, canSubmit, getSubmit, getIsMounted],
   )
 
   return {
+    isSubmitting: isSubmittingState,
     hasSubmitted,
     hasChanged,
     canSubmit,

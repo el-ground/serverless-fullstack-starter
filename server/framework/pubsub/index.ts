@@ -183,11 +183,15 @@ export const instance = new PubSub()
 
     read from cls, store to asyncIterator;
 */
-export const subscribe = (topic: string | string[]) => {
+export const subscribe = <T>(topic: string | string[], initialValue?: T) => {
   const context = getSubscriptionContext()
   return {
     [Symbol.asyncIterator]: () => {
-      return new PubSubAsyncIterator(instance, topic, context)
+      return new PubSubAsyncIterator(instance, topic, context, {
+        // no registration id before initial register;
+        id: null,
+        value: initialValue,
+      })
     },
   }
 }

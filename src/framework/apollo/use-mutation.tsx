@@ -19,6 +19,7 @@ import { useAsyncCallback } from '@/src/hooks/use-async-callback'
 import { Id, toast } from 'react-toastify'
 import type { ErrorMessages } from './types'
 import { useGetter } from '@hooks/use-getter'
+import { tryThrowError } from './util'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -158,6 +159,9 @@ export const useMutation = <
       }
       const fetchResult = await fetch(...params)
       singleRequestLockBox.current = false
+
+      tryThrowError(fetchResult.errors, getOptions().knownErrorMessages)
+
       return fetchResult
     },
     [fetch, getOptions],

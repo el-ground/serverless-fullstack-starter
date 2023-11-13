@@ -28,12 +28,12 @@ export const getWebsocketGraphQLClient = () => {
               toast.update(connectionToastId, {
                 render: `서버와 재연결되었습니다.`,
                 type: toast.TYPE.SUCCESS,
-                autoClose: 2000,
+                autoClose: 500,
                 isLoading: false,
               })
             } else {
               connectionToastId = toast.success(`서버와 재연결되었습니다.`, {
-                autoClose: 2000,
+                autoClose: 500,
                 position: toast.POSITION.BOTTOM_CENTER,
               })
             }

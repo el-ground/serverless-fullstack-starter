@@ -262,6 +262,7 @@ export type VerificationCodeRequestInput = {
 
 export type VerificationCodeRequestOutput = {
   __typename?: 'VerificationCodeRequestOutput';
+  authId: Scalars['String']['output'];
   verificationCodeRequestToken: Scalars['String']['output'];
 };
 

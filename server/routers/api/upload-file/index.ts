@@ -29,20 +29,25 @@ fileUploadRouter.post(
     const {
       auth: { userId, isAuthenticated },
       files,
-      query: { accessLevel, privateAccessLabels: _privateAccessLabels },
+      query: {
+        accessLevel: _accessLevel,
+        privateAccessLabels: _privateAccessLabels,
+      },
     } = req
 
     if (!isAuthenticated || !userId) {
       throw new ResError(403, `Permission denied`)
     }
 
-    if (typeof accessLevel !== `string` || !accessLevel) {
+    if (typeof _accessLevel !== `string` || !_accessLevel) {
       throw new ResError(400, `Must provide accessLevel`)
     }
 
-    if (![`private`, `public`].includes(accessLevel)) {
-      throw new ResError(400, `Invalid accessLevel ${accessLevel}`)
+    if (![`private`, `public`].includes(_accessLevel)) {
+      throw new ResError(400, `Invalid accessLevel ${_accessLevel}`)
     }
+
+    const accessLevel = _accessLevel as `public` | `private`
 
     let privateAccessLabels: string[] = []
     if (_privateAccessLabels) {
@@ -127,7 +132,7 @@ fileUploadRouter.post(
             id,
             userId,
             createdAtSeconds: currentTimeSeconds,
-            accessLevel: `private`,
+            accessLevel,
             privateAccessLabels, // owners can always access the file.
             path,
             size,

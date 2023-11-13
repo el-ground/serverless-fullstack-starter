@@ -4,7 +4,7 @@ import { getWebsocketGraphQLClient } from '@framework/apollo/websocket'
 import equal from 'deep-equal'
 import { getAuthDependencies } from './util'
 import { useBoxedCallback } from '../use-boxed-callback'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@hooks/use-router'
 import type { AuthPayload } from '@/server/framework/auth'
 
 const UpdateAuthHandleContext = React.createContext<

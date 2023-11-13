@@ -1,8 +1,6 @@
 import React from 'react'
 import { useForceUpdate } from '@hooks/use-force-update'
 import { useBoxedCallback } from '@hooks/use-boxed-callback'
-import { fieldSet } from '@util/field-set'
-import deepcopy from 'deepcopy'
 
 export type ObjectFieldEditor<T> = (
   k: keyof T | T,
@@ -22,7 +20,10 @@ const useSetObjectHelper = <T>(
       if (typeof k === `string`) {
         const v = vOrSkipUpdate as T[keyof T]
         skipUpdate = skipUpdateOrUndefined
-        newData = fieldSet(deepcopy<T>(valueBox.current), k, v)
+        newData = {
+          ...valueBox.current,
+          [k]: v,
+        }
         /*
         newData = {
           ...valueBox.current,
@@ -31,7 +32,9 @@ const useSetObjectHelper = <T>(
         */
       } else if (typeof k === `object`) {
         skipUpdate = vOrSkipUpdate as boolean | undefined
-        newData = deepcopy<T>(k)
+        newData = {
+          ...k,
+        }
       } else {
         throw new Error(`useSetObjectHelper parameter not supported : ${k}`)
       }
