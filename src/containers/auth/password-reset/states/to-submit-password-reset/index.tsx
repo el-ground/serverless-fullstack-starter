@@ -64,7 +64,7 @@ export const ToSubmitPasswordReset = ({
   })
 
   return (
-    <form id="to-submit-password-reset" onSubmit={onSubmit}>
+    <form id="to-submit-password-reset" onSubmit={() => onSubmit()}>
       <input
         id="password-reset-new-password"
         type="password"

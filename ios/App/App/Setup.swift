@@ -8,7 +8,7 @@
 
 import Foundation
 import Capacitor
-import FBSDKCoreKit
+// import FBSDKCoreKit
 
 
 @objc(SetupPlugin)
@@ -18,7 +18,7 @@ public class SetupPlugin: CAPPlugin {
         bridge?.webView?.allowsBackForwardNavigationGestures = true;
         bridge?.statusBarStyle = .darkContent;
         
-        AppEvents.shared.augmentHybridWebView(bridge!.webView!);
+        // AppEvents.shared.augmentHybridWebView(bridge!.webView!);
     }
     
 }

@@ -72,7 +72,7 @@ export const ToRequestVerificationCode = ({
 
   // MUST_IMPLEMENT current id format is phone number, national
   return (
-    <form id="to-request-verification-code" onSubmit={onSubmit}>
+    <form id="to-request-verification-code" onSubmit={() => onSubmit()}>
       <input
         id="to-request-verification-code-auth-id"
         type="tel"

@@ -70,7 +70,7 @@ export const ToSubmitVerificationCode = ({
   })
 
   return (
-    <form id="to-submit-verification-code" onSubmit={onSubmit}>
+    <form id="to-submit-verification-code" onSubmit={() => onSubmit()}>
       <input
         id="to-submit-verification-code-verification-code"
         type="text"

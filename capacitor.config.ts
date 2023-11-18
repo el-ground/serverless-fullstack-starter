@@ -4,7 +4,15 @@ const config: CapacitorConfig = {
   appId: 'com.serverless_fullstack_starter.app',
   appName: 'serverless-fullstack-starter',
   webDir: 'capacitor-web-dir',
-  appendUserAgent: `serverless-fullstack-starter-app-webview`,
+  loggingBehavior: `debug`,
+  ios: {
+    appendUserAgent: `capacitor-ios`,
+    webContentsDebuggingEnabled: true,
+  },
+  android: {
+    appendUserAgent: `capacitor-android`,
+    webContentsDebuggingEnabled: true,
+  },
   server: {
     /*
       replace hostname & url for dev / staging / prod

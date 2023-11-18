@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { ErrorInfo } from 'react'
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
 import styles from './style.module.scss'
 
@@ -13,8 +13,11 @@ let errorMessages: string[] = []
   3. JSON.stringify(error, null, 2)
 */
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const errorHandler = (error: any, info: { componentStack: string }) => {
+const errorHandler = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any,
+  info: ErrorInfo,
+) => {
   let errorMessage = ``
   try {
     const code = error?.code

@@ -20,9 +20,6 @@ const hashOnlyIdent = (context, _, exportName) =>
 
 const nextConfig = {
   reactStrictMode: false,
-  experimental: {
-    serverActions: true,
-  },
   webpack: (config) => {
     // 1. svgr
     config.module.rules.push({

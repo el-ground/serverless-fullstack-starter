@@ -69,7 +69,7 @@ export const ToSubmitSignUp = ({
   })
 
   return (
-    <form id="to-submit-sign-up" onSubmit={onSubmit}>
+    <form id="to-submit-sign-up" onSubmit={() => onSubmit()}>
       <input
         id="sign-up-nickname"
         type="text"

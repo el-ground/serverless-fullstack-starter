@@ -1,8 +1,8 @@
-@use '@/src/styles/_palette' as palette;
-@use '@/src/styles/_safe-area' as safe-area;
+@use '../../styles/palette' as palette;
+@use '../../styles/safe-area' as safeArea;
 
 .rootContainer {
-  padding: safe-area.$top 12px safe-area.$bottom;
+  padding: safeArea.$top 12px safeArea.$bottom;
 
   h1 {
     margin: 1em 0;

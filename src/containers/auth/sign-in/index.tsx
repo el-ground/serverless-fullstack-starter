@@ -64,7 +64,7 @@ export const SignIn = () => {
 
   // MUST_IMPLEMENT current id format is phone number, national
   return (
-    <form id="sign-in" onSubmit={onSubmit}>
+    <form id="sign-in" onSubmit={() => onSubmit()}>
       <input
         id="sign-in-auth-id"
         type="tel"

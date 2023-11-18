@@ -1,9 +1,10 @@
 import React from 'react'
-import { useForceUpdate } from 'hooks/use-force-update'
+import { useForceUpdate } from '@hooks/use-force-update'
 
 /*
     setters and array different.
 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const emptyList: any[] = []
 export const useRefList = <T,>(
   length: number,

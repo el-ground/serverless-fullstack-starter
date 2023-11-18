@@ -26,7 +26,7 @@ export const SSRHydrationClientComponentExample = () => {
     <>
       {isAuthenticated ? (
         <>
-          <button type="button" className="link" onClick={logOut}>
+          <button type="button" className="link" onClick={() => logOut()}>
             로그아웃
           </button>
           <button type="button" className="link" onClick={deleteAccount}>
