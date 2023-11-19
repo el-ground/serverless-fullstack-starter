@@ -4,8 +4,17 @@ const resizeOptions: PicaResizeOptions = {
   filter: `lanczos3`,
 }
 
-const pica = Pica({
-  features: [`js`, `wasm`, `cib`, `ww`],
-})
+let pica: Pica.Pica | null
 
-export { resizeOptions, pica }
+const getPica = (): Pica.Pica => {
+  if (!pica) {
+    pica = Pica({
+      features: [`js`, `wasm`, `cib`, `ww`],
+    })
+
+    return pica
+  }
+  return pica
+}
+
+export { resizeOptions, getPica }

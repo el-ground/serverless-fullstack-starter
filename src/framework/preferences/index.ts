@@ -1,61 +1,61 @@
 import { isApp } from '@framework/app'
-import { CombinedTaskRunner } from '@util/combined-task-runner'
 import {
   initialize as initializeWeb,
   get as getWeb,
   set as setWeb,
   del as delWeb,
 } from './web'
+import { get as getApp, set as setApp, del as delApp } from './app'
 
 let initialized = false
 
 /*
     TODO : check for initialize race conditiions 
 */
-export const initialize = new CombinedTaskRunner(async () => {
+export const initialize = async () => {
   console.log(`@preferences:initialize`)
 
   if (isApp()) {
-    throw new Error(`Not implemented!`)
+    // no-op
+  } else {
+    await initializeWeb()
   }
 
-  await initializeWeb()
-
   initialized = true
-})
+}
 
 export const get = async (key: string): Promise<string | null> => {
   if (!initialized) {
-    await initialize.run()
+    await initialize()
   }
 
   if (isApp()) {
-    throw new Error(`Not implemented!`)
+    return getApp(key)
+  } else {
+    return getWeb(key)
   }
-
-  return getWeb(key)
 }
 
 export const set = async (key: string, value: string) => {
   if (!initialized) {
-    await initialize.run()
+    await initialize()
   }
 
   if (isApp()) {
-    throw new Error(`Not implemented!`)
+    return setApp(key, value)
+  } else {
+    return setWeb(key, value)
   }
-
-  return setWeb(key, value)
 }
 
 export const del = async (key: string) => {
   if (!initialized) {
-    await initialize.run()
+    await initialize()
   }
 
   if (isApp()) {
-    throw new Error(`Not implemented!`)
+    return delApp(key)
+  } else {
+    return delWeb(key)
   }
-
-  return delWeb(key)
 }

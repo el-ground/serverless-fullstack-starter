@@ -1,5 +1,5 @@
 import { AspectRatio, Transform } from './types'
-import { pica, resizeOptions } from './pica'
+import { getPica, resizeOptions } from './pica'
 import { taskRunner } from './task-runner'
 import {
   createCanvasElement,
@@ -142,6 +142,6 @@ export const _applyTransformPipeline = async (
 
   // release cropped
   releaseCanvasElement(croppedCanvas)
-  await pica.resize(rotatedScaledCanvas, outputCanvas, resizeOptions)
+  await getPica().resize(rotatedScaledCanvas, outputCanvas, resizeOptions)
   releaseCanvasElement(rotatedScaledCanvas)
 }

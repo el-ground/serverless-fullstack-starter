@@ -19,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // vvv capacitor push added
     // https://capacitorjs.com/docs/guides/push-notifications-firebase
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        NotificationCenter.default.post(name: .capacitorDidRegisterForRemoteNotifications, object: deviceToken)
+    // below is firebase notifications via console;
       /*
       Messaging.messaging().apnsToken = deviceToken
       Messaging.messaging().token(completion: { (token, error) in

@@ -1,9 +1,8 @@
-import blueImpLoadImage from 'blueimp-load-image/js/index'
-
 // https://www.npmjs.com/package/blueimp-load-image
 
 const loadImageToCanvas = async (fileOrBlobOrUrl, minWidth, minHeight) => {
-  const res = await blueImpLoadImage(fileOrBlobOrUrl, {
+  const blueImpLoadImage = await import('blueimp-load-image/js/index.js')
+  const res = await blueImpLoadImage.default(fileOrBlobOrUrl, {
     meta: true,
     canvas: true,
     orientation: true,

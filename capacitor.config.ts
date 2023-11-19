@@ -19,6 +19,7 @@ const config: CapacitorConfig = {
     */
     hostname: `localhost:3000`,
     url: `http://localhost:3000`,
+    cleartext: true, // remove this in prod
   },
   plugins: {
     SplashScreen: {

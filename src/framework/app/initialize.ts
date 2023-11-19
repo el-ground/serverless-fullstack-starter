@@ -1,3 +1,4 @@
+'use client'
 import { isApp } from '.'
 import { registerAppUrl } from '@framework/app/consume-url'
 import { updateAppInfo } from '@framework/app/info'

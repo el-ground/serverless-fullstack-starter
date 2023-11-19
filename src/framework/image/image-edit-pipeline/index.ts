@@ -9,7 +9,7 @@ import { applyFilterPipeline } from './apply-filter-pipeline'
 import { applyTransformPipeline } from './apply-transform-pipeline'
 import { clampTransform } from './clamp-transform'
 import { loadImageToCanvas } from '../load-image-to-canvas'
-import { pica } from './pica'
+import { getPica } from './pica'
 
 /*
     Image edit & preview & export.
@@ -183,7 +183,7 @@ export class ImageEditPipeline {
 
     const mimetype = `image/jpeg`
     const blob = await taskRunner.run(() => {
-      return pica.toBlob(transformedCanvas, mimetype, 0.9)
+      return getPica().toBlob(transformedCanvas, mimetype, 0.9)
     })
 
     releaseCanvasElement(transformedCanvas)
