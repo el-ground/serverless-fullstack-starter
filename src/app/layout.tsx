@@ -9,6 +9,7 @@ import { PushProvider } from '@hooks/use-push'
 import { AuthProvider } from '@hooks/use-auth/client'
 import { IsSSRProvider } from '@hooks/use-is-ssr'
 import { ProgressBar } from '@components/progress-bar'
+import { OnPopStateProvider } from '@hooks/use-on-pop-state'
 // initialize rsc client
 import '@framework/apollo/rsc'
 import '@util/cookie/rsc'
@@ -95,7 +96,7 @@ export default function RootLayout({
                 <AuthProvider>
                   <PushProvider>
                     <DisableOverscrollRefreshProvider>
-                      {children}
+                      <OnPopStateProvider>{children}</OnPopStateProvider>
                     </DisableOverscrollRefreshProvider>
                   </PushProvider>
                 </AuthProvider>

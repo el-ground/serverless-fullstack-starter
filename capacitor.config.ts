@@ -22,6 +22,9 @@ const config: CapacitorConfig = {
     cleartext: true, // remove this in prod
   },
   plugins: {
+    CapacitorCookies: {
+      enabled: true,
+    },
     SplashScreen: {
       // https://capacitorjs.com/docs/apis/splash-screen
       launchAutoHide: true,

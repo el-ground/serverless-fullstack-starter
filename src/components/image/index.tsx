@@ -32,26 +32,51 @@ export const loader = ({
   return src
 }
 
+const srcsetSizes = [80, 140, 240, 320, 640, 1080, 1440]
+const srcsetLoaderSizes = (src: string) => {
+  if (!src) {
+    return ``
+  }
+
+  return srcsetSizes
+    .map((size) => `${loader({ src, width: size })} ${size}w`)
+    .join(`, `)
+}
+
+const srcsetLoaderWidth = (src: string, width: number) => {
+  if (!src) {
+    return ``
+  }
+
+  return `${loader({ src, width })} 1x, ${loader({
+    src,
+    width: width * 2,
+  })} 2x, ${loader({ src, width: width * 3 })} 3x`
+}
+
 // how to you know its mobile then?
 // fallback : image or staticData;
 // if !src & fallbackComponent || f
 export const Image = ({
-  width,
   className,
   src,
+  sizes: _sizes,
   fallbackComponent,
   fallbackStaticImageData,
   fallbackSrc,
   alt,
 }: {
   src?: string | null
-  width: number
+  sizes: number | string
   className?: string
   alt: string
   fallbackComponent?: React.ReactNode
   fallbackStaticImageData?: StaticImageData
   fallbackSrc?: string
 }) => {
+  const width = typeof _sizes === `string` ? undefined : _sizes
+  const sizes = typeof _sizes === `string` ? _sizes : undefined
+
   if (!src) {
     // try fallbacks!
 
@@ -63,11 +88,17 @@ export const Image = ({
       return (
         <NextImage
           width={width}
+          sizes={sizes}
           src={fallbackStaticImageData}
           alt={alt}
           className={className || ``}
         />
       )
+    }
+
+    if (!fallbackSrc) {
+      // eslint-disable-next-line @next/next/no-img-element
+      return <img alt={alt} className={className || ``} />
     }
   }
 
@@ -75,7 +106,14 @@ export const Image = ({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       alt={alt}
-      src={loader({ src: src || fallbackSrc || undefined, width })}
+      sizes={sizes}
+      srcSet={
+        sizes
+          ? srcsetLoaderSizes(src || fallbackSrc || ``)
+          : width
+            ? srcsetLoaderWidth(src || fallbackSrc || ``, width)
+            : ``
+      }
       className={className || ``}
     />
   )

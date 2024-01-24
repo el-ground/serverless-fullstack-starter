@@ -25,7 +25,7 @@ export const ImageViewOverlay = ({
           </button>
         </div>
 
-        <Image src={image} width={1440} className={styles.image} alt="" />
+        <Image src={image} sizes="100vw" className={styles.image} alt="" />
       </div>
     </div>
   )
