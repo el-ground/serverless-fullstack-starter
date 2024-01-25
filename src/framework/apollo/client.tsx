@@ -58,6 +58,16 @@ export const getClient = (): NextSSRApolloClient<NormalizedCacheObject> => {
     const client = new NextSSRApolloClient({
       cache: new NextSSRInMemoryCache(),
       link: splitLink,
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'cache-and-network',
+          // handle backward / forward smoothly;
+        },
+        query: {
+          fetchPolicy: `network-only`,
+          // consistency up to date;
+        },
+      },
     })
 
     cachedClient = client

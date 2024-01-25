@@ -1,9 +1,11 @@
 'use client'
+
 import { isApp } from '.'
 import { registerAppUrl } from '@framework/app/consume-url'
 import { updateAppInfo } from '@framework/app/info'
 import { setStatusBarColorAndroid } from '@framework/app/setup'
 import { registerTrackingPermission } from '@framework/app/tracking-permission'
+import { registerAndroidBackButtonClose } from './android-back-button-close'
 
 export const initialize = () => {
   console.log(`@app:initialize`)
@@ -11,6 +13,7 @@ export const initialize = () => {
   updateAppInfo()
   registerAppUrl()
   registerTrackingPermission()
+  registerAndroidBackButtonClose()
 }
 
 if (isApp()) {

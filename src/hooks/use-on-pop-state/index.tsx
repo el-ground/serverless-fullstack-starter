@@ -45,6 +45,14 @@ if (typeof window !== `undefined`) {
   }
 }
 
+let isAnyPopStateHandleAliveGlobal = false
+
+// used in android backbutton to close app;
+// if none is alive, we can safely close the app;
+export const getIsAnyPopStateHandleAlive = () => {
+  return isAnyPopStateHandleAliveGlobal
+}
+
 export const OnPopStateProvider = ({
   children,
 }: {
@@ -75,6 +83,7 @@ export const OnPopStateProvider = ({
         isAnyAlive = true
       }
     })
+    isAnyPopStateHandleAliveGlobal = isAnyAlive
 
     if (isAnyAlive) {
       /*
@@ -93,14 +102,23 @@ export const OnPopStateProvider = ({
           => push to next state which will be the actual state.
         */
 
-        updateState({ isHiddenState: true })
+        setTimeout(() => {
+          /*
+            If the state update happens right after everything mounts,
+            the state change is not applied.
+            we need to set it back;
 
-        const nextState = {
-          ...getState(),
-        }
-        delete nextState.isInitialState
-        delete nextState.isHiddenState
-        pushState(nextState)
+            useOnPopState(true, ) on the initial component render will fail otherwise.
+          */
+          updateState({ isHiddenState: true })
+
+          const nextState = {
+            ...getState(),
+          }
+          delete nextState.isInitialState
+          delete nextState.isHiddenState
+          pushState(nextState)
+        })
       }
     }
   }, [])
